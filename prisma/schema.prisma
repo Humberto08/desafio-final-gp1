@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Tabelas 
+
+model User {
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  email      String     @unique
+  name       String
+  type       String
+  password   String
+  categories Category[]
+  products   Product[]
+
+  @@map("usuários")
+}
+
+model Category {
+  id                 Int            @id @default(autoincrement())
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  title              String         @unique @db.VarChar(255)
+  content            String
+  published          Boolean        @default(false)
+  user               User           @relation(fields: [user_id], references: [id])
+  user_id            Int
+  categoryStatus     categoryStatus @relation(fields: [category_status_id], references: [id])
+  category_status_id Int
+
+  @@map("categorias")
+}
+
+model categoryStatus {
+  id       Int        @id @default(autoincrement())
+  title    String     @unique
+  Category Category[]
+
+  @@map("categ_status")
+}
+
+model Product {
+  id                Int           @id @default(autoincrement())
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  title             String        @unique @db.VarChar(255)
+  content           String
+  price             String
+  image             Boolean
+  published         Boolean       @default(false)
+  user              User          @relation(fields: [user_id], references: [id])
+  user_id           Int
+  productStatus     productStatus @relation(fields: [product_status_id], references: [id])
+  product_status_id Int
+
+  @@map("produtos")
+}
+
+model productStatus {
+  id      Int       @id @default(autoincrement())
+  title   String    @unique
+  Produto Product[]
+
+  @@map("prod_status")
+}
