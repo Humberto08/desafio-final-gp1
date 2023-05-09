@@ -1,6 +1,20 @@
 import { prisma } from "../src/database/db";
+import bcrypt from "bcrypt";
 
 async function main() {
+
+    const salt = bcrypt.genSaltSync(10);
+
+    await prisma.user.upsert({
+        where: { id: 1 },
+        update: {},
+        create: {
+            name: "Admin",
+            email: "admin@mail.com",
+            type: "admin",
+            password: bcrypt.hashSync("123456789", salt)
+        }
+    });
 
     await prisma.categoryStatus.upsert({
         where: { title: "CADASTRAR" },
@@ -18,7 +32,7 @@ async function main() {
         }
     });
 
-    await prisma.categoryStatus.upsert({
+    await prisma.productStatus.upsert({
         where: { title: "CADASTRAR" },
         update: {},
         create: {
@@ -26,7 +40,7 @@ async function main() {
         }
     });
 
-    await prisma.categoryStatus.upsert({
+    await prisma.productStatus.upsert({
         where: { title: "CADASTRADO" },
         update: {},
         create: {
