@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Tabelas 
+// Tabela Usuários
 
 model User {
   id         Int        @id @default(autoincrement())
@@ -26,12 +26,14 @@ model User {
   @@map("usuários")
 }
 
+// Tabelas Categorias
+
 model Category {
   id                 Int            @id @default(autoincrement())
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
-  title              String         @unique @db.VarChar(255)
-  content            String
+  title              String         @unique @db.VarChar(100)
+  content            String         @db.VarChar(300)
   published          Boolean        @default(false)
   user               User           @relation(fields: [user_id], references: [id])
   user_id            Int
@@ -49,13 +51,18 @@ model categoryStatus {
   @@map("categ_status")
 }
 
+// Tabelas Produtos
+
 model Product {
   id                Int           @id @default(autoincrement())
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
-  title             String        @unique @db.VarChar(255)
-  content           String
-  price             String
+  title             String        @unique @db.VarChar(100)
+  content           String        @db.VarChar(300)
+  price             String        @db.VarChar(17)
+  measures          String        @db.VarChar(10)
+  amount            Int
+  filter_type       String        @db.VarChar(100)
   image             Boolean
   published         Boolean       @default(false)
   user              User          @relation(fields: [user_id], references: [id])
