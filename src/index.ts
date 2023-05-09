@@ -1,14 +1,16 @@
-import express, { json } from 'express';
-import routers from './routes/routes';
-
-const app = express();
-app.use(express, json());
-app.use(routers)
+import { prisma } from './database/db';
+import app from './server/server';
 
 const PORT = 3333;
 
-app.listen(PORT, () => {
-    console.log(`✔️ Server running in localhost:${PORT}`)
-})
+app.listen(PORT, async () => {
+    console.log(`✔️ Server running in localhost:${PORT}!`);
 
-export default app;
+    try {
+        await prisma.$connect();
+        console.log(`😄 Conectado com sucesso à base de dados!`);
+
+    } catch (error) {
+        console.log(`😕 Aconteceu um erro ao tentar conectar à base de dados.`);
+    }
+})
