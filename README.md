@@ -17,3 +17,11 @@ Buscamos dividir as tarefas entre os membros da equipe seguindo os princípios d
 ## Definições do projeto
 - Loja Online de produtos relacionados a café
 - Brand: CafeMaria
+
+## Tecnologias usadas
+- MySQL
+- JavaScript/Typescript
+- Node.JS
+- Express
+- Testes Unitários/Automatizados
+- Design Pattern 
