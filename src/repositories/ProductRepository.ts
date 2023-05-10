@@ -31,11 +31,13 @@ class ProductRepository {
             data: {
                 title: product.title,
                 content: product.content,
-                user_id: product.user_id,
-                product_status_id: product.product_status_id,
                 price: product.price,
-                image: product.image
-                // por que só price e image deu certo? por que não precisa das demais?
+                amount: product.amount,
+                image: product.image,
+                subcategory: product.subcategory,
+                published: product.published,
+                user_id: product.user_id,
+                product_status_id: product.product_status_id
             },
         });
     }
