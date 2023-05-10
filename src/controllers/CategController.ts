@@ -8,9 +8,9 @@ class CategController {
 
         try {
 
-            const { title, content, user_id, category_status_id } = req.body;
+            const { title, description, user_id, category_status_id } = req.body;
 
-            if (!title || !content || !user_id || !category_status_id) {
+            if (!title || !description || !user_id || !category_status_id) {
                 return res
                     .status(500)
                     .json({ success: false, message: "✖️ Você precisa informar todos os campos necessários para criar a Categoria!" })
@@ -18,7 +18,7 @@ class CategController {
 
             const category: Category | string = await CategService.createCategory({
                 title,
-                content,
+                description,
                 user_id,
                 category_status_id
             } as Category); // forçando um objeto a ser do tipo 'Category'
@@ -103,15 +103,15 @@ class CategController {
                 .status(500)
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
-            const { title, content, user_id, category_status_id } = req.body;
+            const { title, description, user_id, category_status_id } = req.body;
 
-            if (!title && !content && !user_id && !category_status_id) {
+            if (!title && !description && !user_id && !category_status_id) {
                 return res
                     .status(500)
                     .json({ success: false, message: "✖️ Você precisa preencher pelo menos um campo para atualizar a Categoria!" });
             }
 
-            const category: Category | string = await CategService.updateCategory(Number(id), title, content, user_id, category_status_id);
+            const category: Category | string = await CategService.updateCategory(Number(id), title, description, user_id, category_status_id);
 
             if (typeof category === 'string') return res
                 .status(404)
