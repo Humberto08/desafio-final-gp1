@@ -166,4 +166,4 @@ class CategController {
         }
     }
 }
-export default new CategController();
+export default CategController;
