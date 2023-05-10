@@ -57,13 +57,13 @@ model Product {
   id                Int           @id @default(autoincrement())
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
-  title             String        @unique @db.VarChar(100)
+  title             String        @db.VarChar(100)
   content           String        @db.VarChar(300)
-  price             String        @db.VarChar(17)
-  measures          String        @db.VarChar(10)
+  price             Float
+  measures          String?       @db.VarChar(10)
   amount            Int
-  filter_type       String        @db.VarChar(100)
-  image             Boolean
+  subcategory       String        @db.VarChar(100)
+  image             String
   published         Boolean       @default(false)
   user              User          @relation(fields: [user_id], references: [id])
   user_id           Int
