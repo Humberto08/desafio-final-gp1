@@ -19,7 +19,7 @@ class UsuarioService {
         return UsuarioRepository.updateUsuario(id, name, email, password);
     }
 
-    async deleteUsuario(id: number): Promise<Usuario | string> {        
+    async deleteUsuario(id: number): Promise<Usuario | string> {
         return UsuarioRepository.deleteUsuario(id);
     }
 
@@ -28,3 +28,6 @@ class UsuarioService {
 
 
 export default new UsuarioService();
+
+
+
