@@ -8,9 +8,9 @@ class ProductController {
 
         try {
 
-            const { title, content, user_id, product_status_id } = req.body;
+            const { title, description, user_id, product_status_id } = req.body;
 
-            if (!title || !content || !user_id || !product_status_id) {
+            if (!title || !description || !user_id || !product_status_id) {
                 return res
                     .status(500)
                     .json({ success: false, message: "✖️ Você precisa informar todos os campos necessários para criar a Categoria!" })
@@ -18,7 +18,7 @@ class ProductController {
 
             const product: Product | string = await ProductService.createProduct({
                 title,
-                content,
+                description,
                 user_id,
                 product_status_id
             } as Product); // forçando um objeto a ser do tipo 'Product'
@@ -104,15 +104,15 @@ class ProductController {
                 .status(500)
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
-            const { title, content, user_id, product_status_id } = req.body;
+            const { title, description, user_id, product_status_id } = req.body;
 
-            if (!title && !content && !user_id && !product_status_id) {
+            if (!title && !description && !user_id && !product_status_id) {
                 return res
                     .status(500)
                     .json({ success: false, message: "✖️ Você precisa preencher pelo menos um campo para atualizar a Categoria!" });
             }
 
-            const product: Product | string = await ProductService.updateProduct(Number(id), title, content, user_id, product_status_id);
+            const product: Product | string = await ProductService.updateProduct(Number(id), title, description, user_id, product_status_id);
 
             if (typeof product === 'string') return res
                 .status(404)
