@@ -1,1 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+// TABELA USUÁRIOS
+
+model User {
+    id              Int        @id @default(autoincrement())
+    name            String
+    email           String     @unique
+    password        String
+    type            String
+    profile_picture String
+    created_at      DateTime   @default(now())
+    updated_at      DateTime   @updatedAt
+    categories      Category[]
+    Product         Product[]
+
+    @@map("users")
+}
+
+// TABELAS CATEGORIAS
+
+model Category {
+    id                 Int            @id @default(autoincrement())
+    created_at         DateTime       @default(now())
+    updated_at         DateTime       @updatedAt
+    title              String         @unique @db.VarChar(100)
+    description        String         @db.VarChar(300)
+    published          Boolean        @default(false)
+    User               User           @relation(fields: [user_id], references: [id])
+    user_id            Int
+    CategoryStatus     CategoryStatus @relation(fields: [category_status_id], references: [id])
+    category_status_id Int
+
+    @@map("categorias")
+}
+
+model CategoryStatus {
+    id       Int        @id @default(autoincrement())
+    title    String     @unique
+    Category Category[]
+
+    @@map("category_status")
+}
+
+// TABELAS PRODUTOS
+
+model Product {
+    id                Int           @id @default(autoincrement())
+    created_at        DateTime      @default(now())
+    updated_at        DateTime      @updatedAt
+    title             String        @db.VarChar(100)
+    description       String        @db.VarChar(300)
+    price             Float
+    measures          String?       @db.VarChar(10)
+    amount            Int
+    subcategory       String        @db.VarChar(100)
+    image             String
+    published         Boolean       @default(false)
+    User              User          @relation(fields: [user_id], references: [id])
+    user_id           Int
+    ProductStatus     ProductStatus @relation(fields: [product_status_id], references: [id])
+    product_status_id Int
+
+    @@map("produtos")
+}
+
+model ProductStatus {
+    id      Int       @id @default(autoincrement())
+    title   String    @unique
+    Product Product[]
+
+    @@map("product_status")
+}
