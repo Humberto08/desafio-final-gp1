@@ -8,7 +8,7 @@ class ProductRepository {
         const findDuplicateProduct = await prisma.product.count({
             where: {
                 title: product.title,
-                content: product.content,
+                description: product.description,
                 user_id: product.user_id
             }
         });
@@ -30,7 +30,7 @@ class ProductRepository {
         return await prisma.product.create({
             data: {
                 title: product.title,
-                content: product.content,
+                description: product.description,
                 price: product.price,
                 amount: product.amount,
                 image: product.image,
@@ -50,7 +50,7 @@ class ProductRepository {
         return await prisma.product.findFirst({ where: { id } })
     }
 
-    async updateProduct(id: number, title: string | null, content: string | null, user_id: number | null, product_status_id: number | null): Promise<Product | string> {
+    async updateProduct(id: number, title: string | null, description: string | null, user_id: number | null, product_status_id: number | null): Promise<Product | string> {
 
         const findById = await prisma.product.findFirst({ where: { id } });
 
@@ -70,7 +70,7 @@ class ProductRepository {
             where: { id, },
             data: {
                 title: title || findById.title,
-                content: content || findById.content,
+                description: description || findById.description,
                 user_id: user_id || findById.user_id,
                 product_status_id: product_status_id || findById.product_status_id
             }
