@@ -8,7 +8,7 @@ class CategRepository {
         const findDuplicateCategory = await prisma.category.count({
             where: {
                 title: category.title,
-                content: category.content,
+                description: category.description,
                 user_id: category.user_id
             }
         });
@@ -30,7 +30,7 @@ class CategRepository {
         return await prisma.category.create({
             data: {
                 title: category.title,
-                content: category.content,
+                description: category.description,
                 user_id: category.user_id,
                 category_status_id: category.category_status_id
             }
@@ -45,7 +45,7 @@ class CategRepository {
         return await prisma.category.findFirst({ where: { id } })
     }
 
-    async updateCategory(id: number, title: string | null, content: string | null, user_id: number | null, category_status_id: number | null): Promise<Category | string> {
+    async updateCategory(id: number, title: string | null, description: string | null, user_id: number | null, category_status_id: number | null): Promise<Category | string> {
 
         const findById = await prisma.category.findFirst({ where: { id } });
 
@@ -65,7 +65,7 @@ class CategRepository {
             where: { id, },
             data: {
                 title: title || findById.title,
-                content: content || findById.content,
+                description: description || findById.description,
                 user_id: user_id || findById.user_id,
                 category_status_id: category_status_id || findById.category_status_id
             }
