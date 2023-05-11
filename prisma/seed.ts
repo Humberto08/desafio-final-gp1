@@ -4,17 +4,49 @@ import bcrypt from "bcrypt";
 async function main() {
 
     const salt = bcrypt.genSaltSync(10);
-    const user = await prisma.usuario.upsert({
+
+    await prisma.user.upsert({
         where: { id: 1 },
         update: {},
         create: {
-            name: "User",
-            email: "usuario_teste@gmail.com",
-            password: bcrypt.hashSync("123456789", salt),
+            name: "Admin",
+            email: "admin@mail.com",
+            type: "admin",
+            password: bcrypt.hashSync("123456789", salt)
         }
     });
 
+    await prisma.categoryStatus.upsert({
+        where: { title: "CADASTRAR" },
+        update: {},
+        create: {
+            title: "CADASTRAR"
+        }
+    });
 
+    await prisma.categoryStatus.upsert({
+        where: { title: "CADASTRADA" },
+        update: {},
+        create: {
+            title: "CADASTRADA"
+        }
+    });
+
+    await prisma.productStatus.upsert({
+        where: { title: "CADASTRAR" },
+        update: {},
+        create: {
+            title: "CADASTRAR"
+        }
+    });
+
+    await prisma.productStatus.upsert({
+        where: { title: "CADASTRADO" },
+        update: {},
+        create: {
+            title: "CADASTRADO"
+        }
+    });
 }
 
 main()
@@ -23,6 +55,12 @@ main()
     })
     .catch(async (e) => {
         console.error(e);
+<<<<<<< HEAD
         await prisma.$disconnect();
         process.exit(1);
     });
+=======
+        await prisma.$disconnect()
+        process.exit(1)
+    })
+>>>>>>> 0f42097dc931061d8e36e1ac863a979c440af9fb

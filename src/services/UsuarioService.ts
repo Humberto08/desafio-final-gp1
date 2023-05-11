@@ -1,33 +1,33 @@
-import { Usuario } from "@prisma/client";
-import UsuarioRepository from "../repositories/UsuarioRepository";
+import { User } from "@prisma/client";
+import UserRepository from "../repositories/UserRepository";
 
 
-class UsuarioService {
-    async getUsuarios(): Promise<Array<Usuario>> {
-        return UsuarioRepository.getUsuarios();
+class UserService {
+    async getUsers(): Promise<Array<User>> {
+        return UserRepository.getUsers();
     }
 
-    async createUsuario(Usuario: Usuario) {
-        return UsuarioRepository.createUsuario(Usuario);
+    async createUser(User: User) {
+        return UserRepository.createUser(User);
     }
 
-    async getUsuario(id: number): Promise<Usuario | null> {
-        return UsuarioRepository.getUsuario(id);
+    async getUser(id: number): Promise<User | null> {
+        return UserRepository.getUser(id);
     }
 
-    async updateUsuario(id: number, name: string | null, email: string | null, password: string | null): Promise<Usuario | null> {
-        return UsuarioRepository.updateUsuario(id, name, email, password);
+    async updateUser(id: number, name: string | null, email: string | null, password: string | null): Promise<User | null> {
+        return UserRepository.updateUser(id, name, email, password);
     }
 
-    async deleteUsuario(id: number): Promise<Usuario | string> {
-        return UsuarioRepository.deleteUsuario(id);
+    async deleteUser(id: number): Promise<User | string> {
+        return UserRepository.deleteUser(id);
     }
 
 }
 
 
 
-export default new UsuarioService();
+export default new UserService();
 
 
 

@@ -1,19 +1,19 @@
-import { Usuario } from '@prisma/client';
+import { User } from '@prisma/client';
 import { Request, Response } from 'express'
-import UsuarioService from '../services/UsuarioService';
+import UserService from '../services/UserService';
 
 
 
-class UsuarioController {
+class UserController {
 
     static async index(req: Request, res: Response) {
 
         try {
-            const usuarios = await UsuarioService.getUsuarios();
+            const users = await UserService.getUsers();
 
             res.json({
                 success: true,
-                result: usuarios
+                result: users
             });
 
         } catch (error) {
@@ -36,24 +36,24 @@ class UsuarioController {
                     .json({ success: false, message: "⚠️ Preencha todos os campos necessários para criação de um usuário" })
             }
 
-            const usuario: Usuario | string = await UsuarioService.createUsuario({
+            const user: User | string = await UserService.createUser({
                 name,
                 email,
                 password
-            } as Usuario);
+            } as User);
 
-            if (usuario) {
+            if (user) {
                 return res.json({
                     success: true,
                     message: "Usuário criado com sucesso",
-                    result: usuario
+                    result: user
                 })
             }
 
             return res.json({
                 success: true,
                 message: "Usuário criado com sucesso",
-                result: usuario
+                result: user
             })
 
         } catch (error) {
@@ -67,20 +67,20 @@ class UsuarioController {
         try {
             const { id } = req.params;
             
-            const checkUsuarioId = UsuarioController.checkUsuarioId(id);
-            if (!checkUsuarioId?.success) return res
+            const checkUserId = UserController.checkUserId(id);
+            if (!checkUserId?.success) return res
                 .status(500)
-                .json( checkUsuarioId);
+                .json( checkUserId);
 
-            const usuario = await UsuarioService.getUsuario(Number(id));
+            const user = await UserService.getUser(Number(id));
 
-            if (!usuario) return res
+            if (!user) return res
                 .status(404)
                 .json({ success: false, message: "⚠️ Usuário não encontrado" })
 
             res.json({
                 success: true,
-                result: usuario
+                result: user
             });
 
         } catch (error) {
@@ -95,10 +95,10 @@ class UsuarioController {
         try {
             const { id } = req.params;
 
-            const checkUsuarioId = UsuarioController.checkUsuarioId(id);
-            if (!checkUsuarioId?.success) return res
+            const checkUserId = UserController.checkUserId(id);
+            if (!checkUserId?.success) return res
                 .status(500)
-                .json( checkUsuarioId?.message);
+                .json( checkUserId?.message);
 
             const { name, email, password } = req.body;
 
@@ -108,16 +108,16 @@ class UsuarioController {
                     .json({ success: false, message: "⚠️ Preencha pelo menos um campo para atualização do usuário" })
             }   
 
-            const usuario = await UsuarioService.updateUsuario(Number(id), name, email, password);
+            const user = await UserService.updateUser(Number(id), name, email, password);
 
-            if (!usuario) return res
+            if (!user) return res
                 .status(404)
                 .json({ success: false, message: "⚠️ É necessário informar o id" })
 
             res.json({
                 success: true,
                 message: "Usuário atualizado com sucesso",
-                result: usuario
+                result: user
             });
 
         } catch (error) {
@@ -132,14 +132,14 @@ class UsuarioController {
 
             const { id } = req.params;
 
-            const checkUsuarioId = UsuarioController.checkUsuarioId(id);
-            if (!checkUsuarioId?.success) return res.status(500).json(checkUsuarioId);
+            const checkUserId = UserController.checkUserId(id);
+            if (!checkUserId?.success) return res.status(500).json(checkUserId);
 
-            const usuario = await UsuarioService.deleteUsuario(Number(id));
+            const user = await UserService.deleteUser(Number(id));
 
-            if (typeof usuario === 'string') return res
+            if (typeof user === 'string') return res
                 .status(404)
-                .json({ success: false, message: usuario });
+                .json({ success: false, message: user });
 
             return res.json({
                 success: true,
@@ -154,7 +154,7 @@ class UsuarioController {
         }
     }
 
-    static checkUsuarioId(id: string) {
+    static checkUserId(id: string) {
 
         if (!id) return { success: false, message: "⚠️ É necessário informar o id" };
         if (isNaN(Number(id))) return { success: false, message: "⚠️ O ID precisa ser um número!" };
@@ -166,4 +166,4 @@ class UsuarioController {
 
 
 
-export default UsuarioController;
+export default UserController;
