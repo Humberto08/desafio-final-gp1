@@ -1,4 +1,5 @@
-import { User } from '@prisma/client';
+import { User } from "@prisma/client";
+
 import { Request, Response } from 'express'
 import UserService from '../services/UserService';
 
