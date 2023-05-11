@@ -12,6 +12,18 @@ datasource db {
 
 // TABELA USUÁRIOS
 
+model Usuario {
+    id         Int      @id @default(autoincrement())
+    name       String
+    email      String   @unique
+    type       String
+    password   String
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    @@map("usuarios")
+}
+
 model User {
     id              Int        @id @default(autoincrement())
     name            String

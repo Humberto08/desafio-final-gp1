@@ -1,5 +1,4 @@
-import { User } from "@prisma/client";
-
+import { User } from '@prisma/client';
 import { Request, Response } from 'express'
 import UserService from '../services/UserService';
 
@@ -23,7 +22,6 @@ class UserController {
 
         }
     }
-
 
     static async create(req: Request, res: Response) {
 
@@ -67,11 +65,11 @@ class UserController {
 
         try {
             const { id } = req.params;
-            
+
             const checkUserId = UserController.checkUserId(id);
             if (!checkUserId?.success) return res
                 .status(500)
-                .json( checkUserId);
+                .json(checkUserId);
 
             const user = await UserService.getUser(Number(id));
 
@@ -99,7 +97,7 @@ class UserController {
             const checkUserId = UserController.checkUserId(id);
             if (!checkUserId?.success) return res
                 .status(500)
-                .json( checkUserId?.message);
+                .json(checkUserId?.message);
 
             const { name, email, password } = req.body;
 
@@ -107,7 +105,7 @@ class UserController {
                 return res
                     .status(400)
                     .json({ success: false, message: "⚠️ Preencha pelo menos um campo para atualização do usuário" })
-            }   
+            }
 
             const user = await UserService.updateUser(Number(id), name, email, password);
 
