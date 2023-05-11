@@ -1,46 +1,46 @@
-import { Usuario } from "@prisma/client";
+import { User } from "@prisma/client";
 import { prisma } from "../database/db";
 
 
-class UsuarioRepository {
+class UserRepository {
 
 
-    async getUsuarios(): Promise<Array<Usuario>> {
-        return await prisma.usuario.findMany();
+    async getUsers(): Promise<Array<User>> {
+        return await prisma.user.findMany();
     }
-    async createUsuario(Usuario: Usuario): Promise<Usuario | string> {
-        const findDuplicateUsuario = await prisma.usuario.count({
+    async createUser(User: User): Promise<User | string> {
+        const findDuplicateUser = await prisma.user.count({
             where: {
-                name: Usuario.name,
-                email: Usuario.email,
-                id: Usuario.id
+                name: User.name,
+                email: User.email,
+                id: User.id
             }
         });
 
-        if (findDuplicateUsuario > 0) {
+        if (findDuplicateUser > 0) {
             return "⚠️ O Usuário não pode ser criado, porque já existe um usuário com as mesmas informações.";
         }
 
-        return await prisma.usuario.create({
+        return await prisma.user.create({
             data: {
-                name: Usuario.name,
-                email: Usuario.email,
-                password: Usuario.password
+                name: User.name,
+                email: User.email,
+                password: User.password
             }
         });
     }
 
-    async getUsuario(id: number): Promise<Usuario | null> {
-        return await prisma.usuario.findFirst({
+    async getUser(id: number): Promise<User | null> {
+        return await prisma.user.findFirst({
             where: {
                 id
             }
         })
     }
 
-    async updateUsuario(id: number, name: string | null, email: string | null, password: string | null): Promise<Usuario | null> {
+    async updateUser(id: number, name: string | null, email: string | null, password: string | null): Promise<User | null> {
 
-        const findById = await prisma.usuario.findFirst({
+        const findById = await prisma.user.findFirst({
             where: {
                 id
             }
@@ -55,7 +55,7 @@ class UsuarioRepository {
         }
 
 
-        return await prisma.usuario.update({
+        return await prisma.user.update({
             where: {
                 id,
             },
@@ -63,17 +63,17 @@ class UsuarioRepository {
         })
     }
 
-    async deleteUsuario(id: number): Promise<Usuario | string> {
+    async deleteUser(id: number): Promise<User | string> {
 
-        const findById = await prisma.usuario.findFirst({
+        const findById = await prisma.user.findFirst({
             where: {
                 id
             }
         });
 
-        if (!findById) return "⚠️ Usuario não encontrado para o ID informado!.";
+        if (!findById) return "⚠️ User não encontrado para o ID informado!.";
 
-        return await prisma.usuario.delete({
+        return await prisma.user.delete({
             where: {
                 id
             }
@@ -83,4 +83,4 @@ class UsuarioRepository {
 
 
 
-export default new UsuarioRepository();
+export default new UserRepository();
