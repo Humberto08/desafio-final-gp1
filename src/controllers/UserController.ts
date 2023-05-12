@@ -1,6 +1,7 @@
 import { User } from '@prisma/client';
 import { Request, Response } from 'express'
 import UserService from '../services/UserService';
+// import { type } from 'node:os';
 
 
 
@@ -27,19 +28,20 @@ class UserController {
 
         try {
 
-            const { name, email, password } = req.body;
+            const { name, email, password, type } = req.body;
 
-            if (!name || !email || !password) {
+            if (!name || !email || !password || !type) {
                 return res
                     .status(400)
                     .json({ success: false, message: "⚠️ Preencha todos os campos necessários para criação de um usuário" })
             }
 
-            const user: User | string = await UserService.createUser({
+            const user: string | User = await UserService.createUser({
                 name,
                 email,
-                password
-            } as User);
+                password,
+                type
+            } as unknown as User);
 
             if (user) {
                 return res.json({
@@ -59,7 +61,10 @@ class UserController {
             console.log(error);
             return res.status(500).json({ success: false, message: " Internal Server Error" })
         }
+
+
     }
+
 
     static async show(req: Request, res: Response) {
 
@@ -99,15 +104,15 @@ class UserController {
                 .status(500)
                 .json(checkUserId?.message);
 
-            const { name, email, password } = req.body;
+            const { name, email, password, type } = req.body;
 
-            if (!name && !email && !password) {
+            if (!name && !email && !password && !type) {
                 return res
                     .status(400)
                     .json({ success: false, message: "⚠️ Preencha pelo menos um campo para atualização do usuário" })
             }
 
-            const user = await UserService.updateUser(Number(id), name, email, password);
+            const user = await UserService.updateUser(Number(id), name, email, password, type);
 
             if (!user) return res
                 .status(404)

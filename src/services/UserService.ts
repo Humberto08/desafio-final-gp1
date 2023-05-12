@@ -1,5 +1,6 @@
 import { User } from "@prisma/client";
 import UserRepository from "../repositories/UserRepository";
+// import { type } from "os";
 
 
 class UserService {
@@ -15,8 +16,8 @@ class UserService {
         return UserRepository.getUser(id);
     }
 
-    async updateUser(id: number, name: string | null, email: string | null, password: string | null): Promise<User | null> {
-        return UserRepository.updateUser(id, name, email, password);
+    async updateUser(id: number, name: string | null, email: string | null, password: string | null | null, type: string | null): Promise<User | null> {
+        return UserRepository.updateUser(id, name, email, password,type);
     }
 
     async deleteUser(id: number): Promise<User | string> {
