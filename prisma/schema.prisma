@@ -93,5 +93,3 @@ model ProductStatus {
 
     @@map("product_status")
 }
-
-
