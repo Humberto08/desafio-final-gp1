@@ -25,7 +25,8 @@ class UserRepository {
             data: {
                 name: User.name,
                 email: User.email,
-                password: User.password
+                password: User.password,
+                type: User.type
             }
         });
     }
