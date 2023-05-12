@@ -1,6 +1,7 @@
 import { Router } from "express";
 import CategController from "../controllers/CategController";
 import ProductController from "../controllers/ProductController";
+import UserController from "../controllers/UserController";
 
 const router = Router();
 
@@ -8,6 +9,13 @@ const router = Router();
 router.get('/', (req, res) => {
     return res.status(200).json("🚀 Aplicação rodando com sucesso!");
 });
+
+// ROTAS USUARIOS
+router.post("/users", UserController.create);
+router.get("/users", UserController.index);
+router.get("/users/:id", UserController.show);
+router.put("/users/:id", UserController.update);
+router.delete("/users/:id", UserController.delete);
 
 // ROTAS CATEGORIAS
 router.post("/categorias", CategController.create);
