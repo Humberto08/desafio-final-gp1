@@ -15,7 +15,7 @@ class UserRepository {
                 name: User.name,
                 email: User.email,
                 id: User.id,
-                
+                type: User.type
             }
         });
 
