@@ -9,7 +9,7 @@ export class Router {
         return async (req: Request, res: Response, next: NextFunction) => {
             const data = await handler(req, res, next);
 
-            return data && this.isSerializable(data) ? res.json(data) : res.send();
+            return data && this.isSerializable(data) ; res.json(data);
         };
     }
 
