@@ -17,7 +17,7 @@ class UserService {
     }
 
     async updateUser(id: number, name: string | null, email: string | null, password: string | null | null, type: string | null): Promise<User | null> {
-        return UserRepository.updateUser(id, name, email, password,type);
+        return UserRepository.updateUser(id, name, email, password, type);
     }
 
     async deleteUser(id: number): Promise<User | string> {
