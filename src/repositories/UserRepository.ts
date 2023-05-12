@@ -1,3 +1,4 @@
+import { type } from 'os';
 import { User } from "@prisma/client";
 import { prisma } from "../database/db";
 
@@ -53,13 +54,15 @@ class UserRepository {
         const payload = {
             name: name || findById.name,
             email: email || findById.email,
-            password: password || findById.password
+            password: password || findById.password,
+            type: type || findById.type
         }
 
 
         return await prisma.user.update({
             where: {
                 id,
+                
             },
             data: payload
         })
