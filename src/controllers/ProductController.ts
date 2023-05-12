@@ -13,7 +13,7 @@ class ProductController {
             if (!title || !description || !user_id || !product_status_id) {
                 return res
                     .status(500)
-                    .json({ success: false, message: "✖️ Você precisa informar todos os campos necessários para criar a Categoria!" })
+                    .json({ success: false, message: "✖️ Você precisa informar todos os campos necessários para criar o Produto!" })
             }
 
             const product: Product | string = await ProductService.createProduct({
@@ -21,16 +21,16 @@ class ProductController {
                 description,
                 user_id,
                 product_status_id
-            } as Product); // forçando um objeto a ser do tipo 'Product'
+            } as Product);
 
             if (typeof product === 'string') return res.status(500).json({
                 success: false,
-                message: product // o retorno vai ser a própria product 
+                message: product
             });
 
             return res.json({
                 success: true,
-                message: "🎉 Categoria criada com sucesso!",
+                message: "✔️ Produto criado com sucesso!",
                 result: product
             })
 
@@ -45,11 +45,11 @@ class ProductController {
     static async index(req: Request, res: Response) {
 
         try {
-            const categories = await ProductService.getProducts();
+            const products = await ProductService.getProducts();
 
             return res.json({
                 success: true,
-                result: categories
+                result: products
             })
 
         } catch (error) {
@@ -67,7 +67,7 @@ class ProductController {
 
             if (!id) return res
                 .status(500)
-                .json({ success: false, message: "✖️ É obrigatório informar o ID da categoria!" });
+                .json({ success: false, message: "✖️ É obrigatório informar o ID do produto!" });
 
             if (isNaN(Number(id))) return res
                 .status(500)
@@ -76,7 +76,7 @@ class ProductController {
             const product = await ProductService.getProduct(Number(id));
             if (!product) return res
                 .status(500)
-                .json({ success: false, message: "✖️ Categoria não encontrada para o ID informado!" });
+                .json({ success: false, message: "✖️ Produto não encontrado para o ID informado!" });
 
             return res.json({
                 success: true,
@@ -98,7 +98,7 @@ class ProductController {
 
             if (!id) return res
                 .status(500)
-                .json({ success: false, message: "✖️ É obrigatório informar o ID da categoria!" });
+                .json({ success: false, message: "✖️ É obrigatório informar o ID do produto!" });
 
             if (isNaN(Number(id))) return res
                 .status(500)
@@ -109,7 +109,7 @@ class ProductController {
             if (!title && !description && !user_id && !product_status_id) {
                 return res
                     .status(500)
-                    .json({ success: false, message: "✖️ Você precisa preencher pelo menos um campo para atualizar a Categoria!" });
+                    .json({ success: false, message: "✖️ Você precisa preencher pelo menos um campo para atualizar o Produto!" });
             }
 
             const product: Product | string = await ProductService.updateProduct(Number(id), title, description, user_id, product_status_id);
@@ -120,7 +120,7 @@ class ProductController {
 
             return res.json({
                 success: true,
-                message: "Categoria atualizada com sucesso!",
+                message: "✔️ Produto atualizado com sucesso!",
                 result: product
             });
 
@@ -141,7 +141,7 @@ class ProductController {
 
             if (!id) return res
                 .status(500)
-                .json({ success: false, message: "✖️ É obrigatório informar o ID da categoria!" });
+                .json({ success: false, message: "✖️ É obrigatório informar o ID do produto!" });
 
             if (isNaN(Number(id))) return res
                 .status(500)
@@ -155,7 +155,7 @@ class ProductController {
 
             return res.json({
                 success: true,
-                message: "✔️ Categoria deletada com sucesso!"
+                message: "✔️ Produto deletado com sucesso!"
             });
 
         } catch (error) {
