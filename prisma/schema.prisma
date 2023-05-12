@@ -22,7 +22,6 @@ model User {
     updated_at DateTime   @updatedAt
     categories Category[]
     Product    Product[]
-    Order      Order[]
 
     @@map("users")
 }
@@ -80,24 +79,4 @@ model ProductStatus {
     Product Product[]
 
     @@map("product_status")
-}
-
-// TABELAS PEDIDOS E VENDAS
-
-model Order {
-    id              Int         @id @default(autoincrement())
-    products_list   String
-    amount          Int
-    User            User        @relation(fields: [user_id], references: [id])
-    user_id         Int
-    OrderStatus     OrderStatus @relation(fields: [order_status_id], references: [id])
-    order_status_id Int
-}
-
-model OrderStatus {
-    id    Int     @id @default(autoincrement())
-    title String  @unique
-    Order Order[]
-
-    @@map("order_status")
 }
