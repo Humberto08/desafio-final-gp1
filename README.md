@@ -32,10 +32,10 @@ O projeto consiste em um MVP (Produto Mínimo Viável) de um ecommerce com o pro
 - [cors](https://www.npmjs.com/package/@types/cors)
 - [bcrypt](https://www.npmjs.com/package/@types/bcrypt)
 - [body-parser](https://www.npmjs.com/package/@types/body-parser)
-- 
+
 ## Autores
 
-- [Thaisa](https://www.github.com/thaisacontar)
+- [Thaisa Contar](https://www.github.com/thaisacontar)
 - [Roberto Braga](https://www.github.com/RBDevDBA)
 - [Eduardo Souza](https://www.github.com/esfigueredo)
 - [Paulo Roberto](https://www.github.com/paulorobertorodrigues)
