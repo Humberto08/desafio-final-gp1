@@ -8,9 +8,9 @@ class ProductController {
 
         try {
 
-            const { title, description, user_id, product_status_id } = req.body;
+            const { title, description, published, user_id } = req.body;
 
-            if (!title || !description || !user_id || !product_status_id) {
+            if (!title || !description || !published || !user_id) {
                 return res
                     .status(500)
                     .json({ success: false, message: "✖️ Você precisa informar todos os campos necessários para criar o Produto!" })
@@ -19,8 +19,7 @@ class ProductController {
             const product: Product | string = await ProductService.createProduct({
                 title,
                 description,
-                user_id,
-                product_status_id
+                published
             } as Product);
 
             if (typeof product === 'string') return res.status(500).json({

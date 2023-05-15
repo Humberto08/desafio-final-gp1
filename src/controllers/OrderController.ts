@@ -2,33 +2,52 @@ import { Order } from "@prisma/client";
 import { Request, Response } from "express";
 import OrderService from "../services/OrderService";
 
-class OrderSaleController {
+class OrderController {
 
     static async create(req: Request, res: Response) {
 
         try {
 
-            const { user_id, products_list, amount } = req.body;
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
 
-            const order: Order | string = await OrderService.createOrder({
-                user_id,
-                products_list,
-                amount,
-            } as Order);
+    static async index(req: Request, res: Response) {
 
-            return res.status(201).json({
-                success: true,
-                message: "✔️ Pedido realizado  com sucesso!",
-                result: order
-            });
+        try {
 
         } catch (error) {
-            console.log(error);
-            return res.status(500).json({
-                success: false, message: "✖️ Ops, tente novamente!"
-            });
+            res.status(500).json(error);
+        }
+    }
+
+    static async show(req: Request, res: Response) {
+
+        try {
+
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
+
+    static async update(req: Request, res: Response) {
+
+        try {
+
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
+
+    static async delete(req: Request, res: Response) {
+
+        try {
+
+        } catch (error) {
+            res.status(500).json(error);
         }
     }
 }
 
-export default OrderSaleController;
+export default OrderController;
