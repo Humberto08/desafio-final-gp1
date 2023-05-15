@@ -106,3 +106,15 @@ model OrderAddress {
 
     @@map("endereços")
 }
+
+// CARRINHO DE COMPRAS
+
+model Cart {
+    id         Int      @id @default(autoincrement())
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    products   String
+    quantity   Int      @default(1)
+
+    @@map("carrinho-de-compras")
+}
