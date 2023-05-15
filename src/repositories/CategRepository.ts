@@ -17,11 +17,6 @@ class CategRepository {
             return "😬 A categoria não pode ser criada porque já existe uma categoria com as mesmas informações.";
         }
 
-        if (category.category_status_id) {
-            const findCategoryStatusById = await prisma.categoryStatus.count({ where: { id: category.category_status_id } });
-            if (!findCategoryStatusById) return "✖️ Status de categoria não existe!"
-        }
-
         if (category.user_id) {
             const findUserById = await prisma.user.count({ where: { id: category.user_id } });
             if (!findUserById) return "✖️ Usuário informado não existe!"
@@ -32,7 +27,7 @@ class CategRepository {
                 title: category.title,
                 description: category.description,
                 user_id: category.user_id,
-                category_status_id: category.category_status_id
+                product_id: category.product_id
             }
         });
     }
@@ -51,23 +46,17 @@ class CategRepository {
 
         if (!findById) return "✖️ Categoria não encontrada para o ID informado!";
 
-        if (category_status_id) {
-            const findCategoryStatusById = await prisma.categoryStatus.count({ where: { id: category_status_id } });
-            if (!findCategoryStatusById) return "✖️ Status de categoria não existe!"
-        }
-
         if (user_id) {
             const findUserById = await prisma.user.count({ where: { id: user_id } });
             if (!findUserById) return "✖️ Usuário informado não existe!"
         }
 
         return await prisma.category.update({
-            where: { id, },
+            where: { id },
             data: {
                 title: title || findById.title,
                 description: description || findById.description,
-                user_id: user_id || findById.user_id,
-                category_status_id: category_status_id || findById.category_status_id
+                user_id: user_id || findById.user_id
             }
         })
     }
