@@ -1,36 +1,34 @@
-import { Product } from "@prisma/client";
+import { Cart } from "@prisma/client";
 import { Request, Response } from "express";
-import ProductService from "../services/ProductService";
+import CartService from "../services/CartService";
 
-class ProductController {
+class CartController {
 
     static async create(req: Request, res: Response) {
 
         try {
 
-            const { title, description, published, user_id } = req.body;
+            const { products, quantity } = req.body;
 
-            if (!title || !description || !published || !user_id) {
+            if (!products || !quantity) {
                 return res
                     .status(500)
-                    .json({ success: false, message: "✖️ Você precisa informar todos os campos necessários para criar o Produto!" })
+                    .json({ success: false, message: "✖️ Você precisa informar todos os campos necessários para iniciar um Carrinho de Compras!" })
             }
 
-            const product: Product | string = await ProductService.createProduct({
-                title,
-                description,
-                published
-            } as Product);
+            const cart: Cart | String = await CartService.createCart({
+                products,
+                quantity
+            } as Cart);
 
-            if (typeof product === 'string') return res.status(500).json({
-                success: false,
-                message: product
-            });
+            if (typeof cart === 'string') return res
+                .status(500)
+                .json({ success: false, message: cart });
 
             return res.json({
                 success: true,
-                message: "✔️ Produto criado com sucesso!",
-                result: product
+                message: "✔️ Carrinho iniciado com sucesso!",
+                result: cart
             })
 
         } catch (error) {
@@ -44,11 +42,11 @@ class ProductController {
     static async index(req: Request, res: Response) {
 
         try {
-            const products = await ProductService.getProducts();
+            const carts = await CartService.getCarts();
 
             return res.json({
                 success: true,
-                result: products
+                result: carts
             })
 
         } catch (error) {
@@ -61,66 +59,67 @@ class ProductController {
     }
 
     static async show(req: Request, res: Response) {
+
         try {
+
             const { id } = req.params;
 
             if (!id) return res
                 .status(500)
-                .json({ success: false, message: "✖️ É obrigatório informar o ID do produto!" });
+                .json({ success: false, message: "✖️ É obrigatório informar o ID do carrinho!" });
 
             if (isNaN(Number(id))) return res
                 .status(500)
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
-            const product = await ProductService.getProduct(Number(id));
-            if (!product) return res
+            const cart = await CartService.getCart(Number(id));
+
+            if (!cart) return res
                 .status(500)
-                .json({ success: false, message: "✖️ Produto não encontrado para o ID informado!" });
+                .json({ success: false, message: "✖️ Carrinho não encontrado para o ID informado!" });
 
             return res.json({
                 success: true,
-                result: product
+                result: cart
             });
 
         } catch (error) {
-            console.log(error);
-
-            return res
-                .status(500)
-                .json({ success: false, message: "✖️ Ops, tente novamente!" });
+            res.status(500).json(error);
         }
     }
 
     static async update(req: Request, res: Response) {
+
         try {
+
             const { id } = req.params;
 
             if (!id) return res
                 .status(500)
-                .json({ success: false, message: "✖️ É obrigatório informar o ID do produto!" });
+                .json({ success: false, message: "✖️ É obrigatório informar o ID do carrinho!" });
 
             if (isNaN(Number(id))) return res
                 .status(500)
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
-            const { title, description, user_id, product_status_id } = req.body;
+            const { products, quantity } = req.body;
 
-            if (!title && !description && !user_id && !product_status_id) {
+            if (!products && !quantity) {
                 return res
                     .status(500)
-                    .json({ success: false, message: "✖️ Você precisa preencher pelo menos um campo para atualizar o Produto!" });
+                    .json({ success: false, message: "✖️ Você precisa preencher pelo menos um campo para atualizar o Carrinho de Compras!" });
             }
 
-            const product: Product | string = await ProductService.updateProduct(Number(id), title, description, user_id, product_status_id);
+            const cart: Cart | string = await CartService.updateCart(Number(id), products, quantity);
 
-            if (typeof product === 'string') return res
+            if (typeof cart === 'string') return res
                 .status(404)
-                .json({ success: false, message: product });
+                .json({ success: false, message: cart });
 
             return res.json({
                 success: true,
-                message: "✔️ Produto atualizado com sucesso!",
-                result: product
+                message: "✔️ Carrinho de Compras atualizada com sucesso!",
+                result: cart
             });
 
         } catch (error) {
@@ -140,21 +139,21 @@ class ProductController {
 
             if (!id) return res
                 .status(500)
-                .json({ success: false, message: "✖️ É obrigatório informar o ID do produto!" });
+                .json({ success: false, message: "✖️ É obrigatório informar o ID do carrinho!" });
 
             if (isNaN(Number(id))) return res
                 .status(500)
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
-            const product = await ProductService.deleteProduct(Number(id));
+            const cart = await CartService.deleteCart(Number(id));
 
-            if (typeof product === 'string') return res
+            if (typeof cart === 'string') return res
                 .status(404)
-                .json({ success: false, message: product });
+                .json({ success: false, message: cart });
 
             return res.json({
                 success: true,
-                message: "✔️ Produto deletado com sucesso!"
+                message: "✔️ Carrinho de Compras esvaziado com sucesso!"
             });
 
         } catch (error) {
@@ -167,4 +166,4 @@ class ProductController {
     }
 }
 
-export default ProductController;
+export default CartController;

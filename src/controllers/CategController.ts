@@ -8,9 +8,9 @@ class CategController {
 
         try {
 
-            const { title, description, user_id, category_status_id } = req.body;
+            const { title, description, published, user_id } = req.body;
 
-            if (!title || !description || !user_id || !category_status_id) {
+            if (!title || !description || !published || !user_id) {
                 return res
                     .status(500)
                     .json({ success: false, message: "✖️ Você precisa informar todos os campos necessários para criar a Categoria!" })
@@ -18,18 +18,16 @@ class CategController {
 
             const category: Category | string = await CategService.createCategory({
                 title,
-                description,
-                user_id,
-                category_status_id
-            } as Category); // forçando um objeto a ser do tipo 'Category'
+                description
+            } as Category);
 
-            if (typeof category === 'string') return res
+            if (typeof category === "string") return res
                 .status(500)
                 .json({ success: false, message: category });
 
             return res.json({
                 success: true,
-                message: "🎉 Categoria criada com sucesso!",
+                message: "✔️ Categoria criada com sucesso!",
                 result: category
             })
 
@@ -62,6 +60,7 @@ class CategController {
 
     static async show(req: Request, res: Response) {
         try {
+
             const { id } = req.params;
 
             if (!id) return res
@@ -73,6 +72,7 @@ class CategController {
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
             const category = await CategService.getCategory(Number(id));
+
             if (!category) return res
                 .status(500)
                 .json({ success: false, message: "✖️ Categoria não encontrada para o ID informado!" });
@@ -93,6 +93,7 @@ class CategController {
 
     static async update(req: Request, res: Response) {
         try {
+
             const { id } = req.params;
 
             if (!id) return res
@@ -119,7 +120,7 @@ class CategController {
 
             return res.json({
                 success: true,
-                message: "Categoria atualizada com sucesso!",
+                message: "✔️ Categoria atualizada com sucesso!",
                 result: category
             });
 

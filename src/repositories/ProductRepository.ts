@@ -8,8 +8,7 @@ class ProductRepository {
         const findDuplicateProduct = await prisma.product.count({
             where: {
                 title: product.title,
-                description: product.description,
-                user_id: product.user_id
+                description: product.description
             }
         });
 
@@ -17,15 +16,10 @@ class ProductRepository {
             return "😬 O produto não pode ser criado porque já existe um produto com as mesmas informações.";
         }
 
-        if (product.product_status_id) {
-            const findproductStatusById = await prisma.productStatus.count({ where: { id: product.product_status_id } });
-            if (!findproductStatusById) return "✖️ Status de produto não existe!"
-        }
-
-        if (product.user_id) {
-            const findUserById = await prisma.user.count({ where: { id: product.user_id } });
-            if (!findUserById) return "✖️ Usuário informado não existe!"
-        }
+        // if (product.user_id) {
+        //     const findUserById = await prisma.user.count({ where: { id: product.user_id } });
+        //     if (!findUserById) return "✖️ Usuário informado não existe!"
+        // }
 
         return await prisma.product.create({
             data: {
@@ -33,11 +27,10 @@ class ProductRepository {
                 description: product.description,
                 price: product.price,
                 amount: product.amount,
-                image: product.image,
                 subcategory: product.subcategory,
+                image: product.image,
                 published: product.published,
-                user_id: product.user_id,
-                product_status_id: product.product_status_id
+                order_id: product.order_id
             },
         });
     }
@@ -56,11 +49,6 @@ class ProductRepository {
 
         if (!findById) return "✖️ Produto não encontrado para o ID informado!";
 
-        if (product_status_id) {
-            const findProductStatusById = await prisma.productStatus.count({ where: { id: product_status_id } });
-            if (!findProductStatusById) return "✖️ Status de produto não existe!"
-        }
-
         if (user_id) {
             const findUserById = await prisma.user.count({ where: { id: user_id } });
             if (!findUserById) return "✖️ Usuário informado não existe!"
@@ -70,9 +58,7 @@ class ProductRepository {
             where: { id, },
             data: {
                 title: title || findById.title,
-                description: description || findById.description,
-                user_id: user_id || findById.user_id,
-                product_status_id: product_status_id || findById.product_status_id
+                description: description || findById.description
             }
         })
     }
