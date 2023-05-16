@@ -8,9 +8,9 @@ class CategController {
 
         try {
 
-            const { title, description, published, user_id } = req.body;
+            const { title, description, published } = req.body;
 
-            if (!title || !description || !published || !user_id) {
+            if (!title || !description || !published) {
                 return res
                     .status(500)
                     .json({ success: false, message: "✖️ Você precisa informar todos os campos necessários para criar a Categoria!" })
@@ -18,7 +18,8 @@ class CategController {
 
             const category: Category | string = await CategService.createCategory({
                 title,
-                description
+                description,
+                published
             } as Category);
 
             if (typeof category === "string") return res
