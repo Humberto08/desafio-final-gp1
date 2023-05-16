@@ -8,9 +8,9 @@ class ProductController {
 
         try {
 
-            const { title, description, published, user_id } = req.body;
+            const { title, description, price, amount, subcategory, image, published } = req.body;
 
-            if (!title || !description || !published || !user_id) {
+            if (!title || !description || !price || !amount || !subcategory || !image || !published) {
                 return res
                     .status(500)
                     .json({ success: false, message: "✖️ Você precisa informar todos os campos necessários para criar o Produto!" })
@@ -19,13 +19,20 @@ class ProductController {
             const product: Product | string = await ProductService.createProduct({
                 title,
                 description,
+                price,
+                amount,
+                subcategory,
+                image,
                 published
-            } as Product);
+            } as unknown as Product);
 
-            if (typeof product === 'string') return res.status(500).json({
-                success: false,
-                message: product
-            });
+            if (product) {
+                return res.status(200).json({
+                    success: true,
+                    message: "✔️ Produto criado com sucesso!",
+                    result: product
+                })
+            };
 
             return res.json({
                 success: true,
@@ -103,15 +110,15 @@ class ProductController {
                 .status(500)
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
-            const { title, description, user_id, product_status_id } = req.body;
+            const { title, description, price, amount, subcategory, image, published } = req.body;
 
-            if (!title && !description && !user_id && !product_status_id) {
+            if (!title && !description && !price && !amount && !subcategory && !image && !published) {
                 return res
                     .status(500)
                     .json({ success: false, message: "✖️ Você precisa preencher pelo menos um campo para atualizar o Produto!" });
             }
 
-            const product: Product | string = await ProductService.updateProduct(Number(id), title, description, user_id, product_status_id);
+            const product: Product | string = await ProductService.updateProduct(Number(id), title, description, price, amount, subcategory, image, published);
 
             if (typeof product === 'string') return res
                 .status(404)

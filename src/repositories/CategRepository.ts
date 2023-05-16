@@ -9,7 +9,7 @@ class CategRepository {
             where: {
                 title: category.title,
                 description: category.description,
-                user_id: category.user_id
+                published: category.published
             }
         });
 
@@ -17,17 +17,11 @@ class CategRepository {
             return "😬 A categoria não pode ser criada porque já existe uma categoria com as mesmas informações.";
         }
 
-        if (category.user_id) {
-            const findUserById = await prisma.user.count({ where: { id: category.user_id } });
-            if (!findUserById) return "✖️ Usuário informado não existe!"
-        }
-
         return await prisma.category.create({
             data: {
                 title: category.title,
                 description: category.description,
-                user_id: category.user_id,
-                product_id: category.product_id
+                published: category.published
             }
         });
     }
@@ -55,8 +49,7 @@ class CategRepository {
             where: { id },
             data: {
                 title: title || findById.title,
-                description: description || findById.description,
-                user_id: user_id || findById.user_id
+                description: description || findById.description
             }
         })
     }

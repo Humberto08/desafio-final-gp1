@@ -15,8 +15,8 @@ class ProductService {
         return ProductRepository.getProduct(id);
     }
 
-    async updateProduct(id: number, title: string | null, content: string | null, user_id: number | null, product_status_id: number | null): Promise<Product | string> {
-        return ProductRepository.updateProduct(id, title, content, user_id, product_status_id);
+    async updateProduct(id: number, title: string | null, description: string | null, price: number | null, amount: number | null, subcategory: string | null, image: string | null, published: boolean | null): Promise<Product | string> {
+        return ProductRepository.updateProduct(id, title, description, price, amount, subcategory, image, published);
     }
 
     async deleteProduct(id: number): Promise<Product | string> {

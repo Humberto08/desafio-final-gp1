@@ -13,15 +13,14 @@ datasource db {
 // USUÁRIOS
 
 model User {
-    id         Int        @id @default(autoincrement())
+    id         Int      @id @default(autoincrement())
     name       String
-    email      String     @unique
+    email      String   @unique
     type       String
     password   String
-    created_at DateTime   @default(now())
-    updated_at DateTime   @updatedAt
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
     orders     Order[]
-    categories Category[]
 
     @@map("usuários")
 }
@@ -35,10 +34,8 @@ model Category {
     title       String   @unique @db.VarChar(100)
     description String   @db.VarChar(300)
     published   Boolean  @default(false)
-    Product     Product  @relation(fields: [product_id], references: [id])
-    product_id  Int
-    User        User     @relation(fields: [user_id], references: [id])
-    user_id     Int
+    Product     Product? @relation(fields: [productId], references: [id])
+    productId   Int?
 
     @@map("categorias")
 }
@@ -58,8 +55,8 @@ model Product {
     image       String
     published   Boolean    @default(false)
     categories  Category[]
-    Order       Order      @relation(fields: [order_id], references: [id])
-    order_id    Int
+    Order       Order?     @relation(fields: [orderId], references: [id])
+    orderId     Int?
 
     @@map("produtos")
 }
