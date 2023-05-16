@@ -16,38 +16,40 @@ async function main() {
         }
     });
 
-    await prisma.categoryStatus.upsert({
-        where: { title: "CADASTRAR" },
-        update: {},
-        create: {
-            title: "CADASTRAR"
-        }
-    });
-
-    await prisma.categoryStatus.upsert({
-        where: { title: "CADASTRADA" },
-        update: {},
-        create: {
-            title: "CADASTRADA"
-        }
-    });
-
-    await prisma.productStatus.upsert({
-        where: { title: "CADASTRAR" },
-        update: {},
-        create: {
-            title: "CADASTRAR"
-        }
-    });
-
-    await prisma.productStatus.upsert({
-        where: { title: "CADASTRADO" },
-        update: {},
-        create: {
-            title: "CADASTRADO"
-        }
-    });
 }
+
+//     await prisma.categoryStatus.upsert({
+//         where: { title: "CADASTRAR" },
+//         update: {},
+//         create: {
+//             title: "CADASTRAR"
+//         }
+//     });
+
+//     await prisma.categoryStatus.upsert({
+//         where: { title: "CADASTRADA" },
+//         update: {},
+//         create: {
+//             title: "CADASTRADA"
+//         }
+//     });
+
+//     await prisma.productStatus.upsert({
+//         where: { title: "CADASTRAR" },
+//         update: {},
+//         create: {
+//             title: "CADASTRAR"
+//         }
+//     });
+
+//     await prisma.productStatus.upsert({
+//         where: { title: "CADASTRADO" },
+//         update: {},
+//         create: {
+//             title: "CADASTRADO"
+//         }
+//     });
+// }
 
 main()
     .then(async () => {
@@ -55,12 +57,6 @@ main()
     })
     .catch(async (e) => {
         console.error(e);
-<<<<<<< HEAD
-        await prisma.$disconnect();
-        process.exit(1);
-    });
-=======
         await prisma.$disconnect()
         process.exit(1)
     })
->>>>>>> 0f42097dc931061d8e36e1ac863a979c440af9fb
