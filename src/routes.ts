@@ -6,13 +6,9 @@ import ProductController from "./controllers/ProductController";
 import CartController from "./controllers/CartController";
 import OrderController from "./controllers/OrderController";
 import AuthController from "./controllers/AuthController";
-
-
-
+import AccessController from "./controllers/AccessController";
 
 export function setupRoutes(app: Application) {
-
-
 
     const router = new Router(app);
 
@@ -23,17 +19,22 @@ export function setupRoutes(app: Application) {
     })
 
     router.post("/login", AuthController.login);
-    
+
 
     router.group("/users", (router) => {
-        router.get("/",  UserController.index);
+        router.get("/", UserController.index);
         router.post("/", UserController.create);
         router.get("/:id", UserController.show);
         router.put("/:id", UserController.update);
         router.delete("/:id", UserController.delete);
     })
 
-    router.group("/categorias", (router) => {
+    router.group("/access", (router) => {
+        router.post("/", AccessController.create);
+        router.get("/", AccessController.index);
+    })
+
+    router.group("/categories", (router) => {
         router.post("/", CategController.create);
         router.get("/", CategController.index);
         router.get("/:id", CategController.show);
@@ -41,7 +42,7 @@ export function setupRoutes(app: Application) {
         router.delete("/:id", CategController.delete)
     });
 
-    router.group("/produtos", (router) => {
+    router.group("/products", (router) => {
         router.post("/", ProductController.create);
         router.get("/", ProductController.index);
         router.get("/:id", ProductController.show);
@@ -52,16 +53,16 @@ export function setupRoutes(app: Application) {
     router.group("/order", (router) => {
         router.post("/", OrderController.create);
         router.get("/", OrderController.index);
-        router.get("/", OrderController.show);
-        router.put("/", OrderController.update);
-        router.delete("/", OrderController.delete);
+        router.get("/:id", OrderController.show);
+        router.put("/:id", OrderController.update);
+        router.delete("/:id", OrderController.delete);
     })
 
     router.group("/cart", (router) => {
         router.post("/", CartController.create);
         router.get("/", CartController.index);
-        router.get("/", CartController.show);
-        router.put("/", CartController.update);
-        router.delete("/", CartController.delete);
+        router.get("/:id", CartController.show);
+        router.put("/:id", CartController.update);
+        router.delete("/:id", CartController.delete);
     })
 }
