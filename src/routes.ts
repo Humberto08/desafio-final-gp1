@@ -6,10 +6,14 @@ import ProductController from "./controllers/ProductController";
 import CartController from "./controllers/CartController";
 import OrderController from "./controllers/OrderController";
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import AuthController from "./controllers/AuthController";
 
 
 
+=======
+import AccessController from "./controllers/AccessController";
+>>>>>>> Stashed changes
 =======
 import AccessController from "./controllers/AccessController";
 >>>>>>> Stashed changes
