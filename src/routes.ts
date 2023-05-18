@@ -5,17 +5,28 @@ import CategController from "./controllers/CategController";
 import ProductController from "./controllers/ProductController";
 import CartController from "./controllers/CartController";
 import OrderController from "./controllers/OrderController";
+import AuthController from "./controllers/AuthController";
+
+
+
 
 export function setupRoutes(app: Application) {
 
+
+
     const router = new Router(app);
+
+    // const AuthController = new AuthController();
 
     router.get("/", (req: Request, res: Response) => {
         res.status(200).json("🚀 Aplicação iniciada com sucesso!");
     })
 
+    router.post("/login", AuthController.login);
+    
+
     router.group("/users", (router) => {
-        router.get("/", UserController.index);
+        router.get("/",  UserController.index);
         router.post("/", UserController.create);
         router.get("/:id", UserController.show);
         router.put("/:id", UserController.update);

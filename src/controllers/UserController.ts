@@ -1,6 +1,7 @@
 import { User } from '@prisma/client';
 import { Request, Response } from 'express'
 import UserService from '../services/UserService';
+import { hash } from 'bcrypt';
 // import { type } from 'node:os';
 
 
@@ -29,6 +30,7 @@ class UserController {
         try {
 
             const { name, email, password, type } = req.body;
+            const hash_password = await hash(password, 10);
 
             if (!name || !email || !password || !type) {
                 return res
@@ -39,8 +41,8 @@ class UserController {
             const user: string | User = await UserService.createUser({
                 name,
                 email,
-                password,
-                type
+                type,
+                password: hash_password
             } as unknown as User);
 
             if (user) {
