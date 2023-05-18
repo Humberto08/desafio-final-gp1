@@ -4,13 +4,17 @@ import { prisma } from "../database/db";
 class OrderRepository {
 
     async createOrder(order: Order): Promise<Order | string> {
+
         return await prisma.order.create({
             data: {
-                products: order.products,
                 amount: order.amount,
-                address: order.address
+                total_value: order.total_value
             }
         });
+    }
+
+    async getOrders(): Promise<Array<Order>> {
+        return await prisma.order.findMany();
     }
 
     async getOrder(id: number): Promise<Order | null> {
@@ -24,9 +28,7 @@ class OrderRepository {
         return await prisma.order.update({
             where: { id },
             data: {
-                products: products || findById.products,
-                amount: amount || findById.amount,
-                address: address || findById.address
+                amount: amount || findById?.amount
             }
         })
     }
@@ -41,4 +43,4 @@ class OrderRepository {
 
 }
 
-export default OrderRepository;
+export default new OrderRepository();
