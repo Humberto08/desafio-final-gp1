@@ -5,22 +5,10 @@ import CategController from "./controllers/CategController";
 import ProductController from "./controllers/ProductController";
 import CartController from "./controllers/CartController";
 import OrderController from "./controllers/OrderController";
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 import AuthController from "./controllers/AuthController";
-
-
-
-=======
 import AccessController from "./controllers/AccessController";
->>>>>>> Stashed changes
-=======
-import AccessController from "./controllers/AccessController";
->>>>>>> Stashed changes
 
 export function setupRoutes(app: Application) {
-
-
 
     const router = new Router(app);
 
@@ -31,10 +19,10 @@ export function setupRoutes(app: Application) {
     })
 
     router.post("/login", AuthController.login);
-    
+
 
     router.group("/users", (router) => {
-        router.get("/",  UserController.index);
+        router.get("/", UserController.index);
         router.post("/", UserController.create);
         router.get("/:id", UserController.show);
         router.put("/:id", UserController.update);
