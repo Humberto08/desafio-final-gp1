@@ -1,5 +1,5 @@
 
-# CaféMaria - Back End / Desafio Final xp #48
+# CaféMaria - Back End / Desafio Final XP #48
 
 
 O projeto consiste em um MVP (Produto Mínimo Viável) de um ecommerce com o propósito de aplicar nosso conhecimento adquirido. Buscamos uma imersão completa no mercado de trabalho, mapeando e criando histórias para cada funcionalidade a ser desenvolvida pela equipe. O objetivo central desse desafio é construir uma loja virtual chamada Cafémaria.
