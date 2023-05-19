@@ -5,8 +5,6 @@ import { sign } from "jsonwebtoken";
 
 
 
-
-
 export class AuthController {
     async login(req: Request, res: Response) {
         const { email, password } = req.body;
