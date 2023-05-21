@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+// USUÁRIOS
+
+model User {
+    id          Int          @id @default(autoincrement())
+    name        String
+    email       String       @unique
+    user_access UserAccess[]
+    type        String
+    password    String
+    created_at  DateTime     @default(now())
+    updated_at  DateTime     @updatedAt
+    order_buyer Order[]      @relation("buyer")
+
+    @@map("usuários")
+}
+
+model UserAccess {
+    id         Int      @id @default(autoincrement())
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    User       User?    @relation(fields: [user_id], references: [id])
+    user_id    Int?
+    Access     Access?  @relation(fields: [access_id], references: [id])
+    access_id  Int?
+}
+
+model Access {
+    id          Int          @id @default(autoincrement())
+    created_at  DateTime     @default(now())
+    updated_at  DateTime     @updatedAt
+    name        String       @unique
+    user_access UserAccess[]
+
+    // essa tabela é o nível de acesso do usuário - pode cadastrar níveis como "comprador" e "adm"
+    // com esses níveis cadastrados, o usuário tem que logar como comprador ou adm e cada um tem suas permissões (accessController.ts)
+}
+
+// CATEGORIAS
+
+model Category {
+    id          Int       @id @default(autoincrement())
+    created_at  DateTime  @default(now())
+    updated_at  DateTime  @updatedAt
+    title       String    @unique @db.VarChar(100)
+    description String    @db.VarChar(300)
+    published   Boolean   @default(false)
+    products    Product[]
+
+    @@map("categorias")
+}
+
+// PRODUTOS
+
+model Product {
+    id             Int            @id @default(autoincrement())
+    created_at     DateTime       @default(now())
+    updated_at     DateTime       @updatedAt
+    title          String         @db.VarChar(100)
+    description    String         @db.VarChar(300)
+    price          Float
+    measures       String?        @db.VarChar(10)
+    amount         Int
+    subcategory    String         @db.VarChar(100)
+    image          String
+    published      Boolean        @default(false)
+    categories     Category[]
+    order_products OrderProduct[]
+
+    @@map("produtos")
+}
+
+// PEDIDOS
+model Order {
+    id             Int            @id @default(autoincrement())
+    created_at     DateTime       @default(now())
+    updated_at     DateTime       @updatedAt
+    order_products OrderProduct[]
+    amount         Int            @default(1)
+    address        OrderAddress[]
+    total_value    Float
+    OrderStatus    String         @default("pending")
+    Buyer          User?          @relation("buyer", fields: [buyer_id], references: [id])
+    buyer_id       Int?
+
+    @@map("pedidos")
+}
+
+model OrderProduct {
+    id         Int      @id @default(autoincrement())
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    quantity   Int      @default(1)
+    discount   Float?
+    Order      Order?   @relation(fields: [order_id], references: [id])
+    order_id   Int?
+    Product    Product? @relation(fields: [product_id], references: [id])
+    product_id Int?
+
+    @@map("produtos-do-pedido")
+}
+
+model OrderAddress {
+    id         Int    @id @default(autoincrement())
+    street     String
+    number     Int
+    complement String
+    city       String
+    state      String
+    zipcode    String
+    country    String
+    Order      Order  @relation(fields: [order_id], references: [id])
+    order_id   Int
+
+    @@map("endereços")
+}
+
+// CARRINHO DE COMPRAS
+
+model Cart {
+    id         Int      @id @default(autoincrement())
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    products   String
+    quantity   Int      @default(1)
+
+    @@map("carrinho-de-compras")
+}
