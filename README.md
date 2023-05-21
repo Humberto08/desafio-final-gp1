@@ -40,3 +40,5 @@ O projeto consiste em um MVP (Produto Mínimo Viável) de um ecommerce com o pro
 - [Eduardo Souza](https://www.github.com/esfigueredo)
 - [Paulo Roberto](https://www.github.com/paulorobertorodrigues)
 - [Humberto Luciano](https://www.github.com/Humberto08)
+=======
+# E-Commerce - CafeMaria
