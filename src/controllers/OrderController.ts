@@ -3,76 +3,86 @@ import { Request, Response } from "express";
 import OrderService from "../services/OrderService";
 import { prisma } from "../database/db";
 
+/*
+
+ERRO: usar PRISMA nessa camada
+PROBLEMA: não tô sabendo separar essas bagaça de camada
+
+DÚVIDA: não entendi a lógica da finalização do pedido 😓
+    O que acho que pode ser que seja:
+    - order tem que receber o return da const addToCart (o que tem no carrinho tem que ir também pra página de pagto)
+    - 
+-> e como fazer essas cabaça de passos?
+
+Atividades relacionadas ao pedido final (funções):
+1) Ir para pagamento / const checkout 
+2) Só depois que pagou é que recebe a mensagem "compra realizada com sucesso"
+-> e como fazer esses passo from hell?
+
+*/
+
+
 class OrderController {
 
     static async create(req: Request, res: Response) {
+        // não sei criar essa fucking rota de create 
 
         try {
 
-            const { products } = req.body;
-            const { id } = req.body;
+            const { email, products } = req.body;
 
-            const productsFromDatabase = await prisma.product.findMany({
-                where: {
-                    id: { in: products.map((product: any) => product.id) }
-                },
+            const user = await prisma.user.findUnique({
+                where: { email: email },
+                select: { id: true }, // não lembro pq essa linha ... ?
             });
 
-            const productQuantity = productsFromDatabase.map((product) => {
-                const { id, title, price } = product;
-                const quantity = products.find((p: any) => p.id === product.id).quantity;
-                return {
-                    id,
-                    title,
-                    price,
-                    quantity,
-                }
-            });
+            if (!user) {
+                return res
+                    .status(500)
+                    .json({ success: false, message: "✖️ Você precisa fazer login para efetuar a compra!" }) // mensagem certa ?
+            }
 
-            // return res.json(productQuantity) 
-            // ↑ até aqui, ele me retorna todos os campos (id, title, price, quantity), mas o preço é o preço da unidade, eu quero o valor total
+            // produtos que vêm do carrinho
+            // como trazer dados de lá pra cá?
 
-            let total = 0;
-            for (const product of productQuantity) {
-                total += product.price * parseInt(product.quantity);
-            };
+            // acho que conseguindo trazer pra cá os produtos adicionados lá, o resto da lógica já tá certa ... ??
 
-            // return res.json(total) 
-            // ↑ aqui ele me retorna só o valor total, mas ainda quero tudo junto
+            // const productsFromCart = await
+            // preciso da variável productQuantity
 
-            // parte que vai mostrar no console os dados do pedido: produto, quantidade e valor total
-            // não tá funfando
-            // se ficar comentada, recebe a mensagem de compra realizada com sucesso / se descomentar, dá erro
-            const order = await prisma.order.create({
-                data: {
-                    total_value: total,
-                    // Buyer: { connect: { id } }, // Comentei essa linha e deu certo! Mas resultou numa puta bagunça
-                    order_products: {
-                        create: productQuantity.map((product) => ({
-                            Product: { connect: { id: product.id } },
-                            quantity: product.quantity,
-                        })),
-                    },
-                },
-                include: {
-                    order_products: true,
-                },
-            });
+            // ↓↓↓ essa próxima função é o que vai retornar no insomnia
 
-            productQuantity.map(async (product) => {
-                await prisma.product.updateMany({
-                    where: { id: product.id },
-                    data: {
-                        amount: {
-                            decrement: parseInt(product.quantity),
-                        },
-                    },
-                });
-            });
+            // const order = await prisma.order.create({
+            //     data: {
+            //         total_value: total,
+            //         order_products: {
+            //             create: productQuantity.map((product) => ({
+            //                 Product: { connect: { id: product.id } },
+            //                 quantity: product.quantity,
+            //             })),
+            //         },
+            //     },
+            //     include: {
+            //         order_products: true,
+            //     },
+            // });
+
+            // ↓↓↓ essa próxima função é a que vai remover quantidade comprada do estoque da loja
+
+            // productQuantity.map(async (product) => {
+            //     await prisma.product.updateMany({
+            //         where: { id: product.id },
+            //         data: {
+            //             amount: {
+            //                 decrement: parseInt(product.quantity),
+            //             },
+            //         },
+            //     });
+            // });
 
             return res
                 .status(201)
-                .json({ order, message: "✔️ Compra realizada com sucesso!" })
+                .json({ message: "✔️ Compra realizada com sucesso!" })
 
         } catch (error) {
             console.log(error);
@@ -88,7 +98,7 @@ class OrderController {
 
             const orders = await OrderService.getOrders();
 
-            return res.json({
+            return res.status(200).json({
                 success: true,
                 result: orders
             })
@@ -106,8 +116,33 @@ class OrderController {
 
         try {
 
+            const { id } = req.params;
+
+            if (!id) return res
+                .status(500)
+                .json({ success: false, message: "✖️ É obrigatório informar o ID do produto!" });
+
+            if (isNaN(Number(id))) return res
+                .status(500)
+                .json({ success: false, message: "✖️ O ID precisa ser um número!" });
+
+            const order = await OrderService.getOrder(Number(id));
+
+            if (!order) return res
+                .status(500)
+                .json({ success: false, message: "✖️ Pedido não encontrado para o ID informado!" });
+
+            return res.json({
+                success: true,
+                result: order
+            });
+
         } catch (error) {
-            res.status(500).json(error);
+            console.log(error);
+
+            return res
+                .status(500)
+                .json({ success: false, message: "✖️ Ops, tente novamente!" });
         }
     }
 
@@ -124,8 +159,33 @@ class OrderController {
 
         try {
 
+            const { id } = req.params;
+
+            if (!id) return res
+                .status(500)
+                .json({ success: false, message: "✖️ É obrigatório informar o ID do produto!" });
+
+            if (isNaN(Number(id))) return res
+                .status(500)
+                .json({ success: false, message: "✖️ O ID precisa ser um número!" });
+
+            const order = await OrderService.deleteOrder(Number(id));
+
+            if (typeof order === 'string') return res
+                .status(404)
+                .json({ success: false, message: order });
+
+            return res.json({
+                success: true,
+                message: "✔️ Pedido deletado com sucesso!"
+            });
+
         } catch (error) {
-            res.status(500).json(error);
+            console.log(error);
+
+            return res
+                .status(500)
+                .json({ success: false, message: "✖️ Ops, tente novamente!" });
         }
     }
 }
