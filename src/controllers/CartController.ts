@@ -1,6 +1,60 @@
 import { Cart } from "@prisma/client";
 import { Request, Response } from "express";
 import CartService from "../services/CartService";
+import { prisma } from "../database/db";
+
+/*
+
+ERRO: usar PRISMA nessa camada
+PROBLEMA: não tô sabendo separar essas bagaça de camada
+
+DÚVIDA: não entendi a lógica de um carrinho de compras 😓
+    O que entendi:
+    - o carrinho não precisa estar atrelado a um user mas precisa gerar um id (cart_id)
+    - quando o user for pagar (order) essa order vai precisar desse cart_id
+    - quando a order vier pro back com o cart_id, vai vir o token do user junto
+-> e como fazer essas cabaça de passos ?
+
+DÚVIDA: o carrinho fica salvo em banco ?
+
+*/
+
+// ------ //
+
+/*
+
+TENTATIVA DE ENTENDER A LÓGICA
+
+const cart = []; // começa com variável cart do tipo array vazio ?
+
+Atividades relacionadas ao carrinho (funções):
+1) Adicionar ao carrinho / const addToCart (ou createCart)
+    Ações de adicionar ao carrinho
+    a) qual produto foi clicado? (product_id)
+    b) qual o tipo? (subcategory - ver outro nome = tamanho, cor, peso, etc)
+    c) qual a quantidade? (como colocar default = 1 ?)
+    d) ligar produto ao preço
+2) Ver carrinho / const getCart
+3) Ver carrinhos / const getCarts
+4) Atualizar o carrinho / const updateCart
+5) Esvaziar o carrinho / const deleteCart
+
+Atividades relacionadas ao pedido final (funções):
+1) Finalizar a compra / const checkout 
+-> essa etapa aqui já é lá em orderController
+
+*/
+
+// tentativa de criar o tipo User 
+type User = {
+    id: number;
+    name: string;
+    email: string;
+    user_access: [];
+    password: string;
+    order_buyer: [];
+    Cart: []
+}
 
 class CartController {
 
@@ -10,24 +64,69 @@ class CartController {
 
             const { products, quantity } = req.body;
 
-            if (!products || !quantity) {
-                return res
-                    .status(500)
-                    .json({ success: false, message: "✖️ Você precisa informar todos os campos necessários para iniciar um Carrinho de Compras!" })
-            }
+            // produtos que vêm do banco            
+            const productsFromDatabase = await prisma.product.findMany({
+                where: {
+                    id: { in: products.map((product: any) => product.id) }
+                },
+            });
 
-            const cart: Cart | String = await CartService.createCart({
-                products,
-                quantity
-            } as Cart);
+            // quantidade do produto adicionada ao carrinho
+            const productQuantity = productsFromDatabase.map((product) => {
+                const { id, title, price } = product;
+                const quantity = products.find((prod: any) => prod.id === product.id).quantity;
+                return {
+                    id,
+                    title,
+                    price,
+                    quantity
+                }
+            });
 
-            if (typeof cart === 'string') return res
-                .status(500)
-                .json({ success: false, message: cart });
+            // ↑↑↑ como tipar esses que tão com any ? ↑↑↑
+
+            // como colocar quantidade default = 1 quando adiciona um item ao carrinho ?
+
+            // quantidade de itens adicionados ao carrinho
+            let total = 0;
+            for (const product of productQuantity) {
+                total += product.price * parseInt(product.quantity);
+            };
+
+            // essa const tá chamando a tabela order ... ?
+            const cart = await prisma.order.create({
+                data: {
+                    total_value: total,
+                    order_products: {
+                        create: productQuantity.map((product) => ({
+                            Product: { connect: { id: product.id } },
+                            quantity: product.quantity,
+                        })),
+                    },
+                },
+                include: {
+                    order_products: true,
+                },
+            });
+
+            // const cart: Cart | String = await CartService.createCart({
+            //     data: {
+            //         total_value: total,
+            //         order_products: {
+            //             create: productQuantity.map((product) => ({
+            //                 Product: { connect: { id: product.id } },
+            //                 quantity: product.quantity,
+            //             })),
+            //         },
+            //     },
+            //     include: {
+            //         order_products: true,
+            //     },
+            // } as unknown as Cart);
 
             return res.json({
                 success: true,
-                message: "✔️ Carrinho iniciado com sucesso!",
+                message: "✔️ Produto adicionado ao carrinho!",
                 result: cart
             })
 
@@ -104,12 +203,6 @@ class CartController {
 
             const { products, quantity } = req.body;
 
-            if (!products && !quantity) {
-                return res
-                    .status(500)
-                    .json({ success: false, message: "✖️ Você precisa preencher pelo menos um campo para atualizar o Carrinho de Compras!" });
-            }
-
             const cart: Cart | string = await CartService.updateCart(Number(id), products, quantity);
 
             if (typeof cart === 'string') return res
@@ -118,7 +211,7 @@ class CartController {
 
             return res.json({
                 success: true,
-                message: "✔️ Carrinho de Compras atualizada com sucesso!",
+                // sem mensagem, só retorno da atualização da quantidade
                 result: cart
             });
 
@@ -153,7 +246,7 @@ class CartController {
 
             return res.json({
                 success: true,
-                message: "✔️ Carrinho de Compras esvaziado com sucesso!"
+                message: "✔️ Carrinho esvaziado com sucesso!"
             });
 
         } catch (error) {
