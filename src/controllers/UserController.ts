@@ -2,8 +2,6 @@ import { User } from '@prisma/client';
 import { Request, Response } from 'express'
 import UserService from '../services/UserService';
 import { hash } from 'bcrypt';
-// import { type } from 'node:os';
-
 
 
 class UserController {
@@ -53,11 +51,6 @@ class UserController {
                 })
             }
 
-            return res.json({
-                success: true,
-                message: "Usuário criado com sucesso",
-                result: user
-            })
 
         } catch (error) {
             console.log(error);
