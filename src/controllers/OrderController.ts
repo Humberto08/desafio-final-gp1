@@ -50,7 +50,7 @@ class OrderController {
             // const productsFromCart = await
             // preciso da variável productQuantity
 
-            // ↓↓↓ essa próxima função é o que vai retornar no insomnia
+            // ↓↓↓ essa próxima função é o que vai retornar os dados no insomnia
 
             // const order = await prisma.order.create({
             //     data: {
