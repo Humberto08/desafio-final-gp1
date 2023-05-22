@@ -24,7 +24,7 @@ class ProductController {
                 subcategory,
                 image,
                 published
-            } as unknown as Product);
+            } as Product);
 
             if (product) {
                 return res.status(200).json({
@@ -33,12 +33,6 @@ class ProductController {
                     result: product
                 })
             };
-
-            return res.json({
-                success: true,
-                message: "✔️ Produto criado com sucesso!",
-                result: product
-            })
 
         } catch (error) {
             console.log(error);
@@ -51,9 +45,10 @@ class ProductController {
     static async index(req: Request, res: Response) {
 
         try {
+
             const products = await ProductService.getProducts();
 
-            return res.json({
+            return res.status(200).json({
                 success: true,
                 result: products
             })
@@ -68,7 +63,9 @@ class ProductController {
     }
 
     static async show(req: Request, res: Response) {
+
         try {
+
             const { id } = req.params;
 
             if (!id) return res
@@ -80,6 +77,7 @@ class ProductController {
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
             const product = await ProductService.getProduct(Number(id));
+
             if (!product) return res
                 .status(500)
                 .json({ success: false, message: "✖️ Produto não encontrado para o ID informado!" });
