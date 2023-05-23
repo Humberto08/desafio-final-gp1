@@ -14,7 +14,7 @@ class CupomController {
 
             const { nome, valor } = req.body;
 
-            const cupom = await  CupomController.create({
+            const cupom = await CupomController.create({
                 nome, valor
             });
 
@@ -40,7 +40,7 @@ class CupomController {
                 return res.json("O parâmetro id é obrigatório.");
             }
 
-            const cupom = await  CupomController.findByPk(id);
+            const cupom = await CupomController.findByPk(id);
 
             if (!cupom) {
                 return res.json(`Cupom de id '${id} não encontrado.'`);
@@ -51,7 +51,7 @@ class CupomController {
 
             Object.assign(payloadUpdate, req.body);
 
-            const cupomUpdate = await  CupomController.update(payloadUpdate, {
+            const cupomUpdate = await CupomController.update(payloadUpdate, {
                 where: { id },
             });
 
@@ -77,22 +77,22 @@ class CupomController {
                 return res.json("O parâmetro id é obrigatório.");
             }
 
-            const cupom = await  CupomController.findByPk(id);
+            const cupom = await CupomController.findByPk(id);
 
             if (!cupom) {
                 return res.json(`Cupom de id '${id} não encontrado.'`);
             }
 
-            const cupomDelete = await  CupomController.destroy({
-                where:{
+            const cupomDelete = await CupomController.destroy({
+                where: {
                     id
                 }
             });
 
-            return res.status(204).json({message:"Cupom deletado com sucesso!"});
+            return res.status(204).json({ message: "Cupom deletado com sucesso!" });
 
         } catch (error) {
-            return res.status(400).json({erro: "Erro ao deletar o cupom"});
+            return res.status(400).json({ erro: "Erro ao deletar o cupom" });
         }
 
     }
@@ -100,7 +100,7 @@ class CupomController {
     public async getAll(req: Request, res: Response) {
         try {
 
-            const cuponsList = await  CupomController.findAll();
+            const cuponsList = await CupomController.findAll();
 
             res.status(200).json(cuponsList);
 
@@ -114,18 +114,18 @@ class CupomController {
 
             const { id } = req.params;
 
-            if(!id){
-                return res.status(400).json({erro: "O parâmetro id é obrigatório."});
+            if (!id) {
+                return res.status(400).json({ erro: "O parâmetro id é obrigatório." });
             }
 
-            const cupom = await  CupomController.findOne({
-                where:{
+            const cupom = await CupomController.findOne({
+                where: {
                     id
                 }
             });
 
-            if(!cupom){
-                return res.status(200).json({mensagem: "Cupum não encontrado."});
+            if (!cupom) {
+                return res.status(200).json({ mensagem: "Cupum não encontrado." });
             }
 
             res.status(200).json(cupom);

@@ -9,6 +9,7 @@ class OrderRepository {
             data: {
                 amount: order.amount,
                 total_value: order.total_value
+                // como incluir o array de order_products aqui?
             }
         });
     }
@@ -25,22 +26,25 @@ class OrderRepository {
 
         const findById = await prisma.order.findFirst({ where: { id } });
 
+        if (!findById) return "✖️ Pedido não encontrado para o ID informado!";
+
         return await prisma.order.update({
             where: { id },
             data: {
                 amount: amount || findById?.amount
+                // como editar arrays de endereço e produtos?
             }
         })
     }
 
     async deleteOrder(id: number): Promise<Order | string> {
 
-        await prisma.order.findFirst({ where: { id } });
+        const findById = await prisma.order.findFirst({ where: { id } });
 
-        return await prisma.order.delete({ where: { id, } })
+        if (!findById) return "✖️ Pedido não encontrado para o ID informado!";
 
+        return await prisma.order.delete({ where: { id } })
     }
-
 }
 
 export default new OrderRepository();

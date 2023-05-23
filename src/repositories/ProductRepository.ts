@@ -48,11 +48,6 @@ class ProductRepository {
 
         if (!findById) return "✖️ Produto não encontrado para o ID informado!";
 
-        // if (user_id) {
-        //     const findUserById = await prisma.user.count({ where: { id: user_id } });
-        //     if (!findUserById) return "✖️ Usuário informado não existe!"
-        // }
-
         return await prisma.product.update({
             where: { id, },
             data: {
@@ -73,7 +68,7 @@ class ProductRepository {
 
         if (!findById) return "✖️ Produto não encontrado para o ID informado!";
 
-        return await prisma.product.delete({ where: { id, } })
+        return await prisma.product.delete({ where: { id } })
     }
 }
 
