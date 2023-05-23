@@ -81,8 +81,6 @@ class CartController {
 
             // ↑↑↑ como tipar esses que tão com any ? ↑↑↑
 
-            // como colocar quantidade default = 1 quando clica em adicionar algum item ao carrinho ?
-
             // quantidade de itens adicionados ao carrinho
             let total = 0;
             for (const product of productQuantity) {
