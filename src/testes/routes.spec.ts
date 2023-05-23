@@ -1,7 +1,6 @@
-import { Router } from './helpers/Router';
-
+import { Router } from '../helpers/Router';
 import { describe } from "node:test";
-import supertest from 'supertest';
+import supertest from 'supertest'
 
 
 describe("Teste da rotas de prodito da API", () => {
