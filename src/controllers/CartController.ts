@@ -8,7 +8,7 @@ import { prisma } from "../database/db";
 ERRO: usar PRISMA nessa camada
 PROBLEMA: não tô sabendo separar essas bagaça de camada
 
-DÚVIDA: não entendi a lógica de um carrinho de compras 😓
+DÚVIDA: não entendi a lógica 'carrinho de compras' + 'fechar pedido'
     O que entendi:
     - o carrinho não precisa estar atrelado a um user mas precisa gerar um id (cart_id)
     - quando o user for pagar (order) essa order vai precisar desse cart_id
@@ -39,10 +39,6 @@ Atividades relacionadas ao carrinho (funções):
 4) Atualizar o carrinho / const updateCart
 5) Esvaziar o carrinho / const deleteCart
 
-Atividades relacionadas ao pedido final (funções):
-1) Finalizar a compra / const checkout 
--> essa etapa aqui já é lá em orderController
-
 */
 
 // tentativa de criar o tipo User 
@@ -64,7 +60,7 @@ class CartController {
 
             const { products, quantity } = req.body;
 
-            // produtos que vêm do banco            
+            // produtos que vêm do banco - acesso ao banco            
             const productsFromDatabase = await prisma.product.findMany({
                 where: {
                     id: { in: products.map((product: any) => product.id) }
@@ -85,7 +81,7 @@ class CartController {
 
             // ↑↑↑ como tipar esses que tão com any ? ↑↑↑
 
-            // como colocar quantidade default = 1 quando adiciona um item ao carrinho ?
+            // como colocar quantidade default = 1 quando clica em adicionar algum item ao carrinho ?
 
             // quantidade de itens adicionados ao carrinho
             let total = 0;
@@ -93,7 +89,7 @@ class CartController {
                 total += product.price * parseInt(product.quantity);
             };
 
-            // essa const tá chamando a tabela order ... ?
+            // essa const tá chamando a tabela order ... é isso ?
             const cart = await prisma.order.create({
                 data: {
                     total_value: total,
@@ -108,21 +104,6 @@ class CartController {
                     order_products: true,
                 },
             });
-
-            // const cart: Cart | String = await CartService.createCart({
-            //     data: {
-            //         total_value: total,
-            //         order_products: {
-            //             create: productQuantity.map((product) => ({
-            //                 Product: { connect: { id: product.id } },
-            //                 quantity: product.quantity,
-            //             })),
-            //         },
-            //     },
-            //     include: {
-            //         order_products: true,
-            //     },
-            // } as unknown as Cart);
 
             return res.json({
                 success: true,

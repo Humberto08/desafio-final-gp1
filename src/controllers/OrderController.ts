@@ -39,7 +39,7 @@ class OrderController {
             if (!user) {
                 return res
                     .status(500)
-                    .json({ success: false, message: "✖️ Você precisa fazer login para efetuar a compra!" }) // mensagem certa ?
+                    .json({ success: false, message: "✖️ Você precisa fazer login para efetuar a compra!" })
             }
 
             // produtos que vêm do carrinho
@@ -48,7 +48,7 @@ class OrderController {
             // acho que conseguindo trazer pra cá os produtos adicionados lá, o resto da lógica já tá certa ... ??
 
             // const productsFromCart = await
-            // preciso da variável productQuantity
+            // como trazer a variável productQuantity ?
 
             // ↓↓↓ essa próxima função é o que vai retornar os dados no insomnia
 
