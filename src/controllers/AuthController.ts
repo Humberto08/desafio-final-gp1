@@ -22,7 +22,7 @@ export class AuthController {
         }
 
         const token = sign({ id: user.id }, "secret", {
-            expiresIn: "1h",
+            expiresIn: "48h",
         })
 
         const { id } = user;

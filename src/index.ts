@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Application } from "express";
 import cors from "cors";
 import { setupRoutes } from "./routes";
 import { prisma } from "./database/db";
