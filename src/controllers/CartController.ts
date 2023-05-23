@@ -192,7 +192,6 @@ class CartController {
 
             return res.json({
                 success: true,
-                // sem mensagem, só retorno da atualização da quantidade
                 result: cart
             });
 
