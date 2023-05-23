@@ -59,10 +59,10 @@ export function setupRoutes(app: Application) {
     })
 
     router.group("/cart", (router) => {
-        router.post("/", CartController.create);
-        router.get("/", CartController.index);
-        router.get("/:id", CartController.show);
-        router.put("/:id", CartController.update);
-        router.delete("/:id", CartController.delete);
+        router.post("/:user_id", CartController.create);
+        router.get("/:user_id", CartController.index);
+        router.get("/:user_id/:cart_id", CartController.show);
+        router.put("/:user_id/:cart_id", CartController.update);
+        router.delete("/:user_id/:cart_id", CartController.delete);
     })
 }
