@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import User from "../models/userModel";
-import Product from "../models/productModel";
-import Cart from "../models/cartModel";
-import Coupon from "../models/couponModel";
-import Order from "../models/orderModel";
+import User from "../controllers/UserController";
+import Product from "../controllers/ProductController";
+import Cart from "../controllers/CartController";
+import Coupon from "../controllers/CouponController";
+import Order from "../controllers/OrderController";
 import uniqid from "uniqid";
 import asyncHandler from "express-async-handler";
 import { generateToken, generateRefreshToken } from "../config/tokenUtils";
