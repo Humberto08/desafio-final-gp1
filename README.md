@@ -17,6 +17,7 @@ O projeto consiste em um MVP (Produto Mínimo Viável) de um ecommerce com o pro
 - Prisma
 - MySql
 - TypeScript
+- SQL Cloud (GCP)
 
 
 ## Documentação - Back End
@@ -32,6 +33,7 @@ O projeto consiste em um MVP (Produto Mínimo Viável) de um ecommerce com o pro
 - [cors](https://www.npmjs.com/package/@types/cors)
 - [bcrypt](https://www.npmjs.com/package/@types/bcrypt)
 - [body-parser](https://www.npmjs.com/package/@types/body-parser)
+- [SQLCloud] (https://cloud.google.com/sql/docs/mysql?hl=pt-br)
 
 ## Autores
 
