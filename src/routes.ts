@@ -1,3 +1,4 @@
+import multer from 'multer';
 import { Application, Request, Response } from "express";
 import { Router } from "./helpers/Router";
 import UserController from "./controllers/UserController";
@@ -7,6 +8,8 @@ import CartController from "./controllers/CartController";
 import OrderController from "./controllers/OrderController";
 import AuthController from "./controllers/AuthController";
 import AccessController from "./controllers/AccessController";
+import path from 'path';
+import fs = require('fs');
 
 export function setupRoutes(app: Application) {
 
@@ -42,8 +45,22 @@ export function setupRoutes(app: Application) {
         router.delete("/:id", CategController.delete)
     });
 
+    const upload = multer({ 
+        limits: {
+            fileSize: 1000000
+        },
+        fileFilter(req:any, file:any, cb:any) {
+            if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+                return cb(new Error('Favor enviar uma imagem válida!'))
+            }
+            cb(null, true)
+        }
+    });
+
+    app.post("/products", upload.single('image'), ProductController.create);
     router.group("/products", (router) => {
-        router.post("/", ProductController.create);
+        //router.post("/", ProductController.create); // 
+       
         router.get("/", ProductController.index);
         router.get("/:id", ProductController.show);
         router.put("/:id", ProductController.update)
