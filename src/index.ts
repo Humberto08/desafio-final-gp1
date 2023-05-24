@@ -3,14 +3,16 @@ import cors from "cors";
 import { setupRoutes } from "./routes";
 import { prisma } from "./database/db";
 import bodyParser from "body-parser";
+import path from "path";
 
 async function main() {
     const app = express();
     const port = 3333;
     app.use(cors());
     app.use(bodyParser.json());
+    
     setupRoutes(app);
-
+    app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
     app.listen(port, async () => {
         console.log(`🚀 Aplicação iniciada na porta: http://127.0.0.1:${port}`);
 

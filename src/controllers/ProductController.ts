@@ -1,14 +1,25 @@
 import { Product } from "@prisma/client";
 import { Request, Response } from "express";
 import ProductService from "../services/ProductService";
+import sharp from 'sharp';
 
 class ProductController {
+
 
     static async create(req: Request, res: Response) {
 
         try {
 
-            const { title, description, price, amount, subcategory, image, published } = req.body;
+            const { title, description, price, amount, subcategory, published } = req.body;
+
+            //upload de arquivo
+            if (!req.file) return res.status(500).json({ message: "É obrigatório o envio de uma imagem " });
+
+            const image = process.env.APP_URL + '/uploads/' + req.file.originalname;
+
+            await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toFile(`./uploads/${req.file.originalname}`)
+            //
+
 
             if (!title || !description || !price || !amount || !subcategory || !image || !published) {
                 return res
@@ -19,11 +30,11 @@ class ProductController {
             const product: Product | string = await ProductService.createProduct({
                 title,
                 description,
-                price,
-                amount,
+                price: Number(price),
+                amount: Number(amount),
                 subcategory,
                 image,
-                published
+                published: published==='true'
             } as Product);
 
             if (product) {
