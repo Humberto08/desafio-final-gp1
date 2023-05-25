@@ -60,7 +60,7 @@ export function setupRoutes(app: Application) {
 
     router.group("/products", (router) => {
         //router.post("/", ProductController.create); // 
-       
+
         router.get("/", ProductController.index);
         router.get("/:id", ProductController.show);
         router.put("/:id", ProductController.update)
