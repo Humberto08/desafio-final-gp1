@@ -34,8 +34,8 @@ class ProductController {
                 amount: Number(amount),
                 subcategory,
                 image,
-                published: published==='true'
-            } as Product);
+                published: published === 'true'
+            } as unknown as Product);
 
             if (product) {
                 return res.status(200).json({

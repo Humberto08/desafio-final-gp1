@@ -2,112 +2,92 @@ import { Cart } from "@prisma/client";
 import { Request, Response } from "express";
 import CartService from "../services/CartService";
 import { prisma } from "../database/db";
+import UserService from "../services/UserService";
 
 /*
 
 ERRO: usar PRISMA nessa camada
 PROBLEMA: não tô sabendo separar essas bagaça de camada
 
-DÚVIDA: não entendi a lógica 'carrinho de compras' + 'fechar pedido'
-    O que entendi:
-    - o carrinho não precisa estar atrelado a um user mas precisa gerar um id (cart_id)
-    - quando o user for pagar (order) essa order vai precisar desse cart_id
-    - quando a order vier pro back com o cart_id, vai vir o token do user junto
--> e como fazer essas cabaça de passos ?
-
-DÚVIDA: o carrinho fica salvo em banco ?
-
 */
-
-// ------ //
-
-/*
-
-TENTATIVA DE ENTENDER A LÓGICA
-
-const cart = []; // começa com variável cart do tipo array vazio ?
-
-Atividades relacionadas ao carrinho (funções):
-1) Adicionar ao carrinho / const addToCart (ou createCart)
-    Ações de adicionar ao carrinho
-    a) qual produto foi clicado? (product_id)
-    b) qual o tipo? (subcategory - ver outro nome = tamanho, cor, peso, etc)
-    c) qual a quantidade? (como colocar default = 1 ?)
-    d) ligar produto ao preço
-2) Ver carrinho / const getCart
-3) Ver carrinhos / const getCarts
-4) Atualizar o carrinho / const updateCart
-5) Esvaziar o carrinho / const deleteCart
-
-*/
-
-// tentativa de criar o tipo User 
-type User = {
-    id: number;
-    name: string;
-    email: string;
-    user_access: [];
-    password: string;
-    order_buyer: [];
-    Cart: []
-}
 
 class CartController {
 
-    static async create(req: Request, res: Response) {
+    static async createUserCart(req: Request, res: Response) {
+        // res.send("Hello from Cart") // linha teste
 
         try {
 
-            const { products, quantity } = req.body;
+            const { products, email } = req.body;
 
-            // produtos que vêm do banco - acesso ao banco            
-            const productsFromDatabase = await prisma.product.findMany({
-                where: {
-                    id: { in: products.map((product: any) => product.id) }
-                },
-            });
+            // check se o user existe
 
-            // quantidade do produto adicionada ao carrinho
-            const productQuantity = productsFromDatabase.map((product) => {
-                const { id, title, price } = product;
-                const quantity = products.find((prod: any) => prod.id === product.id).quantity;
-                return {
-                    id,
-                    title,
-                    price,
-                    quantity
-                }
-            });
+            const userEmail = await UserService.getUser(email);
 
-            // ↑↑↑ como tipar esses que tão com any ? ↑↑↑
+            if (!userEmail) return res
+                .status(404)
+                .json({ success: false, message: "✖️ E-mail não cadastrado!" })
 
-            // quantidade de itens adicionados ao carrinho
-            let total = 0;
-            for (const product of productQuantity) {
-                total += product.price * parseInt(product.quantity);
-            };
+            // check se o user já tem produtos no carrinho
+            // se sim, update
+            // se não, create
 
-            // essa const tá chamando a tabela order ... é isso ?
-            const cart = await prisma.order.create({
-                data: {
-                    total_value: total,
-                    order_products: {
-                        create: productQuantity.map((product) => ({
-                            Product: { connect: { id: product.id } },
-                            quantity: product.quantity,
-                        })),
+            let newCart = null;
+
+            if (newCart) { // cart not null: update
+
+
+            } else { // cart null: create
+
+                newCart = { products: [], totalPrice: 0 }
+
+                // produtos que vêm do banco - acesso ao banco  
+                const productsFromDatabase = await prisma.product.findMany({
+                    where: {
+                        id: { in: products.map((product: any) => product.id) } // pra cada produto, dentre os mapeados, retorno um product.id - esses serão os ids retornados pelo comprador
                     },
-                },
-                include: {
-                    order_products: true,
-                },
-            });
+                });
+
+                // quantidade do produto adicionada ao carrinho
+                const productQuantity = productsFromDatabase.map((product) => {
+                    const { id, title, price } = product;
+                    const quantity = products.find((prod: any) => prod.id === product.id).quantity; // pra cada prod encontrado (find), retorna um prod.id que for igual a product.id
+                    return {
+                        id,
+                        title,
+                        price,
+                        quantity
+                    }
+                    // pra cada produto "clicado" pelo comprador, retorna: id, title, price e quantity
+                });
+
+                // cálculo do valor total dos produtos adicionados
+                let total = 0;
+                for (const product of productQuantity) {
+                    total += product.price * parseInt(product.quantity)
+                }
+
+                // carrinho tomando forma: produtos + quantidade + valor
+                const cart = await prisma.order.create({
+                    data: {
+                        total_value: total,
+                        order_products: {
+                            create: productQuantity.map((product) => ({ // pego os produtos com a quantidade e faço um map
+                                Product: { connect: { id: product.id } }, // pra cada produto, retorno um Product que vai fazer uma conexão com o id do produto que o usuário escolheu pra comprar
+                                quantity: product.quantity,
+                            })),
+                        },
+                    },
+                    include: {
+                        order_products: true,
+                    },
+                });
+            }
 
             return res.json({
                 success: true,
-                message: "✔️ Produto adicionado ao carrinho!",
-                result: cart
-            })
+                result: newCart
+            });
 
         } catch (error) {
             console.log(error);
@@ -170,6 +150,7 @@ class CartController {
 
         try {
 
+            const { user_id, product_id, quantity, product_price } = req.body;
             const { id } = req.params;
 
             if (!id) return res
@@ -180,9 +161,7 @@ class CartController {
                 .status(500)
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
-            const { products, quantity } = req.body;
-
-            const cart: Cart | string = await CartService.updateCart(Number(id), products, quantity);
+            const cart: Cart | string = await CartService.updateCart(Number(id), product_id, quantity);
 
             if (typeof cart === 'string') return res
                 .status(404)
