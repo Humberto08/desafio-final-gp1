@@ -14,8 +14,6 @@ datasource db {
 
 model User {
     id          Int          @id @default(autoincrement())
-    created_at  DateTime     @default(now())
-    updated_at  DateTime     @updatedAt
     name        String
     email       String       @unique
     user_access UserAccess[]
@@ -23,6 +21,9 @@ model User {
     password    String
     order_buyer Order[]
     Cart        Cart[]
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
 
     @@map("usuários")
 }
@@ -35,21 +36,23 @@ enum Type {
 }
 
 model UserAccess {
-    id         Int      @id @default(autoincrement())
+    id        Int     @id @default(autoincrement())
+    User      User?   @relation(fields: [user_id], references: [id])
+    user_id   Int?
+    Access    Access? @relation(fields: [access_id], references: [id])
+    access_id Int?
+
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
-    User       User?    @relation(fields: [user_id], references: [id])
-    user_id    Int?
-    Access     Access?  @relation(fields: [access_id], references: [id])
-    access_id  Int?
 }
 
 model Access {
     id          Int          @id @default(autoincrement())
-    created_at  DateTime     @default(now())
-    updated_at  DateTime     @updatedAt
     name        String       @unique
     user_access UserAccess[]
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
 
     // essa tabela é o nível de acesso do usuário - pode cadastrar níveis como "comprador" e "adm"
     // com esses níveis cadastrados, o usuário tem que logar como comprador ou adm e cada um tem suas permissões (accessController.ts)
@@ -59,12 +62,13 @@ model Access {
 
 model Category {
     id          Int       @id @default(autoincrement())
-    created_at  DateTime  @default(now())
-    updated_at  DateTime  @updatedAt
     title       String    @unique @db.VarChar(100)
     description String    @db.VarChar(300)
     published   Boolean   @default(false)
     products    Product[]
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
 
     @@map("categorias")
 }
@@ -72,86 +76,110 @@ model Category {
 // PRODUTOS
 
 model Product {
-    id             Int            @id @default(autoincrement())
-    created_at     DateTime       @default(now())
-    updated_at     DateTime       @updatedAt
-    title          String         @db.VarChar(100)
-    description    String         @db.VarChar(300)
-    price          Float
-    measures       String?        @db.VarChar(10)
-    amount         Int
-    subcategory    String         @db.VarChar(100)
-    published      Boolean        @default(false)
-    image          ProductImage[]
-    categories     Category[]
-    order_products OrderProduct[]
+    id            Int           @id @default(autoincrement())
+    title         String        @db.VarChar(100)
+    description   String        @db.VarChar(300)
+    price         Float
+    measures      String?       @db.VarChar(10)
+    amount        Int
+    option        String        @db.VarChar(100)
+    published     Boolean       @default(false)
+    image         String?
+    categories    Category[]
+    cart_products CartProduct[]
 
-    @@map("produtos")
-}
-
-model ProductImage {
-    id         Int      @id @default(autoincrement())
-    link       String   @unique
-    Product    Product? @relation(fields: [product_id], references: [id])
-    product_id Int?
-}
-
-// PEDIDOS
-
-model Order {
-    id             Int            @id @default(autoincrement())
-    created_at     DateTime       @default(now())
-    updated_at     DateTime       @updatedAt
-    amount         Int            @default(1)
-    total_value    Float
-    order_products OrderProduct[]
-    address        OrderAddress[]
-    Buyer          User?          @relation(fields: [buyer_id], references: [id])
-    buyer_id       Int?
-
-    @@map("pedidos")
-}
-
-model OrderProduct {
-    id         Int      @id @default(autoincrement())
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
-    quantity   Int      @default(1)
-    discount   Float?
-    Order      Order?   @relation(fields: [order_id], references: [id])
-    order_id   Int?
-    Product    Product? @relation(fields: [product_id], references: [id])
-    product_id Int?
 
-    @@map("produtos-do-pedido")
-}
-
-model OrderAddress {
-    id         Int    @id @default(autoincrement())
-    street     String
-    number     Int
-    complement String
-    city       String
-    state      String
-    zipcode    String
-    country    String
-    Order      Order? @relation(fields: [order_id], references: [id])
-    order_id   Int?
-
-    @@map("endereços")
+    @@map("produtos")
 }
 
 // CARRINHO DE COMPRAS
 
 model Cart {
-    id          Int      @id @default(autoincrement())
-    created_at  DateTime @default(now())
-    updated_at  DateTime @updatedAt
-    products    String
-    quantity    Int      @default(1)
-    OrderStatus String   @default("pending")
-    User        User?    @relation(fields: [user_id], references: [id])
-    user_id     Int?
+    id                   Int           @id @default(autoincrement())
+    user_id              Int
+    cart_status          String
+    total_value          Float
+    total_after_discount Float
+    cartStatus           CartStatus    @default(Pending)
+    cart_products        CartProduct[]
+    address              Address[]
+    User                 User          @relation(fields: [user_id], references: [id])
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
 
     @@map("carrinho-de-compras")
+}
+
+enum CartStatus {
+    Pending
+    Cancelled
+    Paid
+}
+
+model CartProduct {
+    id            Int     @id @default(autoincrement())
+    cart_id       Int
+    product_id    Int
+    quantity      Int
+    product_price Float
+    product       Product @relation(fields: [product_id], references: [id])
+    cart          Cart    @relation(fields: [cart_id], references: [id])
+}
+
+model Address {
+    id                      Int    @id @default(autoincrement())
+    cart_id                 Int
+    shipping                Float
+    shipping_address_street String
+    shipping_address_number String
+    shipping_address_city   String
+    shipping_address_state  String
+    shipping_address_zip    String
+    charge_address_street   String
+    charge_address_number   String
+    charge_address_city     String
+    charge_address_state    String
+    charge_address_zip      String
+    cart                    Cart   @relation(fields: [cart_id], references: [id])
+
+    @@map("endereços")
+}
+
+// PEDIDOS
+
+model Order {
+    id          Int         @id @default(autoincrement())
+    amount      Int         @default(1)
+    total_value Float
+    orderStatus orderStatus @default(Placed)
+    Buyer       User?       @relation(fields: [buyer_id], references: [id])
+    buyer_id    Int?
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    @@map("pedidos")
+}
+
+enum orderStatus {
+    Placed
+    Cancelled
+    Dispatched
+    Delivered
+}
+
+// CUPONS DE DESCONTO (OPCIONAL)
+
+model Coupon {
+    id          Int      @id @default(autoincrement())
+    coupon_name String   @unique
+    expiry_date DateTime
+    discount    Float
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    //6:18:00
 }

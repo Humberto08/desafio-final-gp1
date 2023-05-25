@@ -60,7 +60,6 @@ class UserController {
 
     }
 
-
     static async show(req: Request, res: Response) {
 
         try {

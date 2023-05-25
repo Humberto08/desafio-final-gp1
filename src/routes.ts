@@ -23,7 +23,6 @@ export function setupRoutes(app: Application) {
 
     router.post("/login", AuthController.login);
 
-
     router.group("/users", (router) => {
         router.get("/", UserController.index);
         router.post("/", UserController.create);
@@ -58,9 +57,10 @@ export function setupRoutes(app: Application) {
     });
 
     app.post("/products", upload.single('image'), ProductController.create);
+
     router.group("/products", (router) => {
         //router.post("/", ProductController.create); // 
-
+       
         router.get("/", ProductController.index);
         router.get("/:id", ProductController.show);
         router.put("/:id", ProductController.update)
@@ -76,7 +76,8 @@ export function setupRoutes(app: Application) {
     })
 
     router.group("/cart", (router) => {
-        router.post("/:user_id", CartController.create);
+
+        router.post("/:user_id", CartController.createUserCart)
         router.get("/:user_id", CartController.index);
         router.get("/:user_id/:cart_id", CartController.show);
         router.put("/:user_id/:cart_id", CartController.update);
