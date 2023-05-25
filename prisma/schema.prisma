@@ -154,7 +154,7 @@ model Order {
     id          Int            @id @default(autoincrement())
     amount      Int            @default(1)
     total_value Float
-    orderStatus orderStatus    @default(Pending)
+    orderStatus orderStatus    @default(Placed)
     payment     OrderPayment[]
     Buyer       User?          @relation(fields: [buyer_id], references: [id])
     buyer_id    Int?
@@ -166,9 +166,8 @@ model Order {
 }
 
 enum orderStatus {
-    Pending
+    Placed
     Cancelled
-    Paid
     Dispatched
     Delivered
 }

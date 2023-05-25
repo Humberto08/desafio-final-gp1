@@ -44,7 +44,7 @@ class CartController {
                 // produtos que vêm do banco - acesso ao banco  
                 const productsFromDatabase = await prisma.product.findMany({
                     where: {
-                        id: { in: products.map((product: any) => product.id) } // pra cada produto, dentre os mapeados, retorno um product.id - esses serão os ids retornados pelo comprador
+                        id: { in: products.map((product: any) => product.id) } // pra cada produto, dentre os mapeados, retorno um product.id - esses serão os product.ids retornados pelo comprador
                     },
                 });
 
@@ -82,13 +82,12 @@ class CartController {
                         order_products: true,
                     },
                 });
+                return res.json({
+                    success: true,
+                    message: "✔️ Produto adicionado ao carrinho!",
+                    result: cart
+                });
             }
-
-            return res.json({
-                success: true,
-                result: newCart
-            });
-
         } catch (error) {
             console.log(error);
             return res
