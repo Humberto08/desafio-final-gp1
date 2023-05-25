@@ -21,9 +21,17 @@ export class AuthController {
             return res.json({ error: "⚠️ Senha incorreta" });
         }
 
-        const token = sign({ id: user.id }, "secret", {
-            expiresIn: "48h",
+        const JWT_SECRET = process.env.JWT_SECRET;
+
+            if (JWT_SECRET === undefined) {
+                throw new Error("Chave secreta não encontrada");
+            }
+
+        const token = sign({ id: user.id, email: user.email, name: user.name, type: "user" }, JWT_SECRET, {
+            algorithm: "HS256",
+            expiresIn: "1h",
         })
+
 
         const { id } = user;
 

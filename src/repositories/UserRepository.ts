@@ -2,9 +2,7 @@ import { type } from 'os';
 import { User } from "@prisma/client";
 import { prisma } from "../database/db";
 
-
 class UserRepository {
-
 
     async getUsers(): Promise<Array<User>> {
         return await prisma.user.findMany();
@@ -51,20 +49,21 @@ class UserRepository {
 
         if (!findById) return null;
 
-        const payload = {
-            name: name || findById.name,
-            email: email || findById.email,
-            password: password || findById.password,
-            type: type || findById.type
-        }
-
+        // const payload = {
+        //     name: name || findById.name,
+        //     email: email || findById.email,
+        //     password: password || findById.password,
+        //     type: type || findById.type
+        // }
 
         return await prisma.user.update({
-            where: {
-                id,
-                
-            },
-            data: payload
+            where: { id },
+            data: {
+                name: name || findById.name,
+                email: email || findById.email,
+                password: password || findById.password,
+                type: undefined || findById.type
+            }
         })
     }
 
