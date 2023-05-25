@@ -9,8 +9,9 @@ class CartRepository {
 
         return await prisma.cart.create({
             data: {
-                products: cart.products,
-                quantity: cart.quantity
+                user_id: cart.user_id,
+                cart_status: cart.cart_status,
+                total_value: cart.total_value
             }
         });
     }
@@ -29,7 +30,7 @@ class CartRepository {
 
         return await prisma.cart.update({
             where: { id },
-            data: {} // faltando dados dentro de data
+            data: {} // faltando dados dentro de data ?
         })
     }
 
