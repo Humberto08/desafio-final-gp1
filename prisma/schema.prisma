@@ -151,12 +151,11 @@ model Address {
 // PEDIDOS
 
 model Order {
-    id          Int            @id @default(autoincrement())
-    amount      Int            @default(1)
+    id          Int         @id @default(autoincrement())
+    amount      Int         @default(1)
     total_value Float
-    orderStatus orderStatus    @default(Placed)
-    payment     OrderPayment[]
-    Buyer       User?          @relation(fields: [buyer_id], references: [id])
+    orderStatus orderStatus @default(Placed)
+    Buyer       User?       @relation(fields: [buyer_id], references: [id])
     buyer_id    Int?
 
     created_at DateTime @default(now())
@@ -170,18 +169,6 @@ enum orderStatus {
     Cancelled
     Dispatched
     Delivered
-}
-
-model OrderPayment {
-    id      Int     @id @default(autoincrement())
-    card    String?
-    pix     String?
-    invoice String?
-    Order   Order?  @relation(fields: [orderId], references: [id])
-    orderId Int?
-
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
 }
 
 // CUPONS DE DESCONTO (OPCIONAL)
