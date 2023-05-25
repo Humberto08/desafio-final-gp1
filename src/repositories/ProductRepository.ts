@@ -11,7 +11,7 @@ class ProductRepository {
                 description: product.description,
                 price: product.price,
                 amount: product.amount,
-                subcategory: product.subcategory,
+                option: product.option,
                 image: product.image,
                 published: product.published
             }
@@ -27,7 +27,7 @@ class ProductRepository {
                 description: product.description,
                 price: product.price,
                 amount: product.amount,
-                subcategory: product.subcategory,
+                option: product.option,
                 image: product.image,
                 published: product.published
             },
@@ -42,7 +42,7 @@ class ProductRepository {
         return await prisma.product.findFirst({ where: { id } })
     }
 
-    async updateProduct(id: number, title: string | null, description: string | null, price: number | null, amount: number | null, subcategory: string | null, image: string | null, published: boolean | null): Promise<Product | string> {
+    async updateProduct(id: number, title: string | null, description: string | null, price: number | null, amount: number | null, option: string | null, image: string | null, published: boolean | null): Promise<Product | string> {
 
         const findById = await prisma.product.findFirst({ where: { id } });
 
@@ -55,7 +55,7 @@ class ProductRepository {
                 description: description || findById.description,
                 price: price || findById.price,
                 amount: amount || findById.amount,
-                subcategory: subcategory || findById.subcategory,
+                option: option || findById.option,
                 image: image || findById.image,
                 published: published || findById.published
             }

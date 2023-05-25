@@ -23,7 +23,6 @@ export function setupRoutes(app: Application) {
 
     router.post("/login", AuthController.login);
 
-
     router.group("/users", (router) => {
         router.get("/", UserController.index);
         router.post("/", UserController.create);
@@ -45,11 +44,11 @@ export function setupRoutes(app: Application) {
         router.delete("/:id", CategController.delete)
     });
 
-    const upload = multer({ 
+    const upload = multer({
         limits: {
             fileSize: 1000000
         },
-        fileFilter(req:any, file:any, cb:any) {
+        fileFilter(req: any, file: any, cb: any) {
             if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
                 return cb(new Error('Favor enviar uma imagem válida!'))
             }
@@ -58,9 +57,9 @@ export function setupRoutes(app: Application) {
     });
 
     app.post("/products", upload.single('image'), ProductController.create);
+
     router.group("/products", (router) => {
-        //router.post("/", ProductController.create); // 
-       
+        //router.post("/", ProductController.create);       
         router.get("/", ProductController.index);
         router.get("/:id", ProductController.show);
         router.put("/:id", ProductController.update)
@@ -76,7 +75,8 @@ export function setupRoutes(app: Application) {
     })
 
     router.group("/cart", (router) => {
-        router.post("/:user_id", CartController.create);
+
+        router.post("/:user_id", CartController.createUserCart)
         router.get("/:user_id", CartController.index);
         router.get("/:user_id/:cart_id", CartController.show);
         router.put("/:user_id/:cart_id", CartController.update);
