@@ -13,7 +13,6 @@ import jwt from "jsonwebtoken";
 import { getConnection } from "../config/database";
 
 // Criar usuário
-
 const createUser = asyncHandler(async (req: Request, res: Response) => {
   const email: string = req.body.email;
 
