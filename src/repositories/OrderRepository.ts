@@ -3,13 +3,16 @@ import { prisma } from "../database/db";
 
 class OrderRepository {
 
+    // criar pedido = obrigatório carrinho (cart_id)
+
     async createOrder(order: Order): Promise<Order | string> {
 
         return await prisma.order.create({
             data: {
-                amount: order.amount,
-                total_value: order.total_value
-                // como incluir o array de order_products aqui?
+                buyer_id: order.buyer_id,
+                total_value: order.total_value,
+                cart_id: order.cart_id
+                // precisa incluir order_status aqui? nope (default)
             }
         });
     }
@@ -22,7 +25,7 @@ class OrderRepository {
         return await prisma.order.findFirst({ where: { id } })
     }
 
-    async updateOrder(id: number, products: string | null, amount: number | null, address: string | null): Promise<Order | string> {
+    async updateOrder(id: number, cart_id: number, buyer_id: number, total_value: number | null): Promise<Order | string> {
 
         const findById = await prisma.order.findFirst({ where: { id } });
 
@@ -31,8 +34,7 @@ class OrderRepository {
         return await prisma.order.update({
             where: { id },
             data: {
-                amount: amount || findById?.amount
-                // como editar arrays de endereço e produtos?
+                total_value: total_value || findById?.total_value
             }
         })
     }

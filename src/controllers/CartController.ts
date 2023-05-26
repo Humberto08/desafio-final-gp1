@@ -1,19 +1,31 @@
-import { Cart } from "@prisma/client";
+import { Cart, CartProduct, CartStatus } from "@prisma/client";
 import { Request, Response } from "express";
 import CartService from "../services/CartService";
 import { prisma } from "../database/db";
 import UserService from "../services/UserService";
 
-/*
-
-ERRO: usar PRISMA nessa camada
-PROBLEMA: não tô sabendo separar essas bagaça de camada
-
-*/
-
 class CartController {
 
-    static async createUserCart(req: Request, res: Response) {
+    static async addToCart(req: Request, res: Response) {
+
+        const { user_id, product_id, product_quantity } = req.body;
+
+        const addedProduct = await CartService.addToCart(product_id, user_id, product_quantity);
+
+        // validações
+
+        if (!addedProduct) return res
+            .status(404)
+            .json({ success: false, message: "✖️ Produto não inserido no carrinho!" })
+
+        return res.json({
+            success: true,
+            message: "✔️ Produto adicionado ao carrinho!",
+            result: addedProduct
+        });
+    }
+
+    static async create(req: Request, res: Response) {
         // res.send("Hello from Cart") // linha teste
 
         try {
@@ -28,7 +40,7 @@ class CartController {
                 .status(404)
                 .json({ success: false, message: "✖️ E-mail não cadastrado!" })
 
-            // check se o user já tem produtos no carrinho
+            // check se já existe carrinho pra esse user
             // se sim, update
             // se não, create
 
@@ -36,12 +48,13 @@ class CartController {
 
             if (newCart) { // cart not null: update
 
+                // direcionar para rota update ?
 
             } else { // cart null: create
 
                 newCart = { products: [], totalPrice: 0 }
 
-                // produtos que vêm do banco - acesso ao banco  
+                // produtos que vêm do banco - acesso ao banco (estoque)
                 const productsFromDatabase = await prisma.product.findMany({
                     where: {
                         id: { in: products.map((product: any) => product.id) } // pra cada produto, dentre os mapeados, retorno um product.id - esses serão os product.ids retornados pelo comprador
@@ -68,26 +81,32 @@ class CartController {
                 }
 
                 // carrinho tomando forma: produtos + quantidade + valor
-                const cart = await prisma.order.create({
+                newCart = await prisma.cart.create({ // 'newCart' em vez de 'const cart' ? (linha 43)
                     data: {
                         total_value: total,
-                        order_products: {
+                        cart_products: {
                             create: productQuantity.map((product) => ({ // pego os produtos com a quantidade e faço um map
-                                Product: { connect: { id: product.id } }, // pra cada produto, retorno um Product que vai fazer uma conexão com o id do produto que o usuário escolheu pra comprar
-                                quantity: product.quantity,
+                                product: { connect: { id: product.id } }, // pra cada produto, retorno um Product que vai fazer uma conexão com o id do produto que o usuário escolheu pra comprar
+                                product_quantity: product.quantity,
+                                product_price: product.price
                             })),
                         },
                     },
                     include: {
-                        order_products: true,
+                        cart_products: true,
                     },
                 });
+
                 return res.json({
                     success: true,
-                    message: "✔️ Produto adicionado ao carrinho!",
-                    result: cart
+                    message: "✔️ Carrinho aberto!",
+                    result: newCart
                 });
+
+                // e agora papai... como passar pra rota update ?
+
             }
+
         } catch (error) {
             console.log(error);
             return res
@@ -99,6 +118,7 @@ class CartController {
     static async index(req: Request, res: Response) {
 
         try {
+
             const carts = await CartService.getCarts();
 
             return res.json({
@@ -108,7 +128,6 @@ class CartController {
 
         } catch (error) {
             console.log(error);
-
             return res
                 .status(500)
                 .json({ success: false, message: "✖️ Ops, Tente novamente!" });
@@ -141,15 +160,18 @@ class CartController {
             });
 
         } catch (error) {
-            res.status(500).json(error);
+            console.log(error);
+            return res
+                .status(500)
+                .json({ success: false, message: "✖️ Ops, tente novamente!" });
         }
     }
 
-    static async update(req: Request, res: Response) {
+    static async updateCartProducts(req: Request, res: Response) {
 
         try {
 
-            const { user_id, product_id, quantity, product_price } = req.body;
+            const { cart_products } = req.body;
             const { id } = req.params;
 
             if (!id) return res
@@ -160,24 +182,88 @@ class CartController {
                 .status(500)
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
-            const cart: Cart | string = await CartService.updateCart(Number(id), product_id, quantity);
-
-            if (typeof cart === 'string') return res
-                .status(404)
-                .json({ success: false, message: cart });
+            const cart = await CartService.updateCartProducts(Number(id), cart_products);
+            if (!cart) {
+                return res.status(404).json({ success: false, message: "✖️ Carrinho não encontrado!" });
+            }
 
             return res.json({
                 success: true,
                 result: cart
-            });
+            })
 
         } catch (error) {
             console.log(error);
-
             return res
                 .status(500)
                 .json({ success: false, message: "✖️ Ops, tente novamente!" });
         }
+    }
+
+    static async updateCartStatus(req: Request, res: Response) {
+
+        try {
+
+            const { cart_status } = req.body;
+            const { id } = req.params;
+
+            if (!id) return res
+                .status(500)
+                .json({ success: false, message: "✖️ É obrigatório informar o ID do carrinho!" });
+
+            if (isNaN(Number(id))) return res
+                .status(500)
+                .json({ success: false, message: "✖️ O ID precisa ser um número!" });
+
+            const cart = await CartService.updateCartStatus(Number(id), cart_status)
+
+            if (!cart) return res
+                .status(404)
+                .json({ success: false, message: "✖️ Produto não inserido no carrinho!" })
+
+            return res.json({
+                success: true,
+                message: "✔️ Produto adicionado ao carrinho!",
+                result: cart
+            });
+
+            // const cart_status = 'Pending';
+
+            // if (cart_status === ) {
+            //     console.log('Carrinho aberto.')
+            // } else if ('') {
+            //     console.log('Compra cancelada.')
+            // } else {
+            //     console.log('Compra fechada.')
+            // }
+
+            // cart_status = 'Paid';
+
+            // if (cart_status == 'Pending') {
+
+
+            // } else if (cart_status == 'Cancelled') {
+            //     return res.json({
+            //         success: false,
+            //         message: "✖️ Ops, tente novamente!",
+            //         result: newCart
+            //     });
+
+            // } else {
+            //     return res.json({
+            //         success: true,
+            //         message: "✔️ Pedido realizado com sucesso!",
+            //         result: newCart // como ir daqui pra Order ? // aliás .. como ir daqui pra Terra de volta?
+            //     })
+            // }
+
+        } catch (error) {
+            console.log(error);
+            return res
+                .status(500)
+                .json({ success: false, message: "✖️ Ops, tente novamente!" });
+        }
+
     }
 
     static async delete(req: Request, res: Response) {
@@ -207,7 +293,6 @@ class CartController {
 
         } catch (error) {
             console.log(error);
-
             return res
                 .status(500)
                 .json({ success: false, message: "✖️ Ops, tente novamente!" });
