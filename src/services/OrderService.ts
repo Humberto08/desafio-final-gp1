@@ -15,10 +15,9 @@ class OrderService {
         return OrderRepository.getOrder(id);
     }
 
-    async updateOrder(id: number, amount: string | null, total_value: number | null, address: string | null): Promise<Order | string> {
-        return OrderRepository.updateOrder(id, amount, total_value, address);
+    async updateOrder(id: number, cart_id: number, buyer_id: number, total_value: number | null): Promise<Order | string> {
+        return OrderRepository.updateOrder(id, cart_id, buyer_id, total_value);
     }
-    // aqui aceitou amount como string e não number... pq ?
 
     async deleteOrder(id: number): Promise<Order | string> {
         return OrderRepository.deleteOrder(id);

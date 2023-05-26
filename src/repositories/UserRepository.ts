@@ -1,4 +1,3 @@
-import { type } from 'os';
 import { User } from "@prisma/client";
 import { prisma } from "../database/db";
 
@@ -13,7 +12,7 @@ class UserRepository {
                 name: User.name,
                 email: User.email,
                 id: User.id,
-                type: User.type
+                role: User.role
             }
         });
 
@@ -26,7 +25,7 @@ class UserRepository {
                 name: User.name,
                 email: User.email,
                 password: User.password,
-                type: User.type
+                role: User.role
             }
         });
     }
@@ -39,7 +38,7 @@ class UserRepository {
         })
     }
 
-    async updateUser(id: number, name: string | null, email: string | null, password: string | null, type: string | null): Promise<User | null> {
+    async updateUser(id: number, name: string | null, email: string | null, password: string | null, role: string | null): Promise<User | null> {
 
         const findById = await prisma.user.findFirst({
             where: {
@@ -53,7 +52,7 @@ class UserRepository {
         //     name: name || findById.name,
         //     email: email || findById.email,
         //     password: password || findById.password,
-        //     type: type || findById.type
+        //     role: role || findById.role
         // }
 
         return await prisma.user.update({
@@ -62,7 +61,7 @@ class UserRepository {
                 name: name || findById.name,
                 email: email || findById.email,
                 password: password || findById.password,
-                type: undefined || findById.type
+                role: undefined || findById.role
             }
         })
     }

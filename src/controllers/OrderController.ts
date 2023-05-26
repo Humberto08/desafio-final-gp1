@@ -1,7 +1,8 @@
-import { Order } from "@prisma/client";
+import { Cart, Order } from "@prisma/client";
 import { Request, Response } from "express";
 import OrderService from "../services/OrderService";
 import { prisma } from "../database/db";
+import CartService from "../services/CartService";
 
 /*
 
@@ -29,7 +30,7 @@ class OrderController {
 
         try {
 
-            const { email, products } = req.body;
+            const { email, cart_id } = req.body;
 
             const user = await prisma.user.findUnique({
                 where: { email: email },
@@ -42,47 +43,35 @@ class OrderController {
                     .json({ success: false, message: "✖️ Você precisa fazer login para efetuar a compra!" })
             }
 
-            // produtos que vêm do carrinho
-            // como trazer dados de lá pra cá?
+            if (!cart_id) {
+                return res
+                    .status(500)
+                    .json({ success: false, message: "✖️ Sua anta, é obrigatório informar o id do carrinho!" })
+            }
 
-            // acho que conseguindo trazer pra cá os produtos adicionados lá, o resto da lógica já tá certa ... ??
+            let cart = await CartService.getCart(cart_id);
 
-            // const productsFromCart = await
-            // como trazer a variável productQuantity ?
+            if (!cart) {
+                return res
+                    .status(500)
+                    .json({ success: false, message: "✖️ Sua anta, o carrinho informado é inválido!" })
+            }
 
-            // ↓↓↓ essa próxima função é o que vai retornar os dados no insomnia
+            const order = await OrderService.createOrder({
+                buyer_id: user.id,
+                cart_id: cart_id,
+                total_value: cart.total_value
+            } as Order);
 
-            // const order = await prisma.order.create({
-            //     data: {
-            //         total_value: total,
-            //         order_products: {
-            //             create: productQuantity.map((product) => ({
-            //                 Product: { connect: { id: product.id } },
-            //                 quantity: product.quantity,
-            //             })),
-            //         },
-            //     },
-            //     include: {
-            //         order_products: true,
-            //     },
-            // });
-
-            // ↓↓↓ essa próxima função é a que vai remover quantidade comprada do estoque da loja
-
-            // productQuantity.map(async (product) => {
-            //     await prisma.product.updateMany({
-            //         where: { id: product.id },
-            //         data: {
-            //             amount: {
-            //                 decrement: parseInt(product.quantity),
-            //             },
-            //         },
-            //     });
-            // });
+            if (!order) {
+                return res
+                    .status(500)
+                    .json({ success: false, message: "✖️ Sua anta, deu ruim na criação do carrinho!" })
+            }
 
             return res
-                .status(201)
-                .json({ message: "✔️ Compra realizada com sucesso!" })
+                .status(200)
+                .json({ success: true, message: "✔️ Pedido em aberto, paga aí!" })
 
         } catch (error) {
             console.log(error);
@@ -120,7 +109,7 @@ class OrderController {
 
             if (!id) return res
                 .status(500)
-                .json({ success: false, message: "✖️ É obrigatório informar o ID do produto!" });
+                .json({ success: false, message: "✖️ É obrigatório informar o ID do pedido!" });
 
             if (isNaN(Number(id))) return res
                 .status(500)
@@ -150,8 +139,13 @@ class OrderController {
 
         try {
 
+            // aqui passo a atualização do status ?
+
         } catch (error) {
-            res.status(500).json(error);
+            console.log(error);
+            return res
+                .status(500)
+                .json({ success: false, message: "✖️ Ops, tente novamente!" });
         }
     }
 
@@ -163,7 +157,7 @@ class OrderController {
 
             if (!id) return res
                 .status(500)
-                .json({ success: false, message: "✖️ É obrigatório informar o ID do produto!" });
+                .json({ success: false, message: "✖️ É obrigatório informar o ID do pedido!" });
 
             if (isNaN(Number(id))) return res
                 .status(500)
@@ -177,7 +171,7 @@ class OrderController {
 
             return res.json({
                 success: true,
-                message: "✔️ Pedido deletado com sucesso!"
+                message: "✔️ Pedido excluído com sucesso!"
             });
 
         } catch (error) {

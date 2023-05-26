@@ -13,49 +13,23 @@ datasource db {
 // USUÁRIOS
 
 model User {
-    id          Int          @id @default(autoincrement())
+    id          Int      @id @default(autoincrement())
     name        String
-    email       String       @unique
-    user_access UserAccess[]
-    type        Type
+    email       String   @unique
     password    String
+    role        Role
     order_buyer Order[]
     Cart        Cart[]
-
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
+    created_at  DateTime @default(now())
+    updated_at  DateTime @updatedAt
 
     @@map("usuários")
 }
 
-enum Type {
+enum Role {
+    owner
     admin
     buyer
-
-    // usa essa enum ou as models de acesso abaixo ?
-}
-
-model UserAccess {
-    id        Int     @id @default(autoincrement())
-    User      User?   @relation(fields: [user_id], references: [id])
-    user_id   Int?
-    Access    Access? @relation(fields: [access_id], references: [id])
-    access_id Int?
-
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
-}
-
-model Access {
-    id          Int          @id @default(autoincrement())
-    name        String       @unique
-    user_access UserAccess[]
-
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
-
-    // essa tabela é o nível de acesso do usuário - pode cadastrar níveis como "comprador" e "adm"
-    // com esses níveis cadastrados, o usuário tem que logar como comprador ou adm e cada um tem suas permissões (accessController.ts)
 }
 
 // CATEGORIAS
@@ -66,9 +40,8 @@ model Category {
     description String    @db.VarChar(300)
     published   Boolean   @default(false)
     products    Product[]
-
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
+    created_at  DateTime  @default(now())
+    updated_at  DateTime  @updatedAt
 
     @@map("categorias")
 }
@@ -87,9 +60,8 @@ model Product {
     image         String?
     categories    Category[]
     cart_products CartProduct[]
-
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
+    created_at    DateTime      @default(now())
+    updated_at    DateTime      @updatedAt
 
     @@map("produtos")
 }
@@ -99,16 +71,15 @@ model Product {
 model Cart {
     id                   Int           @id @default(autoincrement())
     user_id              Int
-    cart_status          String
     total_value          Float
-    total_after_discount Float
-    cartStatus           CartStatus    @default(Pending)
+    total_after_discount Float?
+    cart_status          CartStatus    @default(Pending)
     cart_products        CartProduct[]
     address              Address[]
-    User                 User          @relation(fields: [user_id], references: [id])
-
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
+    User                 User?         @relation(fields: [user_id], references: [id])
+    created_at           DateTime      @default(now())
+    updated_at           DateTime      @updatedAt
+    Order                Order[]
 
     @@map("carrinho-de-compras")
 }
@@ -120,30 +91,30 @@ enum CartStatus {
 }
 
 model CartProduct {
-    id            Int     @id @default(autoincrement())
-    cart_id       Int
-    product_id    Int
-    quantity      Int
-    product_price Float
-    product       Product @relation(fields: [product_id], references: [id])
-    cart          Cart    @relation(fields: [cart_id], references: [id])
+    id               Int     @id @default(autoincrement())
+    cart_id          Int
+    product_id       Int
+    product_quantity Int
+    product_price    Float
+    product          Product @relation(fields: [product_id], references: [id])
+    cart             Cart    @relation(fields: [cart_id], references: [id])
 }
 
 model Address {
-    id                      Int    @id @default(autoincrement())
-    cart_id                 Int
+    id                      Int     @id @default(autoincrement())
     shipping                Float
-    shipping_address_street String
-    shipping_address_number String
-    shipping_address_city   String
-    shipping_address_state  String
-    shipping_address_zip    String
-    charge_address_street   String
-    charge_address_number   String
-    charge_address_city     String
-    charge_address_state    String
-    charge_address_zip      String
-    cart                    Cart   @relation(fields: [cart_id], references: [id])
+    shipping_address_street String?
+    shipping_address_number String?
+    shipping_address_city   String?
+    shipping_address_state  String?
+    shipping_address_zip    String?
+    charge_address_street   String?
+    charge_address_number   String?
+    charge_address_city     String?
+    charge_address_state    String?
+    charge_address_zip      String?
+    cart                    Cart    @relation(fields: [cartId], references: [id])
+    cartId                  Int
 
     @@map("endereços")
 }
@@ -151,15 +122,15 @@ model Address {
 // PEDIDOS
 
 model Order {
-    id          Int         @id @default(autoincrement())
-    amount      Int         @default(1)
-    total_value Float
-    orderStatus orderStatus @default(Placed)
-    Buyer       User?       @relation(fields: [buyer_id], references: [id])
-    buyer_id    Int?
-
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
+    id           Int         @id @default(autoincrement())
+    cart_id      Int
+    buyer_id     Int
+    total_value  Float
+    order_status orderStatus @default(Placed)
+    Buyer        User        @relation(fields: [buyer_id], references: [id])
+    Cart         Cart        @relation(fields: [cart_id], references: [id])
+    created_at   DateTime    @default(now())
+    updated_at   DateTime    @updatedAt
 
     @@map("pedidos")
 }

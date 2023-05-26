@@ -7,9 +7,6 @@ import ProductController from "./controllers/ProductController";
 import CartController from "./controllers/CartController";
 import OrderController from "./controllers/OrderController";
 import AuthController from "./controllers/AuthController";
-import AccessController from "./controllers/AccessController";
-import path from 'path';
-import fs = require('fs');
 
 export function setupRoutes(app: Application) {
 
@@ -29,11 +26,6 @@ export function setupRoutes(app: Application) {
         router.get("/:id", UserController.show);
         router.put("/:id", UserController.update);
         router.delete("/:id", UserController.delete);
-    })
-
-    router.group("/access", (router) => {
-        router.post("/", AccessController.create);
-        router.get("/", AccessController.index);
     })
 
     router.group("/categories", (router) => {
@@ -76,11 +68,11 @@ export function setupRoutes(app: Application) {
     })
 
     router.group("/cart", (router) => {
-
-        router.post("/:user_id", CartController.createUserCart)
+        router.post("/add-to-cart", CartController.addToCart)
+        router.post("/:user_id", CartController.create)
         router.get("/:user_id", CartController.index);
         router.get("/:user_id/:cart_id", CartController.show);
-        router.put("/:user_id/:cart_id", CartController.update);
+        router.put("/:user_id/:cart_id", CartController.updateCartProducts);
         router.delete("/:user_id/:cart_id", CartController.delete);
     })
 }

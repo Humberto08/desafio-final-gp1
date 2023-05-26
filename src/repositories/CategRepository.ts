@@ -8,8 +8,7 @@ class CategRepository {
         const findDuplicateCategory = await prisma.category.count({
             where: {
                 title: category.title,
-                description: category.description,
-                published: category.published
+                description: category.description
             }
         });
 
@@ -20,8 +19,7 @@ class CategRepository {
         return await prisma.category.create({
             data: {
                 title: category.title,
-                description: category.description,
-                published: category.published
+                description: category.description
             }
         });
     }
@@ -34,16 +32,11 @@ class CategRepository {
         return await prisma.category.findFirst({ where: { id } })
     }
 
-    async updateCategory(id: number, title: string | null, description: string | null, user_id: number | null, category_status_id: number | null): Promise<Category | string> {
+    async updateCategory(id: number, title: string | null, description: string | null): Promise<Category | string> {
 
         const findById = await prisma.category.findFirst({ where: { id } });
 
         if (!findById) return "✖️ Categoria não encontrada para o ID informado!";
-
-        if (user_id) {
-            const findUserById = await prisma.user.count({ where: { id: user_id } });
-            if (!findUserById) return "✖️ Usuário informado não existe!"
-        }
 
         return await prisma.category.update({
             where: { id },
