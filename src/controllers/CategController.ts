@@ -113,7 +113,7 @@ class CategController {
                     .json({ success: false, message: "✖️ Você precisa preencher pelo menos um campo para atualizar a Categoria!" });
             }
 
-            const category: Category | string = await CategService.updateCategory(Number(id), title, description, user_id, category_status_id);
+            const category: Category | string = await CategService.updateCategory(Number(id), title, description);
 
             if (typeof category === 'string') return res
                 .status(404)
