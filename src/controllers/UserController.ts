@@ -5,6 +5,7 @@ import { hash } from 'bcrypt';
 
 
 class UserController {
+    
 
     static async index(req: Request, res: Response) {
 
@@ -23,14 +24,14 @@ class UserController {
         }
     }
 
-    static async create(req: Request, res: Response) {
+    static async createAdmin(req: Request, res: Response) {
 
         try {
 
-            const { name, email, password, type } = req.body;
+            const { name, email, password } = req.body;
             const hash_password = await hash(password, 10);
 
-            if (!name || !email || !password || !type) {
+            if (!name || !email || !password ) {
                 return res
                     .status(400)
                     .json({ success: false, message: "⚠️ Preencha todos os campos necessários para criação de um usuário" })
@@ -39,7 +40,7 @@ class UserController {
             const user: string | User = await UserService.createUser({
                 name,
                 email,
-                type,
+                role: "admin",
                 password: hash_password
             } as unknown as User);
 
@@ -51,14 +52,79 @@ class UserController {
                 })
             }
 
-
         } catch (error) {
             console.log(error);
             return res.status(500).json({ success: false, message: " Internal Server Error" })
         }
+}
 
+static async createBuyer(req: Request, res: Response) {
 
+    try {
+
+        const { name, email, password } = req.body;
+        const hash_password = await hash(password, 10);
+
+        if (!name || !email || !password) {
+            return res
+                .status(400)
+                .json({ success: false, message: "⚠️ Preencha todos os campos necessários para criação de um usuário" })
+        }
+
+        const user: string | User = await UserService.createUser({
+            name,
+            email,
+            role: "buyer",
+            password: hash_password
+        } as unknown as User);
+
+        if (user) {
+            return res.json({
+                success: true,
+                message: "Usuário criado com sucesso",
+                result: user
+            })
+        }
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false, message: " Internal Server Error" })
     }
+}
+
+static async createOwner(req: Request, res: Response) {
+
+    try {
+
+        const { name, email, password } = req.body;
+        const hash_password = await hash(password, 10);
+
+        if (!name || !email || !password) {
+            return res
+                .status(400)
+                .json({ success: false, message: "⚠️ Preencha todos os campos necessários para criação de um usuário" })
+        }
+
+        const user: string | User = await UserService.createUser({
+            name,
+            email,
+            role: "owner",
+            password: hash_password
+        } as unknown as User);
+
+        if (user) {
+            return res.json({
+                success: true,
+                message: "Usuário criado com sucesso",
+                result: user
+            })
+        }
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false, message: " Internal Server Error" })
+    }
+}
 
     static async show(req: Request, res: Response) {
 
@@ -88,6 +154,37 @@ class UserController {
         }
     }
 
+    // static async showByEmail(req: Request, res: Response) {
+
+    //     try {
+    //         const { email } = req.params;
+
+    //         const checkUserEmail = UserController.checkUserEmail(email);
+    //         if (!checkUserEmail?.success) return res
+    //             .status(500)
+    //             .json(checkUserEmail);
+
+    //         const user = await UserService.getUserByEmail(String(email));
+
+    //         if (!user) return res
+    //             .status(404)
+    //             .json({ success: false, message: "⚠️ Usuário não encontrado" })
+
+    //         res.json({
+    //             success: true,
+    //             result: user
+    //         });
+
+    //     } catch (error) {
+    //         console.log(error);
+    //         return res.status(500).json({ success: false, message: " Internal Server Error" })
+
+    //     }
+    // }
+    static checkUserEmail(email: string) {
+        throw new Error('Method not implemented.');
+    }
+
     static async update(req: Request, res: Response) {
 
         try {
@@ -98,15 +195,15 @@ class UserController {
                 .status(500)
                 .json(checkUserId?.message);
 
-            const { name, email, password, type } = req.body;
+            const { name, email, password, role } = req.body;
 
-            if (!name && !email && !password && !type) {
+            if (!name && !email && !password && !role) {
                 return res
                     .status(400)
                     .json({ success: false, message: "⚠️ Preencha pelo menos um campo para atualização do usuário" })
             }
 
-            const user = await UserService.updateUser(Number(id), name, email, password, type);
+            const user = await UserService.updateUser(Number(id), name, email, password, role);
 
             if (!user) return res
                 .status(404)
@@ -135,9 +232,9 @@ class UserController {
 
             const user = await UserService.deleteUser(Number(id));
 
-            if (typeof user === 'string') return res
-                .status(404)
-                .json({ success: false, message: user });
+            // if (typeof user === 'string') return user === 'string'; return res
+            //     .status(404)
+            //     .json({ success: false, message: user });
 
             return res.json({
                 success: true,

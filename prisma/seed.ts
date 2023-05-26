@@ -11,7 +11,7 @@ async function main() {
         create: {
             name: "Admin",
             email: "admin@mail.com",
-            type: "admin",
+            role: "admin",
             password: bcrypt.hashSync("123456789", salt)
         }
     });

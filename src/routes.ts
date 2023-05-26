@@ -6,9 +6,12 @@ import CategController from "./controllers/CategController";
 import ProductController from "./controllers/ProductController";
 import CartController from "./controllers/CartController";
 import OrderController from "./controllers/OrderController";
-import AuthController from "./controllers/AuthController";
+import LoginValidation from "./validators/login";
+// import { AuthController } from './controllers/AuthController';
+
 
 export function setupRoutes(app: Application) {
+
 
     const router = new Router(app);
 
@@ -18,11 +21,16 @@ export function setupRoutes(app: Application) {
         res.status(200).json("🚀 Aplicação iniciada com sucesso!");
     })
 
-    router.post("/login", AuthController.login);
+    // router.post("/login", LoginValidation, AuthController.login); // ROTA LOGIN FALTA CONCLUIR
+    router.post("/admin", UserController.createAdmin);
+    router.post("/buyer", UserController.createBuyer);
+    router.post("/owner", UserController.createOwner)
+
 
     router.group("/users", (router) => {
         router.get("/", UserController.index);
-        router.post("/", UserController.create);
+        // router.post("/", UserController.createAdmin);
+        // router.post("/", UserController.createBuyer)
         router.get("/:id", UserController.show);
         router.put("/:id", UserController.update);
         router.delete("/:id", UserController.delete);

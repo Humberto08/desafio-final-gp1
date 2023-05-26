@@ -1,7 +1,9 @@
-import { User } from "@prisma/client";
+
+import { Role, User } from "@prisma/client";
 import { prisma } from "../database/db";
 
 class UserRepository {
+    [x: string]: any;
 
     async getUsers(): Promise<Array<User>> {
         return await prisma.user.findMany();
@@ -37,6 +39,8 @@ class UserRepository {
             }
         })
     }
+
+
 
     async updateUser(id: number, name: string | null, email: string | null, password: string | null, role: string | null): Promise<User | null> {
 
