@@ -7,10 +7,6 @@ class CartService {
         return await CartRepository.addToCart(product_id, user_id, product_quantity)
     }
 
-    async createCart(cart: Cart): Promise<Cart | string> {
-        return await CartRepository.createCart(cart);
-    }
-
     async getCarts(): Promise<Array<Cart>> {
         return await CartRepository.getCarts();
     }
@@ -19,12 +15,12 @@ class CartService {
         return await CartRepository.getCart(id);
     }
 
-    async updateCartStatus(id: number, cart_status: CartStatus | null): Promise<Cart | string> {
-        return await CartRepository.updateCartStatus(id, cart_status);
-    }
-
     async updateCartProducts(id: number, cart_products: Array<CartProduct>) {
         return await CartRepository.updateCartProducts(id, cart_products);
+    }
+
+    async updateCartStatus(id: number, cart_status: CartStatus | null): Promise<Cart | string> {
+        return await CartRepository.updateCartStatus(id, cart_status);
     }
 
     async deleteCart(id: number): Promise<Cart | string> {

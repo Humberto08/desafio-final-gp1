@@ -9,11 +9,9 @@ import OrderController from "./controllers/OrderController";
 // import LoginValidation from "./validators/login";
 import AuthController from "./controllers/AuthController";
 
-
 // const AuthController = new AuthController();
 
 export function setupRoutes(app: Application) {
-
 
     const router = new Router(app);
 
@@ -30,7 +28,6 @@ export function setupRoutes(app: Application) {
     router.post("/buyer", UserController.createBuyer);
     router.post("/owner", UserController.createOwner)
 
-
     router.group("/users", (router) => {
         router.get("/", UserController.index);
         // router.post("/", UserController.createAdmin);
@@ -38,7 +35,7 @@ export function setupRoutes(app: Application) {
         router.get("/:id", UserController.show);
         router.put("/:id", UserController.update);
         router.delete("/:id", UserController.delete);
-    })
+    });
 
     router.group("/categories", (router) => {
         router.post("/", CategController.create);
@@ -72,19 +69,19 @@ export function setupRoutes(app: Application) {
     });
 
     router.group("/order", (router) => {
-        router.post("/", OrderController.create);
-        router.get("/", OrderController.index);
-        router.get("/:id", OrderController.show);
-        router.put("/:id", OrderController.update);
-        router.delete("/:id", OrderController.delete);
-    })
+        router.post("/new-order", OrderController.create);
+        router.get("/:user_id", OrderController.index);
+        router.get("/:user_id/:order_id", OrderController.show);
+        router.put("/:user_id/:order_id", OrderController.updateOrderStatus);
+        router.delete("/:user_id/:order_id", OrderController.delete);
+    });
 
     router.group("/cart", (router) => {
         router.post("/add-to-cart", CartController.addToCart)
-        router.post("/:user_id", CartController.create)
         router.get("/:user_id", CartController.index);
         router.get("/:user_id/:cart_id", CartController.show);
         router.put("/:user_id/:cart_id", CartController.updateCartProducts);
+        router.put("/:user_id/:cart_id", CartController.updateCartStatus);
         router.delete("/:user_id/:cart_id", CartController.delete);
-    })
+    });
 }

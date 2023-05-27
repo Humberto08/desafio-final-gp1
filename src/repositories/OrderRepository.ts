@@ -1,20 +1,45 @@
-import { Order } from "@prisma/client";
+import { Order, OrderStatus } from "@prisma/client";
 import { prisma } from "../database/db";
 
 class OrderRepository {
 
-    // criar pedido = obrigatório carrinho (cart_id)
+    async createOrder(email: string, cart_id: number, buyer_id: number, total_value: number): Promise<Order | string | boolean | undefined> {
 
-    async createOrder(order: Order): Promise<Order | string> {
+        await prisma.order.findMany({
+            where: {
+                buyer_id,
+                order_status: "Placed"
+            }
+        })
+
+        const getUserCart = await prisma.cart.findFirst({
+            where: { id: cart_id }
+        })
+
+        if (!getUserCart) {
+            return false
+        }
+
+        const order = await prisma.order.create({
+            data: {
+                cart_id,
+                buyer_id,
+                order_status: "Placed",
+                total_value: total_value
+            }
+        })
+
+        if (!order) {
+            return false
+        }
 
         return await prisma.order.create({
             data: {
-                buyer_id: order.buyer_id,
-                total_value: order.total_value,
-                cart_id: order.cart_id
-                // precisa incluir order_status aqui? nope (default)
+                cart_id: cart_id,
+                buyer_id: buyer_id,
+                total_value: total_value
             }
-        });
+        })
     }
 
     async getOrders(): Promise<Array<Order>> {
@@ -25,7 +50,7 @@ class OrderRepository {
         return await prisma.order.findFirst({ where: { id } })
     }
 
-    async updateOrder(id: number, cart_id: number, buyer_id: number, total_value: number | null): Promise<Order | string> {
+    async updateOrderStatus(id: number, order_status: OrderStatus | null): Promise<Order | string> {
 
         const findById = await prisma.order.findFirst({ where: { id } });
 
@@ -33,9 +58,7 @@ class OrderRepository {
 
         return await prisma.order.update({
             where: { id },
-            data: {
-                total_value: total_value || findById?.total_value
-            }
+            data: { order_status: order_status || findById.order_status }
         })
     }
 
