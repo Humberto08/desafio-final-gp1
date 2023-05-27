@@ -1,13 +1,13 @@
 import { User } from '@prisma/client';
-import { Request, Response } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import UserService from '../services/UserService';
 import { hash } from 'bcrypt';
 
 
 class UserController {
-    
 
-    static async index(req: Request, res: Response) {
+
+    static async index(req: Request, res: Response, next: NextFunction) {
 
         try {
             const users = await UserService.getUsers();
@@ -24,14 +24,14 @@ class UserController {
         }
     }
 
-    static async createAdmin(req: Request, res: Response) {
+    static async createAdmin(req: Request, res: Response, next: NextFunction) {
 
         try {
 
             const { name, email, password } = req.body;
             const hash_password = await hash(password, 10);
 
-            if (!name || !email || !password ) {
+            if (!name || !email || !password) {
                 return res
                     .status(400)
                     .json({ success: false, message: "⚠️ Preencha todos os campos necessários para criação de um usuário" })
@@ -56,75 +56,75 @@ class UserController {
             console.log(error);
             return res.status(500).json({ success: false, message: " Internal Server Error" })
         }
-}
-
-static async createBuyer(req: Request, res: Response) {
-
-    try {
-
-        const { name, email, password } = req.body;
-        const hash_password = await hash(password, 10);
-
-        if (!name || !email || !password) {
-            return res
-                .status(400)
-                .json({ success: false, message: "⚠️ Preencha todos os campos necessários para criação de um usuário" })
-        }
-
-        const user: string | User = await UserService.createUser({
-            name,
-            email,
-            role: "buyer",
-            password: hash_password
-        } as unknown as User);
-
-        if (user) {
-            return res.json({
-                success: true,
-                message: "Usuário criado com sucesso",
-                result: user
-            })
-        }
-
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: " Internal Server Error" })
     }
-}
 
-static async createOwner(req: Request, res: Response) {
+    static async createBuyer(req: Request, res: Response) {
 
-    try {
+        try {
 
-        const { name, email, password } = req.body;
-        const hash_password = await hash(password, 10);
+            const { name, email, password } = req.body;
+            const hash_password = await hash(password, 10);
 
-        if (!name || !email || !password) {
-            return res
-                .status(400)
-                .json({ success: false, message: "⚠️ Preencha todos os campos necessários para criação de um usuário" })
+            if (!name || !email || !password) {
+                return res
+                    .status(400)
+                    .json({ success: false, message: "⚠️ Preencha todos os campos necessários para criação de um usuário" })
+            }
+
+            const user: string | User = await UserService.createUser({
+                name,
+                email,
+                role: "buyer",
+                password: hash_password
+            } as unknown as User);
+
+            if (user) {
+                return res.json({
+                    success: true,
+                    message: "Usuário criado com sucesso",
+                    result: user
+                })
+            }
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ success: false, message: " Internal Server Error" })
         }
-
-        const user: string | User = await UserService.createUser({
-            name,
-            email,
-            role: "owner",
-            password: hash_password
-        } as unknown as User);
-
-        if (user) {
-            return res.json({
-                success: true,
-                message: "Usuário criado com sucesso",
-                result: user
-            })
-        }
-
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: " Internal Server Error" })
     }
-}
+
+    static async createOwner(req: Request, res: Response) {
+
+        try {
+
+            const { name, email, password } = req.body;
+            const hash_password = await hash(password, 10);
+
+            if (!name || !email || !password) {
+                return res
+                    .status(400)
+                    .json({ success: false, message: "⚠️ Preencha todos os campos necessários para criação de um usuário" })
+            }
+
+            const user: string | User = await UserService.createUser({
+                name,
+                email,
+                role: "owner",
+                password: hash_password
+            } as unknown as User);
+
+            if (user) {
+                return res.json({
+                    success: true,
+                    message: "Usuário criado com sucesso",
+                    result: user
+                })
+            }
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ success: false, message: " Internal Server Error" })
+        }
+    }
 
     static async show(req: Request, res: Response) {
 

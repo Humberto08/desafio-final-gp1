@@ -40,7 +40,13 @@ class UserRepository {
         })
     }
 
-
+    async getUserByEmail(email: string): Promise<User | null> {
+        return await prisma.user.findFirst({
+            where: {
+                email
+            }
+        })
+    }
 
     async updateUser(id: number, name: string | null, email: string | null, password: string | null, role: string | null): Promise<User | null> {
 
