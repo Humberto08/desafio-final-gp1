@@ -20,7 +20,10 @@ class ProductController {
             await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toFile(`./uploads/${req.file.originalname}`)
             //
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> f3c0f6da21f8ee99786f118a3ac88c47c68a1349
             if (!title || !description || !price || !amount || !option || !image || !published) {
                 return res
                     .status(500)
