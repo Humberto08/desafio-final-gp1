@@ -16,8 +16,6 @@ class UserService {
         return UserRepository.getUser(id);
     }
 
-
-
     async updateUser(id: number, name: string | null, email: string | null, password: string | null | null, role: string | null): Promise<User | null> {
         return UserRepository.updateUser(id, name, email, password, role);
     }
