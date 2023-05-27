@@ -24,6 +24,8 @@ export function setupRoutes(app: Application) {
     })
 
     router.post("/auth", AuthController.authenticate); // ROTA AUTHENTICATE FALTA CONCLUIR, PRECISA COLOCAR  O SECRET NO DOTENV
+    router.post("/logout", AuthController.logout);
+
     router.post("/admin", UserController.createAdmin);
     router.post("/buyer", UserController.createBuyer);
     router.post("/owner", UserController.createOwner)
