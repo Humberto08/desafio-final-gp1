@@ -10,7 +10,7 @@ class ProductController {
 
         try {
 
-            const { title, description, price, amount, subcategory, published } = req.body;
+            const { title, description, price, amount, option, published } = req.body;
 
             //upload de arquivo
             if (!req.file) return res.status(500).json({ message: "É obrigatório o envio de uma imagem " });
@@ -20,8 +20,7 @@ class ProductController {
             await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toFile(`./uploads/${req.file.originalname}`)
             //
 
-
-            if (!title || !description || !price || !amount || !subcategory || !image || !published) {
+            if (!title || !description || !price || !amount || !option || !image || !published) {
                 return res
                     .status(500)
                     .json({ success: false, message: "✖️ Você precisa informar todos os campos necessários para criar o Produto!" })
@@ -32,7 +31,7 @@ class ProductController {
                 description,
                 price: Number(price),
                 amount: Number(amount),
-                subcategory,
+                option,
                 image,
                 published: published === 'true'
             } as unknown as Product);
