@@ -1,22 +1,42 @@
-// import { User } from '@prisma/client';
-// import { Request } from 'express';
+import { NextFunction, Request, Response } from 'express'
+import { compare } from 'bcrypt';
+import { prisma } from '../database/db';
+import { sign } from 'jsonwebtoken';
 
 
-// class AuthController {
+class AuthController {
     
-// //     static async login(req: Request, res: Response) {
-// //         try {
-// //             const { email, password } = req.body;
-// //             const user = await UserRepository.findOne({
-// //                 where: {
-// //                     email,
-// //                 },
 
-// //             })
-// //             if (!User) {
-// //                 return res.status(400).json({ success: false, message: "⚠️ Preencha todos os campos necessários para criação de um usuário" })
-// //             }
-// //     }
-// // }
+        static async authenticate(req: Request, res: Response, next: NextFunction) {
 
-// // export default AuthController
+            const { email, password } = req.body;
+
+            const user = await prisma.user.findUnique({
+                where: {
+                    email
+                }
+            });
+
+            if (!user) {
+                return res.json({ error: "Usuário não encontrado" })
+            }
+
+
+            const isValuePasssword = await compare(password, user.password)
+
+            if (!isValuePasssword) {
+                return res.json({ error: "Senha incorreta" })
+            }
+
+            const token = sign({ id: user.id }, "secret", { expiresIn: "1h" });
+
+
+            return res.json({ user, token })
+
+
+        }
+    }
+
+
+
+export default AuthController;
