@@ -6,9 +6,11 @@ import CategController from "./controllers/CategController";
 import ProductController from "./controllers/ProductController";
 import CartController from "./controllers/CartController";
 import OrderController from "./controllers/OrderController";
-import LoginValidation from "./validators/login";
-// import { AuthController } from './controllers/AuthController';
+// import LoginValidation from "./validators/login";
+import AuthController from "./controllers/AuthController";
 
+
+// const AuthController = new AuthController();
 
 export function setupRoutes(app: Application) {
 
@@ -21,7 +23,7 @@ export function setupRoutes(app: Application) {
         res.status(200).json("🚀 Aplicação iniciada com sucesso!");
     })
 
-    // router.post("/login", LoginValidation, AuthController.login); // ROTA LOGIN FALTA CONCLUIR
+    router.post("/auth", AuthController.authenticate); // ROTA AUTHENTICATE FALTA CONCLUIR, PRECISA COLOCAR  O SECRET NO DOTENV
     router.post("/admin", UserController.createAdmin);
     router.post("/buyer", UserController.createBuyer);
     router.post("/owner", UserController.createOwner)
