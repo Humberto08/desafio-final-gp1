@@ -23,7 +23,7 @@ export function setupRoutes(app: Application) {
         res.status(200).json("🚀 Aplicação iniciada com sucesso!");
     })
 
-    router.post("/auth", AuthController.authenticate); // ROTA AUTHENTICATE FALTA CONCLUIR, PRECISA COLOCAR  O SECRET NO DOTENV
+    router.post("/auth", AuthController.authenticate); // ROTA AUTHENTICATE FALTA CONCLUIR, PRECISA COLOCAR  O SECRET NO .ENV
     router.post("/logout", AuthController.logout);
 
     router.post("/admin", UserController.createAdmin);
