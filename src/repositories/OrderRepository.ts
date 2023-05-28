@@ -3,11 +3,11 @@ import { prisma } from "../database/db";
 
 class OrderRepository {
 
-    async createOrder(email: string, cart_id: number, buyer_id: number, total_value: number): Promise<Order | string | boolean | undefined> {
+    async createOrder(email: string, cart_id: number, user_id: number, total_value: number): Promise<Order | string | boolean | undefined> {
 
         await prisma.order.findMany({
             where: {
-                buyer_id,
+                user_id,
                 order_status: "Placed"
             }
         })
@@ -23,7 +23,7 @@ class OrderRepository {
         const order = await prisma.order.create({
             data: {
                 cart_id,
-                buyer_id,
+                user_id,
                 order_status: "Placed",
                 total_value: total_value
             }
@@ -36,7 +36,7 @@ class OrderRepository {
         return await prisma.order.create({
             data: {
                 cart_id: cart_id,
-                buyer_id: buyer_id,
+                user_id: user_id,
                 total_value: total_value
             }
         })

@@ -70,13 +70,13 @@ model Product {
 
 model Cart {
     id                   Int           @id @default(autoincrement())
-    buyer_id             Int
+    user_id              Int
     total_value          Float
     total_after_discount Float?
     cart_status          CartStatus    @default(Pending)
     cart_products        CartProduct[]
     address              Address[]
-    User                 User?         @relation(fields: [buyer_id], references: [id])
+    User                 User?         @relation(fields: [user_id], references: [id])
     created_at           DateTime      @default(now())
     updated_at           DateTime      @updatedAt
     Order                Order[]
@@ -124,10 +124,10 @@ model Address {
 model Order {
     id           Int         @id @default(autoincrement())
     cart_id      Int
-    buyer_id     Int
+    user_id      Int
     total_value  Float
     order_status OrderStatus @default(Placed)
-    Buyer        User        @relation(fields: [buyer_id], references: [id])
+    Buyer        User        @relation(fields: [user_id], references: [id])
     Cart         Cart        @relation(fields: [cart_id], references: [id])
     created_at   DateTime    @default(now())
     updated_at   DateTime    @updatedAt
