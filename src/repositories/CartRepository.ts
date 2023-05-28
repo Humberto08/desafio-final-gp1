@@ -1,13 +1,15 @@
-import { Cart, CartProduct, CartStatus } from "@prisma/client";
+
 import { prisma } from "../database/db";
+import { Cart, CartProduct, CartStatus } from "@prisma/client";
+
 
 class CartRepository {
 
-    async addToCart(product_id: number, buyer_id: number, product_quantity: number): Promise<CartProduct | string | boolean | undefined> {
+    async addToCart(user_id: number, product_id: number,  product_quantity: number): Promise<CartProduct | string | boolean | undefined> {
 
         const searchCart = await prisma.cart.findMany({
             where: {
-                buyer_id,
+                user_id,
                 cart_status: "Pending"
             }
         })
@@ -34,7 +36,7 @@ class CartRepository {
 
             cart = await prisma.cart.create({
                 data: {
-                    buyer_id,
+                    user_id,
                     cart_status: "Pending",
                     total_value: 0
                 }
@@ -66,12 +68,12 @@ class CartRepository {
         })
     }
 
-    async getCarts(): Promise<Array<Cart>> {
-        return await prisma.cart.findMany();
-    }
+    async getCartsByUser(user_id: number): Promise<Cart[]> {
+        return await prisma.cart.findMany({ where: { user_id } });
+      }    
 
-    async getCart(id: number): Promise<Cart | null> {
-        return await prisma.cart.findFirst({ where: { id } })
+    async getCart(user_id: number, id: number): Promise<Cart | null> {
+        return await prisma.cart.findFirst({ where: { user_id , id } })
     }
 
     async updateCartProducts(id: number, cart_products: Array<CartProduct>) {
@@ -112,13 +114,23 @@ class CartRepository {
         })
     }
 
-    async deleteCart(id: number): Promise<Cart | string> {
-
-        await prisma.cart.findFirst({ where: { id } });
-
-        return await prisma.cart.delete({ where: { id, } })
-
-    }
-}
+    async deleteCart(user_id: number, cart_id: number): Promise<Cart | string> {
+        const cartProduct = await prisma.cartProduct.findFirst({ where: { cart_id } });
+      
+        if (!cartProduct) {
+          return "✖️ Carrinho de produto não encontrado para o ID informado!";
+        }
+      
+        await prisma.cartProduct.deleteMany({ where: { cart_id } });
+        const deletedCart = await prisma.cart.delete({ where: { id: cart_id } });
+      
+        if (!deletedCart) {
+          return "✖️ Carrinho não encontrado para o ID informado!";
+        }
+      
+        return deletedCart as Cart;
+      }
+      
+    }      
 
 export default new CartRepository();

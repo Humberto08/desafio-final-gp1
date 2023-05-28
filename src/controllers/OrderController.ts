@@ -9,7 +9,7 @@ class OrderController {
 
         try {
 
-            const { email, cart_id, buyer_id, total_value } = req.body;
+            const { email, id, user_id, total_value } = req.body;
 
             const user = await UserService.createUser(email);
 
@@ -19,9 +19,9 @@ class OrderController {
                     .json({ success: false, message: "✖️ Sua anta, você precisa fazer login para efetuar a compra!" })
             }
 
-            const cart = await CartService.getCart(cart_id);
+            const cart = await CartService.getCart(user_id, id);
 
-            if (!cart_id) {
+            if (!user_id || !id) {
                 return res
                     .status(500)
                     .json({ success: false, message: "✖️ Sua anta, é obrigatório informar o id do carrinho!" })
@@ -33,7 +33,7 @@ class OrderController {
                     .json({ success: false, message: "✖️ Sua anta, esse carrinho não existe!" })
             }
 
-            const order = await OrderService.createOrder(email, cart_id, buyer_id, total_value);
+            const order = await OrderService.createOrder(email, id, user_id, total_value);
 
             if (!order) {
                 return res

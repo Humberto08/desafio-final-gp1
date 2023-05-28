@@ -3,16 +3,16 @@ import CartRepository from "../repositories/CartRepository";
 
 class CartService {
 
-    async addToCart(product_id: number, user_id: number, product_quantity: number): Promise<CartProduct | string | boolean | undefined> {
-        return await CartRepository.addToCart(product_id, user_id, product_quantity)
+    async addToCart(user_id: number, product_id: number, product_quantity: number): Promise<CartProduct | string | boolean | undefined> {
+        return await CartRepository.addToCart(user_id, product_id, product_quantity)
     }
 
-    async getCarts(): Promise<Array<Cart>> {
-        return await CartRepository.getCarts();
+    async getCartsByUser(user_id: number): Promise<Array<Cart>> {
+        return await CartRepository.getCartsByUser(user_id);
     }
 
-    async getCart(id: number): Promise<Cart | null> {
-        return await CartRepository.getCart(id);
+    async getCart(user_id: number, id: number): Promise<Cart | null> {
+        return await CartRepository.getCart(user_id, id);
     }
 
     async updateCartProducts(id: number, cart_products: Array<CartProduct>) {
@@ -23,8 +23,8 @@ class CartService {
         return await CartRepository.updateCartStatus(id, cart_status);
     }
 
-    async deleteCart(id: number): Promise<Cart | string> {
-        return await CartRepository.deleteCart(id);
+    async deleteCart(user_id: number, id: number): Promise<Cart | string> {
+        return await CartRepository.deleteCart(user_id, id);
     }
 }
 
