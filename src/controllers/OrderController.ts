@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import OrderService from "../services/OrderService";
-import { prisma } from "../database/db";
 import CartService from "../services/CartService";
+import UserService from "../services/UserService";
 
 class OrderController {
 
@@ -11,10 +11,7 @@ class OrderController {
 
             const { email, cart_id, buyer_id, total_value } = req.body;
 
-            const user = await prisma.user.findUnique({
-                where: { email: email },
-                select: { id: true },
-            });
+            const user = await UserService.createUser(email);
 
             if (!user) {
                 return res
