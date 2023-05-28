@@ -1,47 +1,25 @@
-import { Cart, Order } from "@prisma/client";
 import { Request, Response } from "express";
 import OrderService from "../services/OrderService";
-import { prisma } from "../database/db";
 import CartService from "../services/CartService";
-
-/*
-
-ERRO: usar PRISMA nessa camada
-PROBLEMA: não tô sabendo separar essas bagaça de camada
-
-DÚVIDA: não entendi a lógica da finalização do pedido 😓
-    O que acho que pode ser que seja:
-    - order tem que receber o return da const addToCart (o que tem no carrinho tem que ir também pra página de pagto)
-    - 
--> e como fazer essas cabaça de passos?
-
-Atividades relacionadas ao pedido final (funções):
-1) Ir para pagamento / const checkout 
-2) Só depois que pagou é que recebe a mensagem "compra realizada com sucesso"
--> e como fazer esses passo from hell?
-
-*/
-
+import UserService from "../services/UserService";
 
 class OrderController {
 
     static async create(req: Request, res: Response) {
-        // não sei criar essa fucking rota de create 
 
         try {
 
-            const { email, cart_id } = req.body;
+            const { email, cart_id, buyer_id, total_value } = req.body;
 
-            const user = await prisma.user.findUnique({
-                where: { email: email },
-                select: { id: true }, // não lembro pq essa linha ... ?
-            });
+            const user = await UserService.createUser(email);
 
             if (!user) {
                 return res
                     .status(500)
-                    .json({ success: false, message: "✖️ Você precisa fazer login para efetuar a compra!" })
+                    .json({ success: false, message: "✖️ Sua anta, você precisa fazer login para efetuar a compra!" })
             }
+
+            const cart = await CartService.getCart(cart_id);
 
             if (!cart_id) {
                 return res
@@ -49,29 +27,23 @@ class OrderController {
                     .json({ success: false, message: "✖️ Sua anta, é obrigatório informar o id do carrinho!" })
             }
 
-            let cart = await CartService.getCart(cart_id);
-
             if (!cart) {
                 return res
                     .status(500)
-                    .json({ success: false, message: "✖️ Sua anta, o carrinho informado é inválido!" })
+                    .json({ success: false, message: "✖️ Sua anta, esse carrinho não existe!" })
             }
 
-            const order = await OrderService.createOrder({
-                buyer_id: user.id,
-                cart_id: cart_id,
-                total_value: cart.total_value
-            } as Order);
+            const order = await OrderService.createOrder(email, cart_id, buyer_id, total_value);
 
             if (!order) {
                 return res
                     .status(500)
-                    .json({ success: false, message: "✖️ Sua anta, deu ruim na criação do carrinho!" })
+                    .json({ success: false, message: "✖️ Sua anta, deu ruim na criação do pedido!" })
             }
 
             return res
                 .status(200)
-                .json({ success: true, message: "✔️ Pedido em aberto, paga aí!" })
+                .json({ success: true, message: "✔️ Peido aberto!" })
 
         } catch (error) {
             console.log(error);
@@ -135,11 +107,32 @@ class OrderController {
         }
     }
 
-    static async update(req: Request, res: Response) {
+    static async updateOrderStatus(req: Request, res: Response) {
 
         try {
 
-            // aqui passo a atualização do status ?
+            const { order_status } = req.body;
+            const { id } = req.params;
+
+            if (!id) return res
+                .status(500)
+                .json({ success: false, message: "✖️ É obrigatório informar o ID do carrinho!" });
+
+            if (isNaN(Number(id))) return res
+                .status(500)
+                .json({ success: false, message: "✖️ O ID precisa ser um número!" });
+
+            const order = await CartService.updateCartStatus(Number(id), order_status)
+
+            if (!order) return res
+                .status(404)
+                .json({ success: false, message: "✖️ Status de pedido não atualizado!" })
+
+            return res.json({
+                success: true,
+                message: "✔️ Status de pedido atualizado!",
+                result: order
+            });
 
         } catch (error) {
             console.log(error);
