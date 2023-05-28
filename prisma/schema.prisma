@@ -70,13 +70,13 @@ model Product {
 
 model Cart {
     id                   Int           @id @default(autoincrement())
-    buyer_id             Int
+    user_id              Int
     total_value          Float
     total_after_discount Float?
-    cart_products        CartProduct[]
     cart_status          CartStatus    @default(Pending)
+    cart_products        CartProduct[]
     address              Address[]
-    User                 User?         @relation(fields: [buyer_id], references: [id])
+    User                 User?         @relation(fields: [user_id], references: [id])
     created_at           DateTime      @default(now())
     updated_at           DateTime      @updatedAt
     Order                Order[]
@@ -113,8 +113,8 @@ model Address {
     charge_address_city     String?
     charge_address_state    String?
     charge_address_zip      String?
-    cart                    Cart    @relation(fields: [cart_id], references: [id])
-    cart_id                 Int
+    cart                    Cart    @relation(fields: [cartId], references: [id])
+    cartId                  Int
 
     @@map("endereços")
 }
@@ -126,7 +126,7 @@ model Order {
     cart_id      Int
     buyer_id     Int
     total_value  Float
-    order_status OrderStatus @default(Placed)
+    order_status orderStatus @default(Placed)
     Buyer        User        @relation(fields: [buyer_id], references: [id])
     Cart         Cart        @relation(fields: [cart_id], references: [id])
     created_at   DateTime    @default(now())
@@ -135,7 +135,7 @@ model Order {
     @@map("pedidos")
 }
 
-enum OrderStatus {
+enum orderStatus {
     Placed
     Cancelled
     Dispatched

@@ -1,5 +1,5 @@
 
-import { Role, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { prisma } from "../database/db";
 
 class UserRepository {
@@ -20,6 +20,7 @@ class UserRepository {
 
         if (findDuplicateUser > 0) {
             return "⚠️ O Usuário não pode ser criado, porque já existe um usuário com as mesmas informações.";
+            
         }
 
         return await prisma.user.create({
@@ -40,7 +41,13 @@ class UserRepository {
         })
     }
 
-
+    async getUserByEmail(email: string): Promise<User | null> {
+        return await prisma.user.findFirst({
+            where: {
+                email
+            }
+        })
+    }
 
     async updateUser(id: number, name: string | null, email: string | null, password: string | null, role: string | null): Promise<User | null> {
 

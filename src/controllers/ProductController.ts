@@ -118,15 +118,15 @@ class ProductController {
                 .status(500)
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
-            const { title, description, price, amount, option, image, published } = req.body;
+            const { title, description, price, amount, subcategory, image, published } = req.body;
 
-            if (!title && !description && !price && !amount && !option && !image && !published) {
+            if (!title && !description && !price && !amount && !subcategory && !image && !published) {
                 return res
                     .status(500)
                     .json({ success: false, message: "✖️ Você precisa preencher pelo menos um campo para atualizar o Produto!" });
             }
 
-            const product: Product | string = await ProductService.updateProduct(Number(id), title, description, price, amount, option, image, published);
+            const product: Product | string = await ProductService.updateProduct(Number(id), title, description, price, amount, subcategory, image, published);
 
             if (typeof product === 'string') return res
                 .status(404)
