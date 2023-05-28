@@ -1,1 +1,2 @@
-# desafio-final-gp1
+# E-Commerce - CafeMaria
+
