@@ -1,15 +1,13 @@
 import { Cart, CartProduct, CartStatus } from "@prisma/client";
 import { prisma } from "../database/db";
 
-// check linha 33
-
 class CartRepository {
 
-    async addToCart(product_id: number, user_id: number, product_quantity: number): Promise<CartProduct | string | boolean | undefined> {
+    async addToCart(product_id: number, buyer_id: number, product_quantity: number): Promise<CartProduct | string | boolean | undefined> {
 
         const searchCart = await prisma.cart.findMany({
             where: {
-                user_id,
+                buyer_id,
                 cart_status: "Pending"
             }
         })
@@ -36,7 +34,7 @@ class CartRepository {
 
             cart = await prisma.cart.create({
                 data: {
-                    user_id,
+                    buyer_id,
                     cart_status: "Pending",
                     total_value: 0
                 }
@@ -68,17 +66,6 @@ class CartRepository {
         })
     }
 
-    async createCart(cart: Cart): Promise<Cart | string> {
-
-        return await prisma.cart.create({
-            data: {
-                user_id: cart.user_id,
-                cart_status: cart.cart_status,
-                total_value: cart.total_value
-            }
-        });
-    }
-
     async getCarts(): Promise<Array<Cart>> {
         return await prisma.cart.findMany();
     }
@@ -94,15 +81,15 @@ class CartRepository {
         if (!findById) return "✖️ Carrinho não encontrado para o ID informado!";
 
         for (let index = 0; index < cart_products.length; index++) {
-            const element = cart_products[index]; // unidade de cart_product
+            const element = cart_products[index];
 
             const cart_product = await prisma.cartProduct.findFirst({
                 where: { id: element.id }
             })
 
-            if (!cart_product) continue // próximo registro
+            if (!cart_product) continue
 
-            await prisma.cartProduct.update({
+            return await prisma.cartProduct.update({
                 where: { id: cart_product.id },
                 data: {
                     product_price: element.product_price,
@@ -110,8 +97,6 @@ class CartRepository {
                 }
             })
         }
-
-        return
     }
 
     async updateCartStatus(id: number, cart_status: CartStatus | null): Promise<Cart | string> {
@@ -122,10 +107,7 @@ class CartRepository {
 
         return await prisma.cart.update({
             where: { id },
-            data: {
-                cart_status: cart_status || findById.cart_status,
-            } // como organizar enum e arrays dentro de objeto/data ? 
-            // como liberar pra editar arrays de endereços e produtos?
+            data: { cart_status: cart_status || findById.cart_status }
 
         })
     }
