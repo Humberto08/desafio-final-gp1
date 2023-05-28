@@ -2,10 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import { compare } from 'bcrypt';
 import { prisma } from '../database/db';
 import { sign } from 'jsonwebtoken';
-
-
 class AuthController {
-
 
     static async authenticate(req: Request, res: Response, next: NextFunction) {
 
@@ -21,18 +18,15 @@ class AuthController {
             return res.json({ error: "Usuário não encontrado" })
         }
 
-
         const isValuePasssword = await compare(password, user.password)
 
         if (!isValuePasssword) {
             return res.json({ error: "Senha incorreta" })
         }
 
-        const token = sign({ id: user.id }, "secret", { expiresIn: "1h" });
-
+        const token = sign({ id: user.id, nome: user.name, email: user.email, role: user.role }, "secret", { expiresIn: "1h" });
 
         return res.json({ user, token })
-
 
     }
 

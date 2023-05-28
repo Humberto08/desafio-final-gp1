@@ -16,6 +16,10 @@ class UserService {
         return UserRepository.getUser(id);
     }
 
+    async getUserByEmail(email: string): Promise<User | null> {
+        return UserRepository.getUserByEmail(email);
+    }
+
     async updateUser(id: number, name: string | null, email: string | null, password: string | null | null, role: string | null): Promise<User | null> {
         return UserRepository.updateUser(id, name, email, password, role);
     }
