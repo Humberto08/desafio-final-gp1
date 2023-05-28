@@ -22,9 +22,9 @@ router.post("/logout", AuthController.logout);
 router.post("/admin", verifyEmailMiddleware, AuthMiddleware, verifyEmailsAllMiddleware, UserController.createAdmin);
 router.post("/buyer", verifyEmailMiddleware, AuthMiddleware, verifyEmailsAllMiddleware, UserController.createBuyer);
 
-router.get("/users", AuthMiddleware,UserController.index);
-router.get("/users/:id",AuthMiddleware, UserController.show);
-router.put("/users/:id",AuthMiddleware, UserController.update);
+router.get("/users", AuthMiddleware, UserController.index);
+router.get("/users/:id", AuthMiddleware, UserController.show);
+router.put("/users/:id", AuthMiddleware, UserController.update);
 router.delete("/users/:id", AuthMiddleware, UserController.delete);
 
 router.post("/categories", AuthMiddleware, CategController.create);
@@ -33,7 +33,7 @@ router.get("/categories/:id", AuthMiddleware, CategController.show);
 router.put("/categories/:id", AuthMiddleware, CategController.update);
 router.delete("/categories/:id", AuthMiddleware, CategController.delete);
 
-router.post("/products", upload.single('image'),AuthMiddleware, ProductController.create);
+router.post("/products", upload.single('image'), AuthMiddleware, ProductController.create);
 
 router.get("/products", ProductController.index);
 router.get("/products/:id", ProductController.show);
@@ -42,8 +42,8 @@ router.delete("/products/:id", AuthMiddleware, ProductController.delete);
 
 router.post("/order", AuthMiddleware, OrderController.create);
 router.get("/order", AuthMiddleware, OrderController.index);
-router.get("/order/:id",AuthMiddleware, OrderController.show);
-router.put("/order/:id", AuthMiddleware, OrderController.update);
+router.get("/order/:id", AuthMiddleware, OrderController.show);
+router.put("/order/:id", AuthMiddleware, OrderController.updateOrderStatus);
 router.delete("/order/:id", AuthMiddleware, OrderController.delete);
 
 router.post("/cart/add-to-cart", AuthMiddleware, CartController.addToCart)
