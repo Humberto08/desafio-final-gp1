@@ -14,6 +14,8 @@ O projeto consiste em um MVP (Produto Mínimo Viável) de um ecommerce com o pro
 **Back-end:**
 - Node
 - Express
+- Jest
+- Babel
 - Prisma
 - MySql
 - TypeScript
@@ -33,7 +35,8 @@ O projeto consiste em um MVP (Produto Mínimo Viável) de um ecommerce com o pro
 - [cors](https://www.npmjs.com/package/@types/cors)
 - [bcrypt](https://www.npmjs.com/package/@types/bcrypt)
 - [body-parser](https://www.npmjs.com/package/@types/body-parser)
-[SQL Cloud](https://cloud.google.com/sql/docs/mysql?hl=pt-br)
+- [SQL Cloud](https://cloud.google.com/sql/docs/mysql?hl=pt-br)
+- [Jest](https://jestjs.io/pt-BR/docs/getting-started)
 
 ## Autores
 
