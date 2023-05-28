@@ -1,4 +1,3 @@
-import { Cart, CartProduct, CartStatus } from "@prisma/client";
 import { Request, Response } from "express";
 import CartService from "../services/CartService";
 
