@@ -4,9 +4,11 @@
 # <p align="center"></p>    
 ## Descrição:
 O objetivo desse desafio foi desenvolver uma aplicação e-commerce do zero utilizando todas as habilidades adquiridas durante a jornada Gama Experience.<br><br>
- O projeto foi dividido entre um time Front-End e um time Back-End.
- <br><br>
+O projeto foi dividido entre um time Front-End e um time Back-End.
+<br><br>
 Como time Back-End, buscamos desenvolver uma aplicação com Node.js e Express utilizando padrões de arquiteturas de acordo com a necessidade do projeto. A aplicação usou o banco de dados GCP Cloud SQL.
+<br><br>
+Essa API deve permitir que administradores consigam criar, editar e deletar categorias e produtos, e que usuários consigam fazer cadastro e login pra fazer suas compras de forma segura.
 <br><br>
 Você está no repositório Back-End.
 <br><br>
