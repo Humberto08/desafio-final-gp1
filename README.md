@@ -1,8 +1,8 @@
 # <p align="center">Cafemaria</p>
 <p align="center">Desafio Final Gama Experience <br> [XP48] - Grupo I</p>
 
-# <p align="center"></p>    
-## Descrição:
+
+## <br> Descrição:
 O objetivo desse desafio foi desenvolver uma aplicação e-commerce do zero utilizando todas as habilidades adquiridas durante a jornada Gama Experience.<br><br>
 O projeto foi dividido entre um time Front-End e um time Back-End.
 <br><br>
@@ -10,8 +10,7 @@ Como time Back-End, buscamos desenvolver uma aplicação com Node.js e Express u
 <br><br>
 Essa API deve permitir que administradores consigam criar, editar e deletar categorias e produtos, e que usuários consigam fazer cadastro e login pra fazer suas compras de forma segura.
 
-# <p align="center"></p>    
-## Acessos:
+## <br> Acessos:
 Você está no repositório Back-End.
 <br><br>
 Para ver a documentação da API, acesse:<br>
@@ -20,9 +19,7 @@ https://documenter.getpostman.com/view/26870954/2s93m4Y3T6
 Para ver o repositório Front-End, acesse:<br>
  https://github.com/guipaterlini/Projeto-Cafemaria
 
-# <p align="center"></p>   
-
-## Stacks utilizadas:
+## <br> Stacks utilizadas:
 
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" height="30" width="35" alt="typescript logo"  /> [TypeScript](https://www.typescriptlang.org/) <br>
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons//nodejs/nodejs-original.svg" height="30" width="35" alt="node logo"  /> [NodeJs](https://nodejs.org/en)<br>
