@@ -28,9 +28,7 @@ Para ver o repositório Front-End, acesse:<br>
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/babel/babel-original.svg" height="30" width="35" alt="babel logo"  /> [Babel](https://babeljs.io/docs)<br>
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" height="30" width="35" alt="mysql logo"  /> [MySql](https://dev.mysql.com/doc/)
 
-# <p align="center"></p>    
-
-## Colaboradores do Projeto:
+## <br> Colaboradores do Projeto:
 
 | [<img src="https://avatars.githubusercontent.com/u/121952905?v=4" width=130><br><sub>Thaisa Contar</sub>](https://github.com/thaisacontar) |  [<img src="https://avatars.githubusercontent.com/u/103616315?v=4" width=130><br><sub>Humberto Luciano</sub>](https://github.com/Humberto08) | [<img src="https://avatars.githubusercontent.com/u/26369130?v=4" width=130><br><sub>Eduardo Souza</sub>](https://github.com/esfigueredo) | [<img src="https://avatars.githubusercontent.com/u/119836426?v=4" width=130><br><sub>Roberto Braga</sub>](https://github.com/RBDevDBA) | [<img src="https://avatars.githubusercontent.com/u/112999061?v=4" width=130><br><sub>Paulo Roberto</sub>](https://github.com/paulorobertorodrigues)
 | :---: | :---: | :---: | :---: | :---: |
