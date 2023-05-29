@@ -1,47 +1,33 @@
+# <p align="center">Cafemaria</p>
+<p align="center">Desafio Final Gama Experience <br> [XP48] - Grupo I</p>
 
-# CaféMaria - Back End / Desafio Final XP #48 - Grupo I
+# <p align="center"></p>    
+## Descrição:
+O objetivo desse desafio foi desenvolver uma aplicação e-commerce do zero utilizando todas as habilidades adquiridas durante a jornada Gama Experience.<br><br>
+ O projeto foi dividido entre um time Front-End e um time Back-End.
+ <br><br>
+Como time Back-End, buscamos desenvolver uma aplicação com Node.js e Express utilizando padrões de arquiteturas de acordo com a necessidade do projeto. A aplicação usou o banco de dados GCP Cloud SQL.
+<br><br>
+Você está no repositório Back-End.
+<br><br>
+Para ver a documentação da API, acesse:<br>
+https://documenter.getpostman.com/view/26870954/2s93m4Y3T6
+ <br><br>
+Para ver o repositório Front-End, acesse:<br>
+ https://github.com/guipaterlini/Projeto-Cafemaria
 
+## <br> Stacks utilizadas:
 
-O projeto consiste em um MVP (Produto Mínimo Viável) de um ecommerce com o propósito de aplicar nosso conhecimento adquirido. Buscamos uma imersão completa no mercado de trabalho, mapeando e criando histórias para cada funcionalidade a ser desenvolvida pela equipe. O objetivo central desse desafio é construir uma loja virtual chamada Cafémaria.
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" height="30" width="35" alt="typescript logo"  /> [TypeScript](https://www.typescriptlang.org/) <br>
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons//nodejs/nodejs-original.svg" height="30" width="35" alt="node logo"  /> [NodeJs](https://nodejs.org/en)<br>
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" height="30" width="35" alt="express logo"  /> [Express](https://www.npmjs.com/package/express)<br>
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jest/jest-plain.svg" height="30" width="35" alt="jest logo"  /> [JEST](https://jestjs.io/pt-BR/docs/getting-started)<br>
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/babel/babel-original.svg" height="30" width="35" alt="babel logo"  /> [Babel](https://babeljs.io/docs)<br>
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" height="30" width="35" alt="mysql logo"  /> [MySql](https://dev.mysql.com/doc/)
 
+# <p align="center"></p>    
 
-## Stack utilizada
+## Colaboradores do Projeto:
 
-**Front-end:** 
-- React
-- TypeScript
-
-**Back-end:**
-- Node
-- Express
-- Jest
-- Babel
-- Prisma
-- MySql
-- TypeScript
-- SQL Cloud (GCP)
-
-
-## Documentação - Back End
-
-- [NodeJs](https://nodejs.org/en)
-- [Express](https://www.npmjs.com/package/express)
-- [Prisma](https://www.prisma.io/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [MySql](https://dev.mysql.com/doc/)
-- [JWT](https://jwt.io/)
-- [Jasonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
-- [dotenv](https://www.npmjs.com/package/dotenv)
-- [cors](https://www.npmjs.com/package/@types/cors)
-- [bcrypt](https://www.npmjs.com/package/@types/bcrypt)
-- [body-parser](https://www.npmjs.com/package/@types/body-parser)
-- [SQL Cloud](https://cloud.google.com/sql/docs/mysql?hl=pt-br)
-- [Jest](https://jestjs.io/pt-BR/docs/getting-started)
-
-## Autores
-
-- [Thaisa Contar](https://www.github.com/thaisacontar)
-- [Roberto Braga](https://www.github.com/RBDevDBA)
-- [Eduardo Souza](https://www.github.com/esfigueredo)
-- [Paulo Roberto](https://www.github.com/paulorobertorodrigues)
-- [Humberto Luciano](https://www.github.com/Humberto08)
+| [<img src="https://avatars.githubusercontent.com/u/121952905?v=4" width=80><br><sub>Thaisa Contar</sub>](https://github.com/thaisacontar) |  [<img src="https://avatars.githubusercontent.com/u/103616315?v=4" width=80><br><sub>Humberto Luciano</sub>](https://github.com/Humberto08) | [<img src="https://avatars.githubusercontent.com/u/26369130?v=4" width=80><br><sub>Eduardo Souza</sub>](https://github.com/esfigueredo) | [<img src="https://avatars.githubusercontent.com/u/119836426?v=4" width=80><br><sub>Roberto Braga</sub>](https://github.com/RBDevDBA) | [<img src="https://avatars.githubusercontent.com/u/112999061?v=4" width=80><br><sub>Paulo Roberto</sub>](https://github.com/paulorobertorodrigues)
+| :---: | :---: | :---: | :---: | :---: |
