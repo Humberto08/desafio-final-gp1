@@ -126,7 +126,7 @@ model Order {
     id           Int         @id @default(autoincrement())
     cart_id      Int
     user_id      Int
-    total_value  Float
+    total_value  Float?
     order_status OrderStatus @default(Placed)
     Buyer        User        @relation(fields: [user_id], references: [id])
     Cart         Cart        @relation(fields: [cart_id], references: [id])
