@@ -9,7 +9,9 @@ O projeto foi dividido entre um time Front-End e um time Back-End.
 Como time Back-End, buscamos desenvolver uma aplicação com Node.js e Express utilizando padrões de arquiteturas de acordo com a necessidade do projeto. A aplicação usou o banco de dados GCP Cloud SQL.
 <br><br>
 Essa API deve permitir que administradores consigam criar, editar e deletar categorias e produtos, e que usuários consigam fazer cadastro e login pra fazer suas compras de forma segura.
-<br><br>
+
+# <p align="center"></p>    
+## Acessos:
 Você está no repositório Back-End.
 <br><br>
 Para ver a documentação da API, acesse:<br>
@@ -18,7 +20,9 @@ https://documenter.getpostman.com/view/26870954/2s93m4Y3T6
 Para ver o repositório Front-End, acesse:<br>
  https://github.com/guipaterlini/Projeto-Cafemaria
 
-## <br> Stacks utilizadas:
+# <p align="center"></p>   
+
+## Stacks utilizadas:
 
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" height="30" width="35" alt="typescript logo"  /> [TypeScript](https://www.typescriptlang.org/) <br>
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons//nodejs/nodejs-original.svg" height="30" width="35" alt="node logo"  /> [NodeJs](https://nodejs.org/en)<br>
