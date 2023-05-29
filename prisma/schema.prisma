@@ -1,0 +1,156 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+// USUÁRIOS
+
+model User {
+    id          Int      @id @default(autoincrement())
+    name        String
+    email       String   @unique
+    password    String
+    role        Role
+    order_buyer Order[]
+    Cart        Cart[]
+    created_at  DateTime @default(now())
+    updated_at  DateTime @updatedAt
+
+    @@map("usuários")
+}
+
+enum Role {
+    owner
+    admin
+    buyer
+}
+
+// CATEGORIAS
+
+model Category {
+    id          Int       @id @default(autoincrement())
+    title       String    @unique @db.VarChar(100)
+    description String    @db.VarChar(300)
+    published   Boolean   @default(false)
+    products    Product[]
+    created_at  DateTime  @default(now())
+    updated_at  DateTime  @updatedAt
+
+    @@map("categorias")
+}
+
+// PRODUTOS
+
+model Product {
+    id            Int           @id @default(autoincrement())
+    title         String        @db.VarChar(100)
+    description   String        @db.VarChar(300)
+    price         Float
+    measures      String?       @db.VarChar(10)
+    amount        Int
+    option        String        @db.VarChar(100)
+    published     Boolean       @default(false)
+    image         String?
+    categories    Category[]
+    cart_products CartProduct[]
+    created_at    DateTime      @default(now())
+    updated_at    DateTime      @updatedAt
+
+    @@map("produtos")
+}
+
+// CARRINHO DE COMPRAS
+
+model Cart {
+    id                   Int           @id @default(autoincrement())
+    user_id              Int
+    total_value          Float
+    total_after_discount Float?
+    cart_status          CartStatus    @default(Pending)
+    cart_products        CartProduct[]
+    address              Address[]
+    User                 User?         @relation(fields: [user_id], references: [id])
+    created_at           DateTime      @default(now())
+    updated_at           DateTime      @updatedAt
+    Order                Order[]
+
+    @@map("carrinho-de-compras")
+}
+
+enum CartStatus {
+    Pending
+    Cancelled
+    Paid
+}
+
+model CartProduct {
+    id               Int     @id @default(autoincrement())
+    cart_id          Int
+    product_id       Int
+    product_quantity Int
+    product_price    Float
+    product          Product @relation(fields: [product_id], references: [id])
+    cart             Cart    @relation(fields: [cart_id], references: [id])
+}
+
+model Address {
+    id                      Int     @id @default(autoincrement())
+    shipping                Float
+    shipping_address_street String?
+    shipping_address_number String?
+    shipping_address_city   String?
+    shipping_address_state  String?
+    shipping_address_zip    String?
+    charge_address_street   String?
+    charge_address_number   String?
+    charge_address_city     String?
+    charge_address_state    String?
+    charge_address_zip      String?
+    cart                    Cart    @relation(fields: [cart_id], references: [id])
+    cart_id                 Int
+
+    @@map("endereços")
+}
+
+// PEDIDOS
+
+model Order {
+    id           Int         @id @default(autoincrement())
+    cart_id      Int
+    user_id      Int
+    total_value  Float
+    order_status OrderStatus @default(Placed)
+    Buyer        User        @relation(fields: [user_id], references: [id])
+    Cart         Cart        @relation(fields: [cart_id], references: [id])
+    created_at   DateTime    @default(now())
+    updated_at   DateTime    @updatedAt
+
+    @@map("pedidos")
+}
+
+enum OrderStatus {
+    Placed
+    Cancelled
+    Dispatched
+    Delivered
+}
+
+// CUPONS DE DESCONTO (OPCIONAL)
+
+model Coupon {
+    id          Int      @id @default(autoincrement())
+    coupon_name String   @unique
+    expiry_date DateTime
+    discount    Float
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    //6:18:00
+}
