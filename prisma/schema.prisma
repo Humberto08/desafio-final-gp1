@@ -58,10 +58,11 @@ model Product {
     option        String        @db.VarChar(100)
     published     Boolean       @default(false)
     image         String?
-    categories    Category[]
+    category_id   Int
     cart_products CartProduct[]
     created_at    DateTime      @default(now())
     updated_at    DateTime      @updatedAt
+    Category      Category      @relation(fields: [category_id], references: [id])
 
     @@map("produtos")
 }

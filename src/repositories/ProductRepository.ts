@@ -13,7 +13,8 @@ class ProductRepository {
                 amount: product.amount,
                 option: product.option,
                 image: product.image,
-                published: product.published
+                published: product.published,
+                category_id: product.category_id
             }
         });
 
@@ -29,7 +30,8 @@ class ProductRepository {
                 amount: product.amount,
                 option: product.option,
                 image: product.image,
-                published: product.published
+                published: product.published,
+                category_id: product.category_id
             },
         });
     }
