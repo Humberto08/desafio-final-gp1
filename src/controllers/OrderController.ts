@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import OrderService from "../services/OrderService";
 import CartService from "../services/CartService";
-import UserService from "../services/UserService";
 
 class OrderController {
 
@@ -9,19 +8,11 @@ class OrderController {
 
         try {
 
-            const { email, id, user_id, total_value } = req.body;
+            const { cart_id, user_id } = req.body;
 
-            const user = await UserService.createUser(email);
+            const cart = await CartService.getCart(cart_id);
 
-            if (!user) {
-                return res
-                    .status(500)
-                    .json({ success: false, message: "✖️ Sua anta, você precisa fazer login para efetuar a compra!" })
-            }
-
-            const cart = await CartService.getCart(user_id, id);
-
-            if (!user_id || !id) {
+            if (!cart_id) {
                 return res
                     .status(500)
                     .json({ success: false, message: "✖️ Sua anta, é obrigatório informar o id do carrinho!" })
@@ -33,7 +24,7 @@ class OrderController {
                     .json({ success: false, message: "✖️ Sua anta, esse carrinho não existe!" })
             }
 
-            const order = await OrderService.createOrder(email, id, user_id, total_value);
+            const order = await OrderService.createOrder(Number(cart_id), Number(user_id));
 
             if (!order) {
                 return res
