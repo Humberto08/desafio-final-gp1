@@ -32,7 +32,6 @@ class UserRepository {
             }
         });
     }
-
     async getUser(id: number): Promise<User | null> {
         return await prisma.user.findFirst({
             where: {
@@ -40,7 +39,6 @@ class UserRepository {
             }
         })
     }
-
     async getUserByEmail(email: string): Promise<User | null> {
         return await prisma.user.findFirst({
             where: {
@@ -48,7 +46,6 @@ class UserRepository {
             }
         })
     }
-
     async updateUser(id: number, name: string | null, email: string | null, password: string | null, role: string | null): Promise<User | null> {
 
         const findById = await prisma.user.findFirst({
@@ -58,13 +55,6 @@ class UserRepository {
         });
 
         if (!findById) return null;
-
-        // const payload = {
-        //     name: name || findById.name,
-        //     email: email || findById.email,
-        //     password: password || findById.password,
-        //     role: role || findById.role
-        // }
 
         return await prisma.user.update({
             where: { id },
@@ -76,7 +66,6 @@ class UserRepository {
             }
         })
     }
-
     async deleteUser(id: number): Promise<User | string> {
 
         const findById = await prisma.user.findFirst({
@@ -94,7 +83,5 @@ class UserRepository {
         });
     }
 }
-
-
 
 export default new UserRepository();

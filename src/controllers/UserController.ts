@@ -71,14 +71,14 @@ class UserController {
                 return res
                     .status(400)
                     .json({ success: false, message: "⚠️ Preencha todos os campos necessários para criação de um usuário" })
-            }
+            }        
 
             const user: string | User = await UserService.createUser({
                 name,
                 email,
                 role: "buyer",
                 password: hash_password
-            } as unknown as User);
+            } as unknown as User);           
 
             if (user) {
                 return res.json({
@@ -86,11 +86,12 @@ class UserController {
                     message: "Usuário criado com sucesso",
                     result: user
                 })
+                
             }
 
         } catch (error) {
             console.log(error);
-            return res.status(500).json({ success: false, message: "Internal Server Error" })
+            return res.status(500).json({ success: false, message: error/*"Internal Server Error"*/ })
         }
     }
 
