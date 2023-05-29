@@ -31,7 +31,7 @@ class ProductController {
                 price: Number(price),
                 amount: Number(amount),
                 option,
-                category_id,
+                category_id: Number(category_id),
                 published: published === 'true'
             } as unknown as Product);
             console.log(product)

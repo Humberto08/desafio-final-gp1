@@ -18,6 +18,8 @@ class ProductRepository {
             }
         });
 
+        console.log(findDuplicateProduct)
+
         if (findDuplicateProduct > 0) {
             return "😬 O produto não pode ser criado porque já existe um produto com as mesmas informações.";
         }
