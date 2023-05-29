@@ -16,6 +16,9 @@ Você está no repositório Back-End.
 Para ver a documentação da API, acesse:<br>
 https://documenter.getpostman.com/view/26870954/2s93m4Y3T6
  <br><br>
+Para ver a API no ar, acesse:<br>
+https://api-ecommerce-cafemaria.onrender.com
+<br><br>
 Para ver o repositório Front-End, acesse:<br>
  https://github.com/guipaterlini/Projeto-Cafemaria
 
