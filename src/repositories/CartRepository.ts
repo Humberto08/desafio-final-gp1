@@ -2,7 +2,6 @@
 import { prisma } from "../database/db";
 import { Cart, CartProduct, CartStatus } from "@prisma/client";
 
-
 class CartRepository {
 
     async addToCart(user_id: number, product_id: number, product_quantity: number): Promise<CartProduct | string | boolean | undefined> {
