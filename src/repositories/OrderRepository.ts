@@ -35,7 +35,8 @@ class OrderRepository {
             data: {
                 cart_id: cart_id,
                 user_id,
-                order_status: "Placed"
+                order_status: "Placed",
+                total_value: getUserCart.total_value
             }
         })
     }

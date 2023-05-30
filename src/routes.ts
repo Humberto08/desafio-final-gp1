@@ -46,9 +46,9 @@ router.delete("/products/:id", AuthMiddleware, ProductController.delete);
 // PEDIDOS
 router.post("/order", AuthMiddleware, OrderController.create);
 router.get("/order", AuthMiddleware, OrderController.index);
-router.get("/order/:id", AuthMiddleware, OrderController.show);
-router.put("/order/:id", AuthMiddleware, OrderController.updateOrderStatus);
-router.delete("/order/:id", AuthMiddleware, OrderController.delete);
+router.get("/order/:user_id", AuthMiddleware, OrderController.show);
+router.put("/order/:user_id/:order_id", AuthMiddleware, OrderController.updateOrderStatus);
+router.delete("/order/:user_id/:order_id", AuthMiddleware, OrderController.delete);
 
 // CARRINHO
 router.post("/cart/add-to-cart", AuthMiddleware, CartController.addToCart)
