@@ -51,17 +51,17 @@ class CartController {
         try {
 
             const { cart_products } = req.body;
-            const { cart_id } = req.params;
+            const { id } = req.params;
 
-            if (!cart_id) return res
+            if (!id) return res
                 .status(500)
                 .json({ success: false, message: "✖️ É obrigatório informar o ID do carrinho!" });
 
-            if (isNaN(Number(cart_id))) return res
+            if (isNaN(Number(id))) return res
                 .status(500)
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
-            const cart = await CartService.updateCartProducts(Number(cart_id), cart_products);
+            const cart = await CartService.updateCartProducts(Number(id), cart_products);
 
             if (!cart) {
                 return res.status(404).json({ success: false, message: "✖️ Carrinho não encontrado!" });
