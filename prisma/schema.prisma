@@ -77,7 +77,7 @@ model Cart {
     cart_status          CartStatus    @default(Pending)
     cart_products        CartProduct[]
     address              Address[]
-    User                 User?         @relation(fields: [user_id], references: [id])
+    User                 User          @relation(fields: [user_id], references: [id])
     created_at           DateTime      @default(now())
     updated_at           DateTime      @updatedAt
     Order                Order[]

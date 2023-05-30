@@ -29,6 +29,7 @@ class CartController {
 
         try {
             const { user_id } = req.params;
+            console.log(req.params)
 
             const carts = await CartService.getCartsByUser(Number(user_id));
 

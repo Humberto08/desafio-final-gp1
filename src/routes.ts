@@ -47,15 +47,15 @@ router.delete("/products/:id", AuthMiddleware, verifyUserTypesMiddleware, Produc
 // PEDIDOS
 router.post("/order", AuthMiddleware, OrderController.create);
 router.get("/order", AuthMiddleware, OrderController.index);
-router.get("/order/:user_id", AuthMiddleware, OrderController.show);
-router.put("/order/:user_id/:order_id", AuthMiddleware, OrderController.updateOrderStatus);
-router.delete("/order/:user_id/:order_id", AuthMiddleware, OrderController.delete);
+router.get("/order/:id", AuthMiddleware, OrderController.show);
+router.put("/order/:id", AuthMiddleware, OrderController.updateOrderStatus);
+router.delete("/order/:id", AuthMiddleware, OrderController.delete);
 
 // CARRINHO
 router.post("/cart/add-to-cart", AuthMiddleware, CartController.addToCart)
-router.get("/cart/:user_id", AuthMiddleware, CartController.show);
-router.put("/cart/:user_id/:cart_id", AuthMiddleware, CartController.updateCartProducts);
-router.put("/cartupdatestatus/:user_id/:cart_id", AuthMiddleware, CartController.updateCartStatus);
-router.delete("/cart/:user_id/:cart_id", AuthMiddleware, CartController.delete);
+router.get("/cart/:id", AuthMiddleware, CartController.show);
+router.put("/cart/:id", AuthMiddleware, CartController.updateCartProducts);
+router.put("/cartupdatestatus/:id/:id", AuthMiddleware, CartController.updateCartStatus);
+router.delete("/cart/:id", AuthMiddleware, CartController.delete);
 
 export default router;

@@ -8,9 +8,7 @@ class OrderController {
 
         try {
 
-            const { cart_id, user_id } = req.body;
-
-            console.log(req.body)
+            const { cart_id } = req.body;
 
             const cart = await CartService.getCart(cart_id);
 
@@ -26,7 +24,7 @@ class OrderController {
                     .json({ success: false, message: "✖️ Sua anta, esse carrinho não existe!" })
             }
 
-            const order = await OrderService.createOrder(Number(cart_id), Number(user_id));
+            const order = await OrderService.createOrder(Number(cart_id));
 
             if (!order) {
                 return res
@@ -71,6 +69,7 @@ class OrderController {
         try {
 
             const { id } = req.params;
+            console.log(req.params)
 
             if (!id) return res
                 .status(500)
@@ -109,7 +108,7 @@ class OrderController {
 
             if (!id) return res
                 .status(500)
-                .json({ success: false, message: "✖️ É obrigatório informar o ID do carrinho!" });
+                .json({ success: false, message: "✖️ É obrigatório informar o ID do pedido!" });
 
             if (isNaN(Number(id))) return res
                 .status(500)
