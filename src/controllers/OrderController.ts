@@ -10,6 +10,8 @@ class OrderController {
 
             const { cart_id, user_id } = req.body;
 
+            console.log(req.body)
+
             const cart = await CartService.getCart(cart_id);
 
             if (!cart_id) {
@@ -34,7 +36,7 @@ class OrderController {
 
             return res
                 .status(200)
-                .json({ success: true, message: "✔️ Peido aberto!" })
+                .json({ success: true, message: "✔️ Pedido aberto!" })
 
         } catch (error) {
             console.log(error);
