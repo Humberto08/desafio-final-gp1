@@ -1,4 +1,4 @@
-# <p align="center">Cafemaria</p>
+# <p align="center">CafeMaria</p>
 <p align="center">Desafio Final Gama Experience <br> [XP48] - Grupo I</p>
 
 
