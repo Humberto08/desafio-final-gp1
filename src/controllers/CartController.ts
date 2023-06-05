@@ -25,11 +25,13 @@ class CartController {
         });
     }
 
-    static async index(req: Request, res: Response) {
+    static async show(req: Request, res: Response) {
 
         try {
-            const { user_id } = req.body;
-            const carts = await CartService.getCartsByUser(user_id);
+            const { user_id } = req.params;
+            console.log(req.params)
+
+            const carts = await CartService.getCartsByUser(Number(user_id));
 
             return res.json({
                 success: true,
@@ -44,56 +46,22 @@ class CartController {
         }
     }
 
-    static async show(req: Request, res: Response) {
-
-        try {
-
-            const { user_id, id } = req.params;
-
-
-            if (!user_id || !id) return res
-                .status(500)
-                .json({ success: false, message: "✖️ É obrigatório informar o ID do carrinho!" });
-
-            if (isNaN(Number(user_id)) || isNaN(Number(id))) return res
-                .status(500)
-                .json({ success: false, message: "✖️ O ID precisa ser um número!" });
-
-            const cart = await CartService.getCart(Number(user_id), Number(id));
-
-            if (!cart) return res
-                .status(500)
-                .json({ success: false, message: "✖️ Carrinho não encontrado para o ID informado!" });
-
-            return res.json({
-                success: true,
-                result: cart
-            });
-
-        } catch (error) {
-            console.log(error);
-            return res
-                .status(500)
-                .json({ success: false, message: "✖️ Ops, tente novamente!" });
-        }
-    }
-
     static async updateCartProducts(req: Request, res: Response) {
 
         try {
 
             const { cart_products } = req.body;
-            const { user_id, cart_id } = req.params;            
+            const { id } = req.params;
 
-            if (!cart_id) return res
+            if (!id) return res
                 .status(500)
                 .json({ success: false, message: "✖️ É obrigatório informar o ID do carrinho!" });
 
-            if (isNaN(Number(cart_id))) return res
+            if (isNaN(Number(id))) return res
                 .status(500)
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
-            const cart = await CartService.updateCartProducts(Number(cart_id), cart_products);
+            const cart = await CartService.updateCartProducts(Number(id), cart_products);
 
             if (!cart) {
                 return res.status(404).json({ success: false, message: "✖️ Carrinho não encontrado!" });
@@ -118,7 +86,7 @@ class CartController {
 
             const { cart_status } = req.body;
             const { user_id, cart_id } = req.params;
-            
+
             if (!cart_id) return res
                 .status(500)
                 .json({ success: false, message: "✖️ É obrigatório informar o ID do carrinho!" });
@@ -152,7 +120,7 @@ class CartController {
 
         try {
 
-            const reqParams = { "user_id": req.params.user_id, "id": req.params.cart_id } ;            
+            const reqParams = { "user_id": req.params.user_id, "id": req.params.cart_id };
 
             console.log(reqParams)
 

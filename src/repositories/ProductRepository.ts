@@ -13,9 +13,12 @@ class ProductRepository {
                 amount: product.amount,
                 option: product.option,
                 image: product.image,
-                published: product.published
+                published: product.published,
+                category_id: product.category_id
             }
         });
+
+        console.log(findDuplicateProduct)
 
         if (findDuplicateProduct > 0) {
             return "😬 O produto não pode ser criado porque já existe um produto com as mesmas informações.";
@@ -29,7 +32,8 @@ class ProductRepository {
                 amount: product.amount,
                 option: product.option,
                 image: product.image,
-                published: product.published
+                published: product.published,
+                category_id: product.category_id
             },
         });
     }

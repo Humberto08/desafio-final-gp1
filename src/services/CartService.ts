@@ -11,8 +11,8 @@ class CartService {
         return await CartRepository.getCartsByUser(user_id);
     }
 
-    async getCart(user_id: number, id: number): Promise<Cart | null> {
-        return await CartRepository.getCart(user_id, id);
+    async getCart(id: number): Promise<Cart | null> {
+        return await CartRepository.getCart(id);
     }
 
     async updateCartProducts(id: number, cart_products: Array<CartProduct>) {

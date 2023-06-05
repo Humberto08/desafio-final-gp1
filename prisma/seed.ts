@@ -18,38 +18,6 @@ async function main() {
 
 }
 
-//     await prisma.categoryStatus.upsert({
-//         where: { title: "CADASTRAR" },
-//         update: {},
-//         create: {
-//             title: "CADASTRAR"
-//         }
-//     });
-
-//     await prisma.categoryStatus.upsert({
-//         where: { title: "CADASTRADA" },
-//         update: {},
-//         create: {
-//             title: "CADASTRADA"
-//         }
-//     });
-
-//     await prisma.productStatus.upsert({
-//         where: { title: "CADASTRAR" },
-//         update: {},
-//         create: {
-//             title: "CADASTRAR"
-//         }
-//     });
-
-//     await prisma.productStatus.upsert({
-//         where: { title: "CADASTRADO" },
-//         update: {},
-//         create: {
-//             title: "CADASTRADO"
-//         }
-//     });
-// }
 
 main()
     .then(async () => {

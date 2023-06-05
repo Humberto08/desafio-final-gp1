@@ -1,8 +1,9 @@
-/node_modules
-/build
-/desafio-final-gp1
-.env
+/node_modules 
+/build 
+/desafio-final-gp1 
+.env 
 .idea
-package.lock.json
-package.json
+.idea 
+package.lock.json 
+package.json 
 tsconfig.json

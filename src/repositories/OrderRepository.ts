@@ -1,43 +1,63 @@
-import { Order, OrderStatus } from "@prisma/client";
+import { Cart, Order, OrderStatus } from "@prisma/client";
 import { prisma } from "../database/db";
 
 class OrderRepository {
 
-    async createOrder(email: string, cart_id: number, user_id: number, total_value: number): Promise<Order | string | boolean | undefined> {
+    async createOrder(cart_id: number): Promise<Order | string | boolean | undefined> {
 
-        await prisma.order.findMany({
+        const getUserCart = await prisma.order.findMany({
             where: {
-                user_id,
+                cart_id,
                 order_status: "Placed"
             }
         })
 
-        const getUserCart = await prisma.cart.findFirst({
+        const userCart = await prisma.cart.findFirst({
             where: { id: cart_id }
         })
 
-        if (!getUserCart) {
+        if (!userCart) {
             return false
         }
 
-        const order = await prisma.order.create({
-            data: {
-                cart_id,
-                user_id,
-                order_status: "Placed",
-                total_value: total_value
-            }
-        })
+        let order: Order | Cart | null = null;
+
+        let total = getUserCart[0].total_value;
+
+        if (getUserCart.length > 0) {
+
+            order = getUserCart[0];
+
+        } else {
+
+            order = await prisma.order.create({
+                data: {
+                    user_id: cart_id,
+                    cart_id: cart_id,
+                    order_status: "Placed",
+                    total_value: total
+                }
+            })
+        }
 
         if (!order) {
             return false
         }
 
+        await prisma.order.update({
+            where: {
+                id: order.id,
+            },
+            data: {
+                total_value: getUserCart[0].total_value,
+            }
+        })
+
         return await prisma.order.create({
             data: {
+                user_id: cart_id,
                 cart_id: cart_id,
-                user_id: user_id,
-                total_value: total_value
+                total_value: getUserCart[0].total_value
             }
         })
     }
