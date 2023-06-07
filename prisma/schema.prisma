@@ -96,7 +96,7 @@ model CartProduct {
     cart_id          Int
     product_id       Int
     product_quantity Int
-    product_price    Float
+    product_price    Float?
     product          Product @relation(fields: [product_id], references: [id])
     cart             Cart    @relation(fields: [cart_id], references: [id])
 }

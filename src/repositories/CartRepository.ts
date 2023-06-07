@@ -37,7 +37,13 @@ class CartRepository {
                 data: {
                     user_id,
                     cart_status: "Pending",
-                    total_value: 0
+                    total_value: 0,
+                    cart_products: {
+                        create: {
+                            product_quantity,
+                            product_id
+                        }
+                    }
                 },
                 include: {
                     cart_products: true
