@@ -11,7 +11,7 @@ export default async function verifyEmailsAll(req: Request, res: Response, next:
   console.log(user)
 
   if (user) {
-    return res.status(409).json({ message: `O email já existe!` });
+    return res.status(409).json({ message: `✖️ O e-mail já existe!` });
   }
 
   next();

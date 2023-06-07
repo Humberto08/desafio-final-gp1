@@ -11,10 +11,9 @@ export default function verifyUserType(req: Request, res: Response, next: NextFu
         } else {
             const { role } = decoded as any;
             if (role !== 'admin' && role !== 'owner') {
-                return res.status(400).json({ message: 'Ação inválida' });
+                return res.status(400).json({ message: '✖️ Acesso exclusivo para administradores!' });
             }
             next();
         }
     });
-    
 }
