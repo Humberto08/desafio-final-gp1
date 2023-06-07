@@ -59,3 +59,23 @@ router.put("/cartupdatestatus/:id/:id", AuthMiddleware, CartController.updateCar
 router.delete("/cart/:id", AuthMiddleware, CartController.delete);
 
 export default router;
+
+/*
+
+ANOTAÇÕES MENTORIA
+
+Listar carrinho: só uma rota GET com o carrinho do usuário (listar carrinho por user_id)
+quando for mostrar o carrinho (rota GET) mostrar os itens adicionados (array de produtos - pode ser só o id mas melhor que apareça o nome)
+(pesquisar tipos de rotas de carrinho no youtube - shopping cart backend node - pode ser qualquer tecnologia, só quero saber a lógica das rotas)
+
+Documentação: tem que remover uma das rotas GET de carrinho, mantém só a get by id.
+
+JÁ MEXIDO
+
+Alterado o middleware de verifyUserTypes pra que tanto admin quanto owner consigam acessos.
+O tipo do usuário tava vindo do body, tá errado pois eu posso me colocar como admin quando eu quiser, essa permissão tem que vir do token
+
+Banco de dados conectado: o problema tava no root, criou um usuário admin e conectou.
+Mas agora o usuário admin não tá dando certo.
+
+*/
