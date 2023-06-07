@@ -38,7 +38,10 @@ class CartRepository {
                     user_id,
                     cart_status: "Pending",
                     total_value: 0
-                }
+                },
+                include: {
+                    cart_products: true
+                },
             })
 
             total = product.price * product_quantity

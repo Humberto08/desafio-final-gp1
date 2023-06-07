@@ -10,7 +10,7 @@ class CartController {
         if (!user_id || !product_id || !product_quantity) {
             return res
                 .status(500)
-                .json({ success: false, message: "✖️ Você precisa informar todos os campos necessários para criar o Carrinho!" })
+                .json({ success: false, message: "✖️ Você precisa informar todos os campos para adicionar ao carrinho!" })
         }
         const addedProduct = await CartService.addToCart(user_id, product_id, product_quantity);
 

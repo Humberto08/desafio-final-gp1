@@ -7,7 +7,7 @@ export default function verifyUserType(req: Request, res: Response, next: NextFu
     // verify token
     jwt.verify(token, 'secret', (err, decoded) => {
         if (err) {
-            res.json({ success: false, message: 'Token inválido' });
+            res.json({ success: false, message: '✖️ Token inválido!' });
         } else {
             const { role } = decoded as any;
             if (role !== 'admin' && role !== 'owner') {
