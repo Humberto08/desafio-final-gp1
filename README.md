@@ -20,7 +20,10 @@ Para ver a API no ar, acesse:<br>
 https://api-ecommerce-cafemaria.onrender.com
 <br><br>
 Para ver o repositório Front-End, acesse:<br>
- https://github.com/guipaterlini/Projeto-Cafemaria
+https://github.com/guipaterlini/Projeto-Cafemaria
+<br><br>
+Para visualizar o projeto, acesse:
+https://projeto-cafemaria.vercel.app/
 
 ## <br> Stacks utilizadas:
 
