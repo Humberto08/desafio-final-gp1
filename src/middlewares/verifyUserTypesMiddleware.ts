@@ -9,8 +9,8 @@ export default function verifyUserType(req: Request, res: Response, next: NextFu
         if (err) {
             res.json({ success: false, message: 'Token inválido' });
         } else {
-            const { type } = decoded as any;
-            if (type !== 'admin' && type !== 'owner') {
+            const { role } = decoded as any;
+            if (role !== 'admin' && role !== 'owner') {
                 return res.status(400).json({ message: 'Ação inválida' });
             }
             next();
