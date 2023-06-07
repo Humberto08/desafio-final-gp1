@@ -19,7 +19,7 @@ router.get("/", (req: Request, res: Response) => {
 
 // USUÁRIOS E AUTENTICAÇÃO
 
-router.post("/auth", AuthController.authenticate); // ROTA AUTHENTICATE FALTA CONCLUIR, PRECISA COLOCAR  O SECRET NO .ENV
+router.post("/auth", AuthController.authenticate); 
 router.post("/logout", AuthController.logout);
 
 router.post("/admin", verifyEmailMiddleware, verifyUserTypesMiddleware, AuthMiddleware, verifyEmailsAllMiddleware, UserController.createAdmin);
