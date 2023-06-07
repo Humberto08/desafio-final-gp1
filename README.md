@@ -22,7 +22,7 @@ https://api-ecommerce-cafemaria.onrender.com
 Para ver o repositório Front-End, acesse:<br>
 https://github.com/guipaterlini/Projeto-Cafemaria
 <br><br>
-Para visualizar o projeto, acesse:
+Para visualizar o projeto, acesse:<br>
 https://projeto-cafemaria.vercel.app/
 
 ## <br> Stacks utilizadas:
