@@ -72,7 +72,10 @@ class CartRepository {
                 product_price: product?.price,
                 cart_id: cart.id,
                 product_id: product_id
-            }
+            },
+            include: {
+                product: true
+            },
         })
     }
 
