@@ -107,7 +107,9 @@ class ProductController {
     }
 
     static async update(req: Request, res: Response) {
+
         try {
+
             const { id } = req.params;
 
             if (!id) return res
@@ -118,15 +120,22 @@ class ProductController {
                 .status(500)
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
-            const { title, description, price, amount, subcategory, image, published } = req.body;
+            const { title, description, price, amount, option, published, category_id } = req.body;
 
-            if (!title && !description && !price && !amount && !subcategory && !image && !published) {
+            //upload de arquivo
+            if (!req.file) return res.status(500).json({ message: "É obrigatório o envio de uma imagem " });
+
+            const image = process.env.APP_URL + '/uploads/' + req.file.originalname;
+
+            await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toFile(`./uploads/${req.file.originalname}`)
+
+            if (!title && !description && !price && !amount && !option && !published) {
                 return res
                     .status(500)
                     .json({ success: false, message: "✖️ Você precisa preencher pelo menos um campo para atualizar o Produto!" });
             }
 
-            const product: Product | string = await ProductService.updateProduct(Number(id), title, description, price, amount, subcategory, image, published);
+            const product: Product | string = await ProductService.updateProduct(Number(id), title, description, price, amount, option, published, category_id);
 
             if (typeof product === 'string') return res
                 .status(404)
