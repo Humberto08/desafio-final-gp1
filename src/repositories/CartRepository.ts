@@ -1,4 +1,3 @@
-
 import { prisma } from "../database/db";
 import { Cart, CartProduct, CartStatus } from "@prisma/client";
 
@@ -10,6 +9,9 @@ class CartRepository {
             where: {
                 user_id,
                 cart_status: "Pending"
+            },
+            include: {
+                cart_products: true,
             }
         })
 
@@ -68,14 +70,11 @@ class CartRepository {
 
         return await prisma.cartProduct.create({
             data: {
+                cart_id: cart.id,
+                product_id: product_id,
                 product_quantity,
                 product_price: product?.price,
-                cart_id: cart.id,
-                product_id: product_id
-            },
-            include: {
-                product: true
-            },
+            }
         })
     }
 
