@@ -120,7 +120,7 @@ class CartController {
 
         try {
 
-            const reqParams = { "user_id": req.params.user_id, "id": req.params.cart_id };
+            const reqParams = { "id": req.params.cart_id };
 
             console.log(reqParams)
 
@@ -132,7 +132,7 @@ class CartController {
                 .status(500)
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
-            const cart = await CartService.deleteCart(Number(reqParams.user_id), Number(reqParams.id));
+            const cart = await CartService.deleteCart(Number(reqParams.id));
 
             if (typeof cart === 'string') return res
                 .status(404)
