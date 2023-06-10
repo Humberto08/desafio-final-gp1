@@ -14,7 +14,7 @@ Essa API deve permitir que administradores consigam criar, editar e deletar cate
 Você está no repositório Back-End.
 <br><br>
 Para ver a documentação da API, acesse:<br>
-https://documenter.getpostman.com/view/26870954/2s93m4Y3T6
+https://documenter.getpostman.com/view/27684167/2s93sc5Ch9
  <br><br>
 Para ver a API no ar, acesse:<br>
 https://api-ecommerce-cafemaria.onrender.com

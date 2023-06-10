@@ -55,7 +55,7 @@ router.delete("/order/:id", AuthMiddleware, OrderController.delete);
 router.post("/cart/add-to-cart", AuthMiddleware, CartController.addToCart)
 router.get("/cart/:id", AuthMiddleware, CartController.show);
 router.put("/cart/:id", AuthMiddleware, CartController.updateCartProducts);
-router.put("/cartupdatestatus/:id/:id", AuthMiddleware, CartController.updateCartStatus);
+router.put("/cart/updatestatus/:id", AuthMiddleware, CartController.updateCartStatus);
 router.delete("/cart/:id", AuthMiddleware, CartController.delete);
 
 export default router;
