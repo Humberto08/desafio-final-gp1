@@ -10,22 +10,15 @@ class ProductController {
 
         try {
 
+
+            const { title, description, price, amount, option, published, category_id } = req.body;
+
             //upload de arquivo
             if (!req.file) return res.status(500).json({ message: "✖️ Você precisa enviar uma imagem!" });
 
             const image = process.env.APP_URL + '/uploads/' + req.file.originalname;
 
             await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toFile(`./uploads/${req.file.originalname}`)
-
-
-            const { title, description, price, amount, option, published, category_id } = req.body;
-
-            // //upload de arquivo
-            // if (!req.file) return res.status(500).json({ message: "✖️ Você precisa enviar uma imagem!" });
-
-            // const image = process.env.APP_URL + '/uploads/' + req.file.originalname;
-
-            // await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toFile(`./uploads/${req.file.originalname}`)
 
             if (!title || !description || !price || !amount || !option || !published || !category_id) {
                 return res
