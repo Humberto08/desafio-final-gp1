@@ -9,9 +9,6 @@ class CartRepository {
             where: {
                 user_id,
                 cart_status: "Pending"
-            },
-            include: {
-                cart_products: true,
             }
         })
 
@@ -21,7 +18,7 @@ class CartRepository {
 
         if (!product) {
             return false
-        }
+        };
 
         let cart: Cart | null = null;
 
@@ -37,7 +34,7 @@ class CartRepository {
 
             cart = await prisma.cart.create({
                 data: {
-                    user_id,
+                    user_id: user_id,
                     cart_status: "Pending",
                     total_value: total,
                     cart_products: {
@@ -50,7 +47,7 @@ class CartRepository {
                 include: {
                     cart_products: true
                 },
-            })
+            });
 
             total = product.price * product_quantity
         }
@@ -65,9 +62,16 @@ class CartRepository {
             },
             data: {
                 total_value: total,
+                cart_products: {
+                    create: {
+                        product: { connect: { id: product.id } },
+                        product_quantity,
+                        product_price: product.price
+                    }
+                }
             },
             include: {
-                cart_products: true,
+                cart_products: true
             }
         })
 
@@ -79,17 +83,24 @@ class CartRepository {
                 product_price: product?.price,
             },
             include: {
+                cart: true,
                 product: true,
             }
         })
     }
 
-    async getCartsByUser(user_id: number): Promise<Cart[]> {
-        return await prisma.cart.findMany({ where: { user_id } });
+    async removeProductFromCart(product_id: number) {
+        return await prisma.cartProduct.delete({
+            where: { id: product_id },
+        });
     }
 
-    async getCart(id: number): Promise<Cart | null> {
-        return await prisma.cart.findFirst({ where: { id } })
+    async getCarts(): Promise<Array<Cart>> {
+        return await prisma.cart.findMany();
+    }
+
+    async getUserCart(user_id: number): Promise<Array<Cart>> {
+        return await prisma.cart.findMany({ where: { user_id } });
     }
 
     async updateCartProducts(id: number, cart_products: Array<CartProduct>) {
@@ -131,10 +142,11 @@ class CartRepository {
     }
 
     async deleteCart(cart_id: number): Promise<Cart | string> {
+
         const cartProduct = await prisma.cartProduct.findFirst({ where: { cart_id } });
 
         if (!cartProduct) {
-            return "✖️ Carrinho de produto não encontrado para o ID informado!";
+            return "✖️ Produto não encontrado para o ID informado!";
         }
 
         await prisma.cartProduct.deleteMany({ where: { cart_id } });
@@ -147,7 +159,6 @@ class CartRepository {
 
         return deletedCart as Cart;
     }
-
 }
 
 export default new CartRepository();

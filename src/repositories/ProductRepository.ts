@@ -18,8 +18,6 @@ class ProductRepository {
             }
         });
 
-        console.log(findDuplicateProduct)
-
         if (findDuplicateProduct > 0) {
             return "😬 O produto não pode ser criado porque já existe um produto com as mesmas informações.";
         }
@@ -60,8 +58,7 @@ class ProductRepository {
                 price: price || findById.price,
                 amount: amount || findById.amount,
                 option: option || findById.option,
-                image: image || findById.image,
-                published: published || findById.published
+                published: published || findById.published,
             }
         })
     }
