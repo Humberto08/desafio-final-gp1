@@ -27,7 +27,6 @@ model User {
 }
 
 enum Role {
-    owner
     admin
     buyer
 }
