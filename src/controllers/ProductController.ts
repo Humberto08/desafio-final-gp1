@@ -13,7 +13,7 @@ class ProductController {
             const { title, description, price, amount, option, published, category_id } = req.body;
 
             //upload de arquivo
-            if (!req.file) return res.status(500).json({ message: "É obrigatório o envio de uma imagem " });
+            if (!req.file) return res.status(500).json({ message: "✖️ É obrigatório o envio de uma imagem!" });
 
             const image = process.env.APP_URL + '/uploads/' + req.file.originalname;
 
@@ -34,7 +34,6 @@ class ProductController {
                 category_id: Number(category_id),
                 published: published === 'true'
             } as unknown as Product);
-            console.log(product)
 
             if (product) {
                 return res.status(200).json({
@@ -121,13 +120,6 @@ class ProductController {
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
             const { title, description, price, amount, option, published, category_id } = req.body;
-
-            //upload de arquivo
-            if (!req.file) return res.status(500).json({ message: "É obrigatório o envio de uma imagem " });
-
-            const image = process.env.APP_URL + '/uploads/' + req.file.originalname;
-
-            await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toFile(`./uploads/${req.file.originalname}`)
 
             if (!title && !description && !price && !amount && !option && !published) {
                 return res

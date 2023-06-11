@@ -43,6 +43,7 @@ class CategController {
     static async index(req: Request, res: Response) {
 
         try {
+
             const categories = await CategService.getCategories();
 
             return res.json({

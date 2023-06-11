@@ -10,6 +10,7 @@ import verifyEmailsAllMiddleware from './middlewares/VerifyEmailsAllMiddleware';
 import AuthMiddleware from './middlewares/AuthMiddleware';
 import verifyUserTypesMiddleware from './middlewares/verifyUserTypesMiddleware';
 import upload from './middlewares/UploadImgMiddleware';
+import UploadImgMiddleware from "./middlewares/UploadImgMiddleware";
 
 const router = Router();
 
@@ -48,11 +49,13 @@ router.delete("/products/:id", AuthMiddleware, verifyUserTypesMiddleware, Produc
 router.post("/order", AuthMiddleware, OrderController.create);
 router.get("/order", AuthMiddleware, OrderController.index);
 router.get("/order/:id", AuthMiddleware, OrderController.show);
-router.put("/order/:id", AuthMiddleware, OrderController.updateOrderStatus);
+router.put("/order/updatestatus/:id", AuthMiddleware, OrderController.updateOrderStatus);
 router.delete("/order/:id", AuthMiddleware, OrderController.delete);
 
 // CARRINHO
-router.post("/cart/add-to-cart", AuthMiddleware, CartController.addToCart)
+router.post("/cart/add-to-cart", AuthMiddleware, CartController.addProductToCart)
+router.post("/cart/remove-from-cart", CartController.removeProductFromCart)
+router.get("/cart", AuthMiddleware, CartController.index);
 router.get("/cart/:id", AuthMiddleware, CartController.show);
 router.put("/cart/:id", AuthMiddleware, CartController.updateCartProducts);
 router.put("/cart/updatestatus/:id", AuthMiddleware, CartController.updateCartStatus);

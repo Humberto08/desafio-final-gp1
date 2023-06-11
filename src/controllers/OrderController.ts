@@ -10,18 +10,18 @@ class OrderController {
 
             const { cart_id } = req.body;
 
-            const cart = await CartService.getCart(cart_id);
+            const cart = await CartService.getUserCart(cart_id);
 
             if (!cart_id) {
                 return res
                     .status(500)
-                    .json({ success: false, message: "✖️ Sua anta, é obrigatório informar o id do carrinho!" })
+                    .json({ success: false, message: "✖️ É obrigatório informar o id do carrinho!" })
             }
 
             if (!cart) {
                 return res
                     .status(500)
-                    .json({ success: false, message: "✖️ Sua anta, esse carrinho não existe!" })
+                    .json({ success: false, message: "✖️ Esse carrinho não existe!" })
             }
 
             const order = await OrderService.createOrder(Number(cart_id));
@@ -29,7 +29,7 @@ class OrderController {
             if (!order) {
                 return res
                     .status(500)
-                    .json({ success: false, message: "✖️ Sua anta, deu ruim na criação do pedido!" })
+                    .json({ success: false, message: "✖️ Não foi possível iniciar um pedido!" })
             }
 
             return res

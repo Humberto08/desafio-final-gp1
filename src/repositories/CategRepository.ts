@@ -8,7 +8,8 @@ class CategRepository {
         const findDuplicateCategory = await prisma.category.count({
             where: {
                 title: category.title,
-                description: category.description
+                description: category.description,
+                published: category.published
             }
         });
 
@@ -19,7 +20,8 @@ class CategRepository {
         return await prisma.category.create({
             data: {
                 title: category.title,
-                description: category.description
+                description: category.description,
+                published: category.published
             }
         });
     }
