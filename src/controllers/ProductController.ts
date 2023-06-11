@@ -6,7 +6,7 @@ import sharp from 'sharp';
 class ProductController {
 
 
-    static async create(req: Request, res: Response, next: NextFunction) {
+    static async create(req: Request, res: Response) {
 
         try {
 
