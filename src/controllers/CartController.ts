@@ -74,7 +74,6 @@ class CartController {
         try {
 
             const { user_id } = req.params;
-            console.log(req.params)
 
             if (!user_id) return res
                 .status(500)

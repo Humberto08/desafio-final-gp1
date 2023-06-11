@@ -65,7 +65,8 @@ class CartRepository {
                 cart_products: {
                     create: {
                         product: { connect: { id: product.id } },
-                        product_quantity
+                        product_quantity,
+                        product_price: product.price
                     }
                 }
             },
