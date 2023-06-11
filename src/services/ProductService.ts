@@ -3,6 +3,7 @@ import ProductRepository from "../repositories/ProductRepository";
 
 class ProductService {
 
+
     async createProduct(product: Product): Promise<Product | string> {
         return ProductRepository.createProduct(product);
     }

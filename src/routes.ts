@@ -38,10 +38,10 @@ router.put("/categories/:id", AuthMiddleware, verifyUserTypesMiddleware, CategCo
 router.delete("/categories/:id", AuthMiddleware, verifyUserTypesMiddleware, CategController.delete);
 
 // PRODUTOS
-router.post("/products", upload.single('image'), AuthMiddleware, verifyUserTypesMiddleware, ProductController.create);
+router.post("/products", upload.single('image'),AuthMiddleware, verifyUserTypesMiddleware, ProductController.create);
 router.get("/products", ProductController.index);
 router.get("/products/:id", ProductController.show);
-router.put("/products/:id", AuthMiddleware, verifyUserTypesMiddleware, ProductController.update);
+router.put("/products/:id", upload.single('image'), AuthMiddleware, verifyUserTypesMiddleware, ProductController.update);
 router.delete("/products/:id", AuthMiddleware, verifyUserTypesMiddleware, ProductController.delete);
 
 // PEDIDOS
