@@ -13,7 +13,7 @@ class ProductController {
             const { title, description, price, amount, option, published, category_id } = req.body;
 
             //upload de arquivo
-            if (!req.file) return res.status(500).json({ message: "✖️ É obrigatório o envio de uma imagem!" });
+            if (!req.file) return res.status(500).json({ message: "✖️ Você precisa enviar uma imagem!" });
 
             const image = process.env.APP_URL + '/uploads/' + req.file.originalname;
 
@@ -22,7 +22,7 @@ class ProductController {
             if (!title || !description || !price || !amount || !option || !published || !category_id) {
                 return res
                     .status(500)
-                    .json({ success: false, message: "✖️ Você precisa informar todos os campos necessários para criar o Produto!" })
+                    .json({ success: false, message: "✖️ Você precisa informar todos os campos para criar o Produto!" })
             }
 
             const product: Product | string = await ProductService.createProduct({

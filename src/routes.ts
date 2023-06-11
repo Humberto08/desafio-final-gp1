@@ -10,7 +10,6 @@ import verifyEmailsAllMiddleware from './middlewares/VerifyEmailsAllMiddleware';
 import AuthMiddleware from './middlewares/AuthMiddleware';
 import verifyUserTypesMiddleware from './middlewares/verifyUserTypesMiddleware';
 import upload from './middlewares/UploadImgMiddleware';
-import UploadImgMiddleware from "./middlewares/UploadImgMiddleware";
 
 const router = Router();
 
@@ -39,7 +38,7 @@ router.put("/categories/:id", AuthMiddleware, verifyUserTypesMiddleware, CategCo
 router.delete("/categories/:id", AuthMiddleware, verifyUserTypesMiddleware, CategController.delete);
 
 // PRODUTOS
-router.post("/products", upload.single('image'),AuthMiddleware, verifyUserTypesMiddleware, ProductController.create);
+router.post("/products", upload.single('image'), AuthMiddleware, verifyUserTypesMiddleware, ProductController.create);
 router.get("/products", ProductController.index);
 router.get("/products/:id", ProductController.show);
 router.put("/products/:id", upload.single('image'), AuthMiddleware, verifyUserTypesMiddleware, ProductController.update);
