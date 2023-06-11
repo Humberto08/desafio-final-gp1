@@ -3,9 +3,26 @@ import path from "path"
 
 //set storage engine
 const storageEngine = multer.diskStorage({
+
     destination: "./uploads",
+
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()}--${file.originalname}`);
+
+        let fileType = '';
+
+        if (file.mimetype === 'image/gif') {
+            fileType = 'gif';
+        }
+        if (file.mimetype === 'image/png') {
+            fileType = 'png';
+        }
+        if (file.mimetype === 'image/jpeg') {
+            fileType = 'jpg';
+        }
+
+        cb(null, 'file-' + Date.now() + '.' + fileType);
+
+        // cb(null, `${Date.now()}--${file.originalname}`);
     },
 });
 
@@ -23,6 +40,7 @@ const upload = multer({
 
 //implement the file filtering logic
 const checkFileType = function (file: any, cb: any) {
+
     //allowed file extensions
     const fileTypes = /jpeg|jpg|png|gif|svg/;
 
@@ -34,7 +52,7 @@ const checkFileType = function (file: any, cb: any) {
     if (mimeType && extName) {
         return cb(null, true);
     } else {
-        cb("Erro: você só pode subir imagens!");
+        cb("✖️ Você precisa enviar uma imagem válida!");
     }
 };
 
@@ -51,7 +69,6 @@ const checkFileType = function (file: any, cb: any) {
 //         }
 
 //         cb(null, true)
-
 //     }
 // });
 
