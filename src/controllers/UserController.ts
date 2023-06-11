@@ -60,7 +60,7 @@ class UserController {
         }
     }
 
-    static async createBuyer(req: Request, res: Response) {
+    static async createBuyer(req: Request, res: Response, next: NextFunction) {
 
         try {
 
