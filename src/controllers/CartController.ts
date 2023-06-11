@@ -3,7 +3,7 @@ import CartService from "../services/CartService";
 
 class CartController {
 
-    static async addToCart(req: Request, res: Response) {
+    static async addProductToCart(req: Request, res: Response) {
 
         const { user_id, product_id, product_quantity } = req.body;
 
@@ -12,11 +12,12 @@ class CartController {
                 .status(500)
                 .json({ success: false, message: "✖️ Você precisa informar todos os campos para adicionar ao carrinho!" })
         }
+
         const addedProduct = await CartService.addToCart(user_id, product_id, product_quantity);
 
         if (!addedProduct) return res
             .status(404)
-            .json({ success: false, message: "✖️ Produto não inserido no carrinho!" })
+            .json({ success: false, message: "✖️ Produto não adicionado ao carrinho!" })
 
         return res.json({
             success: true,
@@ -25,17 +26,69 @@ class CartController {
         });
     }
 
-    static async show(req: Request, res: Response) {
+    static async removeProductFromCart(req: Request, res: Response) {
 
         try {
-            const { user_id } = req.params;
-            console.log(req.params)
 
-            const carts = await CartService.getCartsByUser(Number(user_id));
+            const { product_id } = req.body;
+
+            const productInCart = await CartService.removeProductFromCart(product_id);
+
+            await CartService.removeProductFromCart(productInCart.id);
+
+            return res.json({
+                success: true,
+                message: "✔️ Produto removido do carrinho!"
+            });
+
+        } catch (error) {
+            console.log(error);
+            return res
+                .status(500)
+                .json({ success: false, message: "✖️ Ops, tente novamente!" });
+        }
+    }
+
+    static async index(req: Request, res: Response) {
+
+        try {
+
+            const carts = await CartService.getCarts();
 
             return res.json({
                 success: true,
                 result: carts
+            })
+
+        } catch (error) {
+            console.log(error);
+
+            return res
+                .status(500)
+                .json({ success: false, message: "✖️ Ops, Tente novamente!" });
+        }
+    }
+
+    static async show(req: Request, res: Response) {
+
+        try {
+
+            const { user_id } = req.params;
+            console.log(req.params)
+
+            if (!user_id) return res
+                .status(500)
+                .json({ success: false, message: "✖️ É obrigatório informar o ID do usuário!" });
+
+            if (isNaN(Number(user_id))) return res
+                .status(500)
+                .json({ success: false, message: "✖️ O ID precisa ser um número!" });
+
+            const cart = await CartService.getUserCart(Number(user_id));
+
+            return res.json({
+                success: true,
+                result: cart
             })
 
         } catch (error) {
