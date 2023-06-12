@@ -1,56 +1,20 @@
-import { Cart, Order, OrderStatus } from "@prisma/client";
+import { Order, OrderStatus } from "@prisma/client";
 import { prisma } from "../database/db";
 
 class OrderRepository {
 
     async createOrder(cart_id: number, user_id: number): Promise<Order | string | boolean | undefined> {
 
-        const getUserCart = await prisma.cart.findMany({
-            where: { id: user_id, }
-        })
-
-        if (!getUserCart) {
-            return false
-        }
-
-        let order: Order | Cart | null = null;
-
-        let total = getUserCart[0].total_value;
-
-        if (getUserCart.length > 0) {
-
-            order = getUserCart[0];
-
-        } else {
-
-            order = await prisma.order.create({
-                data: {
-                    user_id: cart_id,
-                    cart_id: cart_id,
-                    order_status: "Placed",
-                    total_value: total
-                }
-            })
-        }
-
-        if (!order) {
-            return false
-        }
-
-        await prisma.order.update({
-            where: {
-                id: order.id,
-            },
-            data: {
-                total_value: getUserCart[0].total_value,
-            }
+        const getUserCart = await prisma.cart.findUnique({
+            where: { id: cart_id, }
         })
 
         return await prisma.order.create({
             data: {
-                user_id: cart_id,
+                user_id: user_id,
                 cart_id: cart_id,
-                total_value: getUserCart[0].total_value
+                order_status: "Placed",
+                total_value: getUserCart?.total_value
             }
         })
     }
