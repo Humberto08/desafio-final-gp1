@@ -89,12 +89,6 @@ class CartRepository {
         })
     }
 
-    async removeProductFromCart(product_id: number) {
-        return await prisma.cartProduct.delete({
-            where: { id: product_id },
-        });
-    }
-
     async updateCartProducts(id: number, cart_products: Array<CartProduct>) {
 
         const findById = await prisma.cart.findFirst({ where: { id } });
@@ -146,6 +140,8 @@ class CartRepository {
         const findById = await prisma.cart.findUnique({ where: { id } });
 
         if (!findById) return "✖️ Carrinho não encontrado para o ID informado!";
+
+        await prisma.cartProduct.deleteMany();
 
         return await prisma.cart.delete({ where: { id } })
     }
