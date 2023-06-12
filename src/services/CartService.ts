@@ -23,8 +23,8 @@ class CartService {
         return await CartRepository.updateCartStatus(id, cart_status);
     }
 
-    async deleteCart(id: number, product_id: number): Promise<Cart | CartProduct | string> {
-        return await CartRepository.deleteCart(id, product_id);
+    async deleteCart(id: number): Promise<Cart | CartProduct | string> {
+        return await CartRepository.deleteCart(id);
     }
 }
 
