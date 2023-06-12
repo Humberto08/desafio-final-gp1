@@ -12,15 +12,51 @@ class OrderRepository {
             }
         })
 
-        if (!getUserCart) {
+        const userCart = await prisma.cart.findFirst({
+            where: { id: cart_id }
+        })
+
+        if (!userCart) {
             return false
         }
+
+        let order: Order | null = null;
+
+        let total = getUserCart[0].total_value;
+
+        if (getUserCart.length > 0) {
+
+            order = getUserCart[0];
+
+        } else {
+
+            order = await prisma.order.create({
+                data: {
+                    user_id: cart_id,
+                    cart_id: cart_id,
+                    order_status: "Placed",
+                    total_value: total
+                }
+            })
+        }
+
+        if (!order) {
+            return false
+        }
+
+        await prisma.order.update({
+            where: {
+                id: order.id,
+            },
+            data: {
+                total_value: getUserCart[0].total_value,
+            }
+        })
 
         return await prisma.order.create({
             data: {
                 user_id: cart_id,
                 cart_id: cart_id,
-                order_status: "Placed",
                 total_value: getUserCart[0].total_value
             }
         })
