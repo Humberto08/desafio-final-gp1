@@ -147,7 +147,7 @@ class CartController {
 
         try {
 
-            const { id } = req.params;
+            const { id, product_id } = req.params;
 
             if (!id) return res
                 .status(500)
@@ -157,7 +157,7 @@ class CartController {
                 .status(500)
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
-            const cart = await CartService.deleteCart(Number(id));
+            const cart = await CartService.deleteCart(Number(id), Number(product_id));
 
             if (typeof cart === 'string') return res
                 .status(404)
