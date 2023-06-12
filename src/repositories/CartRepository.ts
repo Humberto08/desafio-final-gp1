@@ -135,13 +135,13 @@ class CartRepository {
         return await prisma.cart.findMany({ where: { user_id } });
     }
 
-    async deleteCart(id: number, product_id: number | any): Promise<Cart | CartProduct | string> {
+    async deleteCart(id: number): Promise<Cart | string> {
 
         const findById = await prisma.cart.findUnique({ where: { id } });
 
         if (!findById) return "✖️ Carrinho não encontrado para o ID informado!";
 
-        await prisma.cartProduct.delete(product_id);
+        await prisma.cartProduct.deleteMany();
 
         return await prisma.cart.delete({ where: { id } })
     }
