@@ -3,24 +3,17 @@ import { prisma } from "../database/db";
 
 class OrderRepository {
 
-    async createOrder(cart_id: number): Promise<Order | string | boolean | undefined> {
+    async createOrder(cart_id: number, user_id: number): Promise<Order | string | boolean | undefined> {
 
-        const getUserCart = await prisma.order.findMany({
-            where: {
-                cart_id,
-                order_status: "Placed"
-            }
+        const getUserCart = await prisma.cart.findMany({
+            where: { id: user_id, }
         })
 
-        const userCart = await prisma.cart.findFirst({
-            where: { id: cart_id }
-        })
-
-        if (!userCart) {
+        if (!getUserCart) {
             return false
         }
 
-        let order: Order | null = null;
+        let order: Order | Cart | null = null;
 
         let total = getUserCart[0].total_value;
 

@@ -8,7 +8,7 @@ class OrderController {
 
         try {
 
-            const { cart_id } = req.body;
+            const { cart_id, user_id } = req.body;
 
             const cart = await CartService.getUserCart(cart_id);
 
@@ -24,7 +24,7 @@ class OrderController {
                     .json({ success: false, message: "✖️ Esse carrinho não existe!" })
             }
 
-            const order = await OrderService.createOrder(Number(cart_id));
+            const order = await OrderService.createOrder(Number(cart_id), Number(user_id));
 
             if (!order) {
                 return res
