@@ -4,7 +4,7 @@ import OrderRepository from "../repositories/OrderRepository";
 class OrderService {
 
     async createOrder(cart_id: number, user_id: number): Promise<Order | string | boolean | undefined> {
-        return await OrderRepository.createOrder(cart_id, user_id)
+        return await OrderRepository.createOrder((Number(cart_id)), (Number(user_id)))
     }
 
     async getOrders(): Promise<Array<Order | boolean>> {
