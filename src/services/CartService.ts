@@ -7,10 +7,6 @@ class CartService {
         return await CartRepository.addToCart(user_id, product_id, product_quantity)
     }
 
-    async removeProductFromCart(product_id: number) {
-        return await CartRepository.removeProductFromCart(product_id);
-    }
-
     async getCarts(): Promise<Array<Cart>> {
         return await CartRepository.getCarts();
     }

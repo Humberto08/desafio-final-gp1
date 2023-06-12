@@ -26,29 +26,6 @@ class CartController {
         });
     }
 
-    static async removeProductFromCart(req: Request, res: Response) {
-
-        try {
-
-            const { product_id } = req.body;
-
-            const productInCart = await CartService.removeProductFromCart(product_id);
-
-            await CartService.removeProductFromCart(productInCart.id);
-
-            return res.json({
-                success: true,
-                message: "✔️ Produto removido do carrinho!"
-            });
-
-        } catch (error) {
-            console.log(error);
-            return res
-                .status(500)
-                .json({ success: false, message: "✖️ Ops, tente novamente!" });
-        }
-    }
-
     static async updateCartProducts(req: Request, res: Response) {
 
         try {
