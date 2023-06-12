@@ -170,19 +170,17 @@ class CartController {
 
         try {
 
-            const reqParams = { "id": req.params.cart_id };
+            const { id } = req.params;
 
-            console.log(reqParams)
-
-            if (!reqParams.id) return res
+            if (!id) return res
                 .status(500)
                 .json({ success: false, message: "✖️ É obrigatório informar o ID do carrinho!" });
 
-            if (isNaN(Number(reqParams.id))) return res
+            if (isNaN(Number(id))) return res
                 .status(500)
                 .json({ success: false, message: "✖️ O ID precisa ser um número!" });
 
-            const cart = await CartService.deleteCart(Number(reqParams.id));
+            const cart = await CartService.deleteCart(Number(id));
 
             if (typeof cart === 'string') return res
                 .status(404)
@@ -190,7 +188,7 @@ class CartController {
 
             return res.json({
                 success: true,
-                message: "✔️ Carrinho esvaziado com sucesso!"
+                message: "✔️ Carrinho deletado com sucesso!"
             });
 
         } catch (error) {
