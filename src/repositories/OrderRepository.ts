@@ -6,13 +6,13 @@ class OrderRepository {
     async createOrder(cart_id: number, user_id: number): Promise<Order | string | boolean | undefined> {
 
         const getUserCart = await prisma.cart.findUnique({
-            where: { id: cart_id, }
+            where: { id: (Number(cart_id)), }
         })
 
         return await prisma.order.create({
             data: {
-                user_id: user_id,
-                cart_id: cart_id,
+                user_id: (Number(user_id)),
+                cart_id: (Number(cart_id)),
                 order_status: "Placed",
                 total_value: getUserCart?.total_value
             }
