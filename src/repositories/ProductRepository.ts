@@ -3,7 +3,6 @@ import { prisma } from "../database/db";
 
 class ProductRepository {
     findById: jest.Mock<any, any, any> | undefined;
-    
 
     async createProduct(product: Product): Promise<Product | string> {
 
