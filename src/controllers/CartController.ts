@@ -49,6 +49,74 @@ class CartController {
         }
     }
 
+    static async updateCartProducts(req: Request, res: Response) {
+
+        try {
+
+            const { cart_products, product_id } = req.body;
+
+            if (!product_id) return res
+                .status(500)
+                .json({ success: false, message: "✖️ É obrigatório informar o ID do carrinho!" });
+
+            if (isNaN(Number(product_id))) return res
+                .status(500)
+                .json({ success: false, message: "✖️ O ID precisa ser um número!" });
+
+            const cart = await CartService.updateCartProducts(Number(product_id), cart_products);
+
+            if (!cart) {
+                return res.status(404).json({ success: false, message: "✖️ Carrinho não encontrado!" });
+            }
+
+            return res.json({
+                success: true,
+                result: cart
+            })
+
+        } catch (error) {
+            console.log(error);
+            return res
+                .status(500)
+                .json({ success: false, message: "✖️ Ops, tente novamente!" });
+        }
+    }
+
+    static async updateCartStatus(req: Request, res: Response) {
+
+        try {
+
+            const { cart_id, cart_status } = req.body;
+
+            if (!cart_id) return res
+                .status(500)
+                .json({ success: false, message: "✖️ É obrigatório informar o ID do carrinho!" });
+
+            if (isNaN(Number(cart_id))) return res
+                .status(500)
+                .json({ success: false, message: "✖️ O ID precisa ser um número!" });
+
+            const cart = await CartService.updateCartStatus(Number(cart_id), cart_status)
+
+            if (!cart) return res
+                .status(404)
+                .json({ success: false, message: "✖️ Status de carrinho não atualizado!" })
+
+            return res.json({
+                success: true,
+                message: "✔️ Status de carrinho atualizado!",
+                result: cart
+            });
+
+        } catch (error) {
+            console.log(error);
+            return res
+                .status(500)
+                .json({ success: false, message: "✖️ Ops, tente novamente!" });
+        }
+
+    }
+
     static async index(req: Request, res: Response) {
 
         try {
@@ -96,76 +164,6 @@ class CartController {
                 .status(500)
                 .json({ success: false, message: "✖️ Ops, Tente novamente!" });
         }
-    }
-
-    static async updateCartProducts(req: Request, res: Response) {
-
-        try {
-
-            const { cart_products } = req.body;
-            const { id } = req.params;
-
-            if (!id) return res
-                .status(500)
-                .json({ success: false, message: "✖️ É obrigatório informar o ID do carrinho!" });
-
-            if (isNaN(Number(id))) return res
-                .status(500)
-                .json({ success: false, message: "✖️ O ID precisa ser um número!" });
-
-            const cart = await CartService.updateCartProducts(Number(id), cart_products);
-
-            if (!cart) {
-                return res.status(404).json({ success: false, message: "✖️ Carrinho não encontrado!" });
-            }
-
-            return res.json({
-                success: true,
-                result: cart
-            })
-
-        } catch (error) {
-            console.log(error);
-            return res
-                .status(500)
-                .json({ success: false, message: "✖️ Ops, tente novamente!" });
-        }
-    }
-
-    static async updateCartStatus(req: Request, res: Response) {
-
-        try {
-
-            const { cart_status } = req.body;
-            const { user_id, cart_id } = req.params;
-
-            if (!cart_id) return res
-                .status(500)
-                .json({ success: false, message: "✖️ É obrigatório informar o ID do carrinho!" });
-
-            if (isNaN(Number(cart_id))) return res
-                .status(500)
-                .json({ success: false, message: "✖️ O ID precisa ser um número!" });
-
-            const cart = await CartService.updateCartStatus(Number(cart_id), cart_status)
-
-            if (!cart) return res
-                .status(404)
-                .json({ success: false, message: "✖️ Status de carrinho não atualizado!" })
-
-            return res.json({
-                success: true,
-                message: "✔️ Status de carrinho atualizado!",
-                result: cart
-            });
-
-        } catch (error) {
-            console.log(error);
-            return res
-                .status(500)
-                .json({ success: false, message: "✖️ Ops, tente novamente!" });
-        }
-
     }
 
     static async delete(req: Request, res: Response) {

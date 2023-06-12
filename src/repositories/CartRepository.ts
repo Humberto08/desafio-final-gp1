@@ -95,14 +95,6 @@ class CartRepository {
         });
     }
 
-    async getCarts(): Promise<Array<Cart>> {
-        return await prisma.cart.findMany();
-    }
-
-    async getUserCart(user_id: number): Promise<Array<Cart>> {
-        return await prisma.cart.findMany({ where: { user_id } });
-    }
-
     async updateCartProducts(id: number, cart_products: Array<CartProduct>) {
 
         const findById = await prisma.cart.findFirst({ where: { id } });
@@ -139,6 +131,14 @@ class CartRepository {
             where: { id },
             data: { cart_status: cart_status || findById.cart_status }
         })
+    }
+
+    async getCarts(): Promise<Array<Cart>> {
+        return await prisma.cart.findMany();
+    }
+
+    async getUserCart(user_id: number): Promise<Array<Cart>> {
+        return await prisma.cart.findMany({ where: { user_id } });
     }
 
     async deleteCart(cart_id: number): Promise<Cart | string> {
