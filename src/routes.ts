@@ -53,7 +53,6 @@ router.delete("/order/:id", AuthMiddleware, OrderController.delete);
 
 // CARRINHO
 router.post("/cart/add-to-cart", AuthMiddleware, CartController.addProductToCart)
-router.post("/cart/remove-from-cart", CartController.removeProductFromCart)
 router.get("/cart", AuthMiddleware, CartController.index);
 router.get("/cart/:id", AuthMiddleware, CartController.show);
 router.put("/cart/:id", AuthMiddleware, CartController.updateCartProducts);
