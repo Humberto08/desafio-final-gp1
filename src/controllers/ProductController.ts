@@ -16,7 +16,12 @@ class ProductController {
             //upload de arquivo
             if (!req.file) return res.status(500).json({ message: "✖️ Você precisa enviar uma imagem!" });
 
-            const image = process.env.APP_URL + '/uploads/' + req.file.originalname;
+            let image: string | undefined = undefined;
+
+            if (req.files) {
+                // image = storeImages(req.files as Array<Express.Multer.File>);
+                image = process.env.APP_URL + '/uploads/' + req.file.originalname;
+            }
 
             await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toFile(`./uploads/${req.file.originalname}`)
 
