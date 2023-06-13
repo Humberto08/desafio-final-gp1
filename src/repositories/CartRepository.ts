@@ -80,7 +80,7 @@ class CartRepository {
                 cart_id: cart.id,
                 product_id: product_id,
                 product_quantity,
-                product_price: product?.price,
+                product_price: product.price,
             },
             include: {
                 cart: true,
