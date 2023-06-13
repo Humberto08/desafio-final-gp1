@@ -141,7 +141,7 @@ class CartRepository {
 
         if (!findById) return "✖️ Carrinho não encontrado para o ID informado!";
 
-        await prisma.cartProduct.deleteMany({ where: { cart_id: id } });
+        await prisma.cartProduct.deleteMany();
 
         return await prisma.cart.delete({ where: { id } })
     }
