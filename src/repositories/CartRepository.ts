@@ -135,7 +135,7 @@ class CartRepository {
         return await prisma.cart.findMany({ where: { user_id } });
     }
 
-    async deleteCart(id: number, product_id: number | any): Promise<Cart | string> {
+    async deleteCart(id: number): Promise<Cart | string> {
 
         const findById = await prisma.cart.findUnique({ where: { id } });
 
@@ -143,10 +143,10 @@ class CartRepository {
 
         // await prisma.cartProduct.deleteMany();
         // await prisma.cartProduct.deleteMany({ where: { id } });
-        // await prisma.cartProduct.deleteMany({ where: { cart_id: id } });
+        await prisma.cartProduct.deleteMany({ where: { product_id: id } });
         // await prisma.cartProduct.delete({ where: {} });
         // await prisma.cartProduct.delete(cart_id);
-        await prisma.cartProduct.delete({ where: { id: product_id } });
+        // await prisma.cartProduct.delete({ where: { product_id: id } });
 
         return await prisma.cart.delete({ where: { id } })
     }
