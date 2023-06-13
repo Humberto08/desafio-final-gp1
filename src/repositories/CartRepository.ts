@@ -36,13 +36,7 @@ class CartRepository {
                 data: {
                     user_id: user_id,
                     cart_status: "Pending",
-                    total_value: total,
-                    cart_products: {
-                        create: {
-                            product: { connect: { id: product.id } },
-                            product_quantity
-                        }
-                    }
+                    total_value: total
                 },
                 include: {
                     cart_products: true
@@ -61,14 +55,7 @@ class CartRepository {
                 id: cart.id,
             },
             data: {
-                total_value: total,
-                cart_products: {
-                    create: {
-                        product: { connect: { id: product.id } },
-                        product_quantity,
-                        product_price: product.price
-                    }
-                }
+                total_value: total
             },
             include: {
                 cart_products: true
