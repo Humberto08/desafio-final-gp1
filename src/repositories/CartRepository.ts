@@ -143,7 +143,7 @@ class CartRepository {
 
         // await prisma.cartProduct.deleteMany();
         // await prisma.cartProduct.deleteMany({ where: { id } });
-        await prisma.cartProduct.deleteMany({ where: { product_id: id } });
+        await prisma.cart.deleteMany();
         // await prisma.cartProduct.delete({ where: {} });
         // await prisma.cartProduct.delete(cart_id);
         // await prisma.cartProduct.delete({ where: { product_id: id } });
